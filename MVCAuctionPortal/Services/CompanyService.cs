@@ -43,6 +43,12 @@ namespace ServicesAndInterfacesLibary.Services
         {
             return _context.Company.Include(c => c.CompanyAddress)
                                       .FirstOrDefault(c => c.CompanyID == id);
+        }  
+        public Company GetCompanyByUserId(int id)
+        {
+            var user=_context.User.Find(id);
+            return _context.Company.Include(c => c.CompanyAddress)
+                                      .FirstOrDefault(c => c.CompanyID == user.CompanyID);
         }
 
         public IEnumerable<Company> GetAllCompanies()

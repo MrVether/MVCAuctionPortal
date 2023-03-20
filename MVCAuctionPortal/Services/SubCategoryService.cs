@@ -16,9 +16,10 @@ namespace ServicesAndInterfacesLibary.Services
             _context = context;
         }
 
-        public IEnumerable<SubCategory> GetAllSubCategories()
+        public IEnumerable<SubCategory> GetAllSubCategories(int id)
         {
-            return _context.SubCategory.ToList();
+            var subcategories = _context.SubCategory.Where(sc => sc.CategoryID == id).ToList();
+            return subcategories;
         }
 
         public SubCategory GetSubCategoryById(int id)

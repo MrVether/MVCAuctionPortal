@@ -1,0 +1,19 @@
+﻿@model AuctionPortal.Models.Company
+
+<h2>@Model.Name</h2>
+
+<p><strong>NIP:</strong> @Model.Nip</p>
+@if (!string.IsNullOrEmpty(Model.Regon))
+{
+    <p><strong>REGON:</strong> @Model.Regon</p>
+}
+
+<p><strong>Country Establishment:</strong> @Model.CountryEstablishment</p>
+<p><strong>Date of Establishment:</strong> @Model.DateOfEstablishment.ToString("dd/MM/yyyy")</p>
+<p><strong>Description:</strong> @Model.Description</p>
+
+<h3>Company Address</h3>
+
+<p><strong>Street:</strong> @Model.CompanyAddress.Street</p>
+<p><strong>City:</strong> @Model.CompanyAddress.HouseNumber</p>
+<p><strong>Zip Code:</strong> @Model.CompanyAddress.ZipCode</p>

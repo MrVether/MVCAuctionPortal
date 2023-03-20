@@ -1,0 +1,56 @@
+﻿@using AuctionPortal.Models
+@model AuctionPortal.Models.Auction
+
+@{
+    ViewData["Title"] = "Auction Editing";
+}
+
+<form action="../edit" method="post">
+
+    <div class="form-group">
+        <input type="hidden" name="AuctionID" value="@Model.AuctionID" />
+
+        <label for="title">Title:</label>
+        <input type="text" class="form-control" id="title" name="title" value=@Model.Title required>
+    </div>   
+    <div class="form-group">
+        <label for="description">Description:</label>
+        <input type="text" class="form-control" id="description" name="Item.Description" value="@Model.Item.Description" required>
+    </div>
+    <div class="form-group">
+        <label for="buyItNow">Buy It Now:</label>
+        <select class="form-control" id="buyItNow" name="buyItNow" value=@Model.BuyItNow required>
+            <option value="true">True</option>
+            <option value="false">False</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="endDate">End Date:</label>
+        <input type="date" class="form-control" id="endDate" name="endDate" value=@Model.EndDate required>
+    </div>
+    <div class="form-group">
+        <label for="price">Price:</label>
+        <input type="number" class="form-control" id="price" name="price" value=@Model.Price required>
+    </div>
+    <div class="form-group">
+        <label for="pieces">Pieces:</label>
+        <input type="number" class="form-control" id="pieces" name="pieces" value=@Model.Pieces required>
+    </div>
+    <div class="form-group">
+        <label for="categoryID">Category ID:</label>
+        <input type="number" class="form-control" id="SubCategoryID" name="SubCategoryID" value=@Model.SubCategoryID required>
+    </div>
+    <div class="form-group">
+        <label for="itemID">Item ID:</label>
+        <input type="number" class="form-control" id="itemID" name="itemID" value=@Model.ItemID required>
+    </div>
+    <div class="form-group">
+        <label for="warrantyID">Warranty ID:</label>
+        <input type="number" class="form-control" id="warrantyID" name="warrantyID" value=@Model.WarrantyID required>
+    </div>
+    <div class="form-group">
+        <label for="imageURL">Image URL:</label>
+        <input type="url" class="form-control" id="imageURL" name="imageURL" value=@Model.ImageURL required>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

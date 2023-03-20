@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace MVCAuctionPortal.Migrations
 {
     /// <inheritdoc />
-    public partial class seed : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -35,7 +35,8 @@ namespace MVCAuctionPortal.Migrations
                 {
                     CategoryID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false)
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    ImageURL = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -150,7 +151,8 @@ namespace MVCAuctionPortal.Migrations
                     SubCategoryID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CategoryID = table.Column<int>(type: "int", nullable: false)
+                    CategoryID = table.Column<int>(type: "int", nullable: false),
+                    ImageURL = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -241,13 +243,14 @@ namespace MVCAuctionPortal.Migrations
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Pieces = table.Column<int>(type: "int", nullable: false),
                     PurchaseCounter = table.Column<int>(type: "int", nullable: false),
-                    CategoryID = table.Column<int>(type: "int", nullable: false),
+                    SubCategoryID = table.Column<int>(type: "int", nullable: false),
                     ItemID = table.Column<int>(type: "int", nullable: false),
                     WarrantyID = table.Column<int>(type: "int", nullable: false),
                     ReviewID = table.Column<int>(type: "int", nullable: false),
                     UserID = table.Column<int>(type: "int", nullable: false),
                     ImageURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BasketID = table.Column<int>(type: "int", nullable: true)
+                    BasketID = table.Column<int>(type: "int", nullable: true),
+                    CategoryID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -261,8 +264,7 @@ namespace MVCAuctionPortal.Migrations
                         name: "FK_Auction_Category_CategoryID",
                         column: x => x.CategoryID,
                         principalTable: "Category",
-                        principalColumn: "CategoryID",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "CategoryID");
                     table.ForeignKey(
                         name: "FK_Auction_Item_ItemID",
                         column: x => x.ItemID,
@@ -274,6 +276,12 @@ namespace MVCAuctionPortal.Migrations
                         column: x => x.ReviewID,
                         principalTable: "Review",
                         principalColumn: "ReviewID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Auction_SubCategory_SubCategoryID",
+                        column: x => x.SubCategoryID,
+                        principalTable: "SubCategory",
+                        principalColumn: "SubCategoryID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Auction_User_UserID",
@@ -301,13 +309,13 @@ namespace MVCAuctionPortal.Migrations
 
             migrationBuilder.InsertData(
                 table: "Category",
-                columns: new[] { "CategoryID", "Name" },
+                columns: new[] { "CategoryID", "ImageURL", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Electronics" },
-                    { 2, "Home and Garden" },
-                    { 3, "Fashion" },
-                    { 4, "Toys and Games" }
+                    { 1, "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", "Electronics" },
+                    { 2, "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", "Home and Garden" },
+                    { 3, "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", "Fashion" },
+                    { 4, "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", "Toys and Games" }
                 });
 
             migrationBuilder.InsertData(
@@ -370,24 +378,19 @@ namespace MVCAuctionPortal.Migrations
 
             migrationBuilder.InsertData(
                 table: "SubCategory",
-                columns: new[] { "SubCategoryID", "CategoryID", "Name" },
+                columns: new[] { "SubCategoryID", "CategoryID", "ImageURL", "Name" },
                 values: new object[,]
                 {
-                    { 1, 1, "Laptops" },
-                    { 2, 1, "Smartphones" },
-                    { 3, 2, "Furniture" },
-                    { 4, 2, "Kitchen appliances" }
+                    { 1, 1, "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", "Laptops" },
+                    { 2, 1, "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", "Smartphones" },
+                    { 3, 2, "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", "Furniture" },
+                    { 4, 2, "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", "Kitchen appliances" }
                 });
 
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "UserID", "AddressID", "CompanyID", "CouponID", "Email", "Name", "Nip", "Password", "RegistationDate", "RoleID", "Surname" },
-                values: new object[] { 1, 1, null, 1, "johndoe@example.com", "John", null, "password", new DateTime(2023, 3, 10, 23, 8, 42, 474, DateTimeKind.Local).AddTicks(9306), 1, "Doe" });
-
-            migrationBuilder.InsertData(
-                table: "Auction",
-                columns: new[] { "AuctionID", "BasketID", "BuyItNow", "CategoryID", "DateOfIssue", "EndDate", "ImageURL", "ItemID", "Pieces", "Price", "PurchaseCounter", "ReviewID", "Title", "UserID", "WarrantyID" },
-                values: new object[] { 1, null, false, 1, new DateTime(2023, 3, 17, 23, 8, 42, 474, DateTimeKind.Local).AddTicks(6348), new DateTime(2023, 3, 24, 23, 8, 42, 474, DateTimeKind.Local).AddTicks(6379), "https://example.com/item2.jpg", 1, 5, 100m, 0, 1, "Sample auction", 1, 1 });
+                values: new object[] { 1, 1, null, 1, "johndoe@example.com", "John", null, "password", new DateTime(2023, 3, 13, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(7754), 1, "Doe" });
 
             migrationBuilder.InsertData(
                 table: "Basket",
@@ -397,7 +400,17 @@ namespace MVCAuctionPortal.Migrations
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "UserID", "AddressID", "CompanyID", "CouponID", "Email", "Name", "Nip", "Password", "RegistationDate", "RoleID", "Surname" },
-                values: new object[] { 2, 2, 1, null, "janedoe@example.com", "Jane", null, "password", new DateTime(2023, 3, 14, 23, 8, 42, 474, DateTimeKind.Local).AddTicks(9322), 2, "Doe" });
+                values: new object[] { 2, 2, 1, null, "janedoe@example.com", "Jane", null, "password", new DateTime(2023, 3, 17, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(7770), 2, "Doe" });
+
+            migrationBuilder.InsertData(
+                table: "Auction",
+                columns: new[] { "AuctionID", "BasketID", "BuyItNow", "CategoryID", "DateOfIssue", "EndDate", "ImageURL", "ItemID", "Pieces", "Price", "PurchaseCounter", "ReviewID", "SubCategoryID", "Title", "UserID", "WarrantyID" },
+                values: new object[,]
+                {
+                    { 1, null, false, null, new DateTime(2023, 3, 20, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(5165), new DateTime(2023, 3, 27, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(5201), "https://m.media-amazon.com/images/I/71dpTXFz+dL._AC_UF1000,1000_QL80_.jpg", 1, 5, 100m, 0, 1, 1, "Iphone", 2, 1 },
+                    { 2, null, true, null, new DateTime(2023, 3, 20, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(5210), new DateTime(2023, 4, 3, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(5212), "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", 2, 3, 200m, 0, 2, 2, "Shovel", 2, 2 },
+                    { 3, null, false, null, new DateTime(2023, 3, 20, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(5215), new DateTime(2023, 4, 10, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(5217), "https://a.allegroimg.com/original/1e76f9/ba5267f249a8bb358f5d3cf50ec6", 3, 1, 300m, 0, 3, 3, "Boots", 2, 3 }
+                });
 
             migrationBuilder.InsertData(
                 table: "Basket",
@@ -423,6 +436,11 @@ namespace MVCAuctionPortal.Migrations
                 name: "IX_Auction_ReviewID",
                 table: "Auction",
                 column: "ReviewID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Auction_SubCategoryID",
+                table: "Auction",
+                column: "SubCategoryID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Auction_UserID",
@@ -477,9 +495,6 @@ namespace MVCAuctionPortal.Migrations
                 name: "Auction");
 
             migrationBuilder.DropTable(
-                name: "SubCategory");
-
-            migrationBuilder.DropTable(
                 name: "Basket");
 
             migrationBuilder.DropTable(
@@ -489,13 +504,16 @@ namespace MVCAuctionPortal.Migrations
                 name: "Review");
 
             migrationBuilder.DropTable(
+                name: "SubCategory");
+
+            migrationBuilder.DropTable(
                 name: "Warranty");
 
             migrationBuilder.DropTable(
-                name: "Category");
+                name: "User");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Category");
 
             migrationBuilder.DropTable(
                 name: "Company");

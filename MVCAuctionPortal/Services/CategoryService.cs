@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MVCAuctionPortal.Models;
 
-namespace ServicesAndInterfacesLibary.Services
+namespace AuctionPortal.Services
 {
     public class CategoryService : ICategoryService
     {

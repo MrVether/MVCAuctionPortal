@@ -1,0 +1,111 @@
+﻿@model IEnumerable<AuctionPortal.Models.Auction>
+
+@{
+    ViewData["Title"] = "List of Auctions";
+}
+<style>
+    .card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+    }
+
+    .card img {
+        max-width: 100%;
+        max-height: 80%;
+        object-fit: contain;
+    }
+
+    .card-body {
+        height: auto;
+        overflow-y: auto;
+    }
+
+    .card-container {
+        position: relative;
+        height: 450px;
+        margin-bottom: 50px;
+    }
+
+    .card-footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin-top: auto; 
+    }
+</style>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 col-xs-6 border-primary mb-3">
+            <div class="card-container">
+                <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0 ">
+                    <div class="col-md-12">
+                        <div class="card-header text-white bg-info">
+                            <p class="card-text">
+                                <h5 class="card-title">
+                                    @item.Title
+                                </h5>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <img src="@item.ImageURL" width="100%" alt="@item.Title">
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card-body">
+                            <p class="card-text">@item.Item.Description</p>
+                            <p class="card-text"><b>Seller: </b><a href="/company/GetByUserID/@item.UserID">@item.UserID</a></p>
+                            <p class="card-text"><b>Category: </b>@item.SubCategory.Name</p>
+                            <p class="card-text"><b>Start Date: </b>@item.DateOfIssue.ToString("dd MMM yyyy")</p>
+                            <p class="card-text ">
+                                <b>Status: </b>
+                                @if (DateTime.Now >= item.DateOfIssue && DateTime.Now <= item.EndDate)
+                                {
+                                    <span class="badge bg-success text-white">AVAILABLE</span>
+                                }
+                                else if (DateTime.Now > item.EndDate)
+                                {
+                                    <span class="badge bg-danger text-white">ENDED</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-primary text-white">UPCOMING</span>
+                                }
+                            </p>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card-footer mt-auto">
+                            <div class="row">
+                                <div class="col-6 mb-2">
+                                    <a class="btn btn-outline-primary w-100" asp-action="Details" asp-route-id="@item.ItemID">
+                                        <i class="bi bi-eye-fill"></i> Show Details
+                                    </a>
+                                </div>
+                                <div class="col-6 mb-2">
+                                    <a class="btn btn-outline-primary w-100" asp-action="Edit" asp-route-id="@item.ItemID">
+                                        <i class="bi bi-eye-fill"></i> Edit
+                                    </a>
+                                </div>
+                                <div class="col-12 mb-2">
+                                    <a class="btn btn-success text-white w-100 @((DateTime.Now > item.EndDate) ? "disabled" : "")"
+                                   asp-controller="Orders"
+                                   asp-action="AddItemToShoppingCart"
+                                   asp-route-id="@item.AuctionID">
+                                        <i class="bi bi-cart-plus"></i> Add to Cart (Price @item.Price.ToString("c"))
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    }
+</div>
+

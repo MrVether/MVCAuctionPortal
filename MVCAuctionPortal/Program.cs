@@ -1,7 +1,10 @@
 ﻿using AuctionPortal.Data.Seeders;
+using AuctionPortal.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MVCAuctionPortal.Models;
+using ServicesAndInterfacesLibary.Services;
+using ServicesAndInterfacesLibrary.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +13,19 @@ builder.Services.AddControllersWithViews();
 
 var connectionString = builder.Configuration.GetConnectionString("AuctionPortalDB");
 builder.Services.AddDbContext<AuctionDbContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddScoped<IAuctionService, AuctionService>();
+builder.Services.AddScoped<IAddressService, AddressService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<ICouponService, CouponService>();
+builder.Services.AddScoped<ICompanyService, CompanyService>();
+builder.Services.AddScoped<IItemService, ItemService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IWarrantyService, WarrantyService>();
+builder.Services.AddScoped<ISubCategoryService, SubCategoryService>();
+builder.Services.AddScoped<ISubCategoryService, SubCategoryService>();
+
 builder.Services.AddTransient<AddressSeeder>();
 builder.Services.AddTransient<AuctionSeeder>();
 builder.Services.AddTransient<CategorySeeder>();
@@ -41,6 +57,6 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Auction}/{action=Index}/{id?}");
 
 app.Run();

@@ -1,6 +1,7 @@
-﻿using ServicesAndInterfacesLibary.Models;
+﻿using MVCAuctionPortal.Models;
+using ServicesAndInterfacesLibary.Models;
 
-namespace ServicesAndInterfacesLibary.Services;
+namespace AuctionPortal.Services;
 
 public interface ICategoryService
 {

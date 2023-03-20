@@ -90,7 +90,7 @@ namespace MVCAuctionPortal.Migrations
                     b.Property<bool>("BuyItNow")
                         .HasColumnType("bit");
 
-                    b.Property<int>("CategoryID")
+                    b.Property<int?>("CategoryID")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("DateOfIssue")
@@ -118,6 +118,9 @@ namespace MVCAuctionPortal.Migrations
                     b.Property<int>("ReviewID")
                         .HasColumnType("int");
 
+                    b.Property<int>("SubCategoryID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -138,6 +141,8 @@ namespace MVCAuctionPortal.Migrations
 
                     b.HasIndex("ReviewID");
 
+                    b.HasIndex("SubCategoryID");
+
                     b.HasIndex("UserID");
 
                     b.HasIndex("WarrantyID");
@@ -149,18 +154,52 @@ namespace MVCAuctionPortal.Migrations
                         {
                             AuctionID = 1,
                             BuyItNow = false,
-                            CategoryID = 1,
-                            DateOfIssue = new DateTime(2023, 3, 17, 23, 8, 42, 474, DateTimeKind.Local).AddTicks(6348),
-                            EndDate = new DateTime(2023, 3, 24, 23, 8, 42, 474, DateTimeKind.Local).AddTicks(6379),
-                            ImageURL = "https://example.com/item2.jpg",
+                            DateOfIssue = new DateTime(2023, 3, 20, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(5165),
+                            EndDate = new DateTime(2023, 3, 27, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(5201),
+                            ImageURL = "https://m.media-amazon.com/images/I/71dpTXFz+dL._AC_UF1000,1000_QL80_.jpg",
                             ItemID = 1,
                             Pieces = 5,
                             Price = 100m,
                             PurchaseCounter = 0,
                             ReviewID = 1,
-                            Title = "Sample auction",
-                            UserID = 1,
+                            SubCategoryID = 1,
+                            Title = "Iphone",
+                            UserID = 2,
                             WarrantyID = 1
+                        },
+                        new
+                        {
+                            AuctionID = 2,
+                            BuyItNow = true,
+                            DateOfIssue = new DateTime(2023, 3, 20, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(5210),
+                            EndDate = new DateTime(2023, 4, 3, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(5212),
+                            ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg",
+                            ItemID = 2,
+                            Pieces = 3,
+                            Price = 200m,
+                            PurchaseCounter = 0,
+                            ReviewID = 2,
+                            SubCategoryID = 2,
+                            Title = "Shovel",
+                            UserID = 2,
+                            WarrantyID = 2
+                        },
+                        new
+                        {
+                            AuctionID = 3,
+                            BuyItNow = false,
+                            DateOfIssue = new DateTime(2023, 3, 20, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(5215),
+                            EndDate = new DateTime(2023, 4, 10, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(5217),
+                            ImageURL = "https://a.allegroimg.com/original/1e76f9/ba5267f249a8bb358f5d3cf50ec6",
+                            ItemID = 3,
+                            Pieces = 1,
+                            Price = 300m,
+                            PurchaseCounter = 0,
+                            ReviewID = 3,
+                            SubCategoryID = 3,
+                            Title = "Boots",
+                            UserID = 2,
+                            WarrantyID = 3
                         });
                 });
 
@@ -444,6 +483,10 @@ namespace MVCAuctionPortal.Migrations
                         .IsRequired()
                         .HasColumnType("int");
 
+                    b.Property<string>("ImageURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -459,24 +502,28 @@ namespace MVCAuctionPortal.Migrations
                         {
                             SubCategoryID = 1,
                             CategoryID = 1,
+                            ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg",
                             Name = "Laptops"
                         },
                         new
                         {
                             SubCategoryID = 2,
                             CategoryID = 1,
+                            ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg",
                             Name = "Smartphones"
                         },
                         new
                         {
                             SubCategoryID = 3,
                             CategoryID = 2,
+                            ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg",
                             Name = "Furniture"
                         },
                         new
                         {
                             SubCategoryID = 4,
                             CategoryID = 2,
+                            ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg",
                             Name = "Kitchen appliances"
                         });
                 });
@@ -544,7 +591,7 @@ namespace MVCAuctionPortal.Migrations
                             Email = "johndoe@example.com",
                             Name = "John",
                             Password = "password",
-                            RegistationDate = new DateTime(2023, 3, 10, 23, 8, 42, 474, DateTimeKind.Local).AddTicks(9306),
+                            RegistationDate = new DateTime(2023, 3, 13, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(7754),
                             RoleID = 1,
                             Surname = "Doe"
                         },
@@ -556,7 +603,7 @@ namespace MVCAuctionPortal.Migrations
                             Email = "janedoe@example.com",
                             Name = "Jane",
                             Password = "password",
-                            RegistationDate = new DateTime(2023, 3, 14, 23, 8, 42, 474, DateTimeKind.Local).AddTicks(9322),
+                            RegistationDate = new DateTime(2023, 3, 17, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(7770),
                             RoleID = 2,
                             Surname = "Doe"
                         });
@@ -649,13 +696,17 @@ namespace MVCAuctionPortal.Migrations
                         });
                 });
 
-            modelBuilder.Entity("ServicesAndInterfacesLibary.Models.Category", b =>
+            modelBuilder.Entity("MVCAuctionPortal.Models.Category", b =>
                 {
                     b.Property<int>("CategoryID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CategoryID"));
+
+                    b.Property<string>("ImageURL")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -670,21 +721,25 @@ namespace MVCAuctionPortal.Migrations
                         new
                         {
                             CategoryID = 1,
+                            ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg",
                             Name = "Electronics"
                         },
                         new
                         {
                             CategoryID = 2,
+                            ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg",
                             Name = "Home and Garden"
                         },
                         new
                         {
                             CategoryID = 3,
+                            ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg",
                             Name = "Fashion"
                         },
                         new
                         {
                             CategoryID = 4,
+                            ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg",
                             Name = "Toys and Games"
                         });
                 });
@@ -695,11 +750,9 @@ namespace MVCAuctionPortal.Migrations
                         .WithMany("Auctions")
                         .HasForeignKey("BasketID");
 
-                    b.HasOne("ServicesAndInterfacesLibary.Models.Category", "Category")
+                    b.HasOne("MVCAuctionPortal.Models.Category", null)
                         .WithMany("Auctions")
-                        .HasForeignKey("CategoryID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CategoryID");
 
                     b.HasOne("AuctionPortal.Models.Item", "Item")
                         .WithMany()
@@ -710,6 +763,12 @@ namespace MVCAuctionPortal.Migrations
                     b.HasOne("AuctionPortal.Models.Review", "Review")
                         .WithMany()
                         .HasForeignKey("ReviewID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AuctionPortal.Models.SubCategory", "SubCategory")
+                        .WithMany()
+                        .HasForeignKey("SubCategoryID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -725,11 +784,11 @@ namespace MVCAuctionPortal.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Category");
-
                     b.Navigation("Item");
 
                     b.Navigation("Review");
+
+                    b.Navigation("SubCategory");
 
                     b.Navigation("User");
 
@@ -749,7 +808,7 @@ namespace MVCAuctionPortal.Migrations
 
             modelBuilder.Entity("AuctionPortal.Models.SubCategory", b =>
                 {
-                    b.HasOne("ServicesAndInterfacesLibary.Models.Category", "Categories")
+                    b.HasOne("MVCAuctionPortal.Models.Category", "Categories")
                         .WithMany("SubCategory")
                         .HasForeignKey("CategoryID")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -805,7 +864,7 @@ namespace MVCAuctionPortal.Migrations
                     b.Navigation("Auctions");
                 });
 
-            modelBuilder.Entity("ServicesAndInterfacesLibary.Models.Category", b =>
+            modelBuilder.Entity("MVCAuctionPortal.Models.Category", b =>
                 {
                     b.Navigation("Auctions");
 

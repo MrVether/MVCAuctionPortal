@@ -1,0 +1,49 @@
+﻿@model IEnumerable<AuctionPortal.Models.SubCategory>
+
+@{
+    ViewData["Title"] = "List of Categories";
+}
+
+<style>
+    .card-header {
+        background-color: #17a2b8;
+        color: white;
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+    .card-body {
+        height: auto;
+        overflow-y: auto;
+    }
+    .card img {
+        max-width: 100%;
+        max-height: 80%;
+        object-fit: contain;
+    }
+</style>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 col-xs-6 border-primary mb-3" onclick="location.href='/auction/SubCategoryAuctionsList/@item.SubCategoryID'">
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-12">
+                        <div class="card-header">
+                            @item.Name
+                        </div>  
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card-footer">
+                            <p class="card-text">
+                                <img src="@item.ImageURL" alt="@item.Name" />
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    }
+</div>
