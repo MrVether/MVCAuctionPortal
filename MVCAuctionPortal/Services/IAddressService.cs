@@ -8,6 +8,7 @@ public interface IAddressService
     void Update(Address dto);
     int Delete(int id);
     Address GetAddressById(int id);
+    IEnumerable<Address> GetAddressesForUser(User user);
     IEnumerable<Address> GetAllAddresses();
     Address GetById(int id);
 }

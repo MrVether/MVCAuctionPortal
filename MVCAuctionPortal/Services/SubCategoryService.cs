@@ -22,6 +22,12 @@ namespace ServicesAndInterfacesLibary.Services
             return subcategories;
         }
 
+        public IEnumerable<SubCategory> GetAllSubCategories()
+        {
+            var subcategories = _context.SubCategory.ToList();
+            return subcategories;
+        }
+
         public SubCategory GetSubCategoryById(int id)
         {
             return _context.SubCategory.SingleOrDefault(s => s.SubCategoryID == id);

@@ -9,4 +9,5 @@ public interface ICouponService
     void Update(Coupon coupon);
     IEnumerable<Coupon> GetAllCoupons();
     Coupon GetCouponById(int id);
+    IEnumerable<Coupon> GetCouponsForUser(User user);
 }

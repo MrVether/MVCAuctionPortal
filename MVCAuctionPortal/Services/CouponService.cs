@@ -15,7 +15,12 @@ namespace ServicesAndInterfacesLibary.Services
         {
             _context = context;
         }
+        public IEnumerable<Coupon> GetCouponsForUser(User user)
+        {
 
+            return _context.Coupon
+                .Where(a => a.CouponID == user.CouponID);
+        }
 
         public int Create(Coupon dto)
         {

@@ -20,7 +20,7 @@ namespace AuctionPortal.Models
         public int SubCategoryID { get; set; }
         public int ItemID { get; set; }
         public int WarrantyID { get; set; }
-        public int ReviewID { get; set; }
+        public int? ReviewID { get; set; }
         public int UserID { get; set; }
 
         public string ImageURL { get; set; }

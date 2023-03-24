@@ -29,7 +29,14 @@ namespace AuctionPortal.Services
                 .Include(a => a.Item)
                 .Include(a => a.SubCategory)
                 .FirstOrDefault(a => a.AuctionID == auctionId);
-        } 
+        }
+        public List<Auction> GetAuctionsForUser(int id)
+        {
+            var user = _context.User.Find(id);
+            return _context.Auction.Where(c => c.UserID == user.UserID).ToList();
+        }
+
+
         public IEnumerable<Auction> GetAuctionBySubCategory(int Id)
         {
             var auctionList = _context.Auction.Where(x => x.SubCategoryID == Id).Include(a => a.Item)
@@ -40,6 +47,9 @@ namespace AuctionPortal.Services
 
         public void AddAuction(Auction auction)
         {
+            auction.UserID = 2;
+            auction.ReviewID = null;
+            auction.DateOfIssue = DateTime.Now;
             _context.Auction.Add(auction);
             _context.SaveChanges();
         }

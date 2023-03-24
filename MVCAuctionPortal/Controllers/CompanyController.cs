@@ -16,7 +16,7 @@ namespace MVCAuctionPortal.Controllers
         }
         public IActionResult GetByUserID([FromRoute] int id)
         {
-            var company = _companyService.GetCompanyByUserId(id);
+            var company = _companyService.GetCompaniesForUser(id);
             return View(company);
         }
     }
