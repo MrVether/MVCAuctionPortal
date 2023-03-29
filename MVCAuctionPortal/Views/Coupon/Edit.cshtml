@@ -1,0 +1,39 @@
+﻿@model AuctionPortal.Models.Coupon
+
+<form method="post" action="@Url.Action("Edit", "Coupon")" class="form-horizontal" role="form">
+    <input type="hidden" name="CouponID" value="@Model.CouponID" />
+
+    <div class="form-group">
+        <label for="Name" class="control-label col-md-2">Name:</label>
+        <div class="col-md-10">
+            <input type="text" id="Name" name="Name" class="form-control" value="@Model.Name" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="Description" class="control-label col-md-2">Description:</label>
+        <div class="col-md-10">
+            <textarea id="Description" name="Description" class="form-control">@Model.Description</textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="ExpireDate" class="control-label col-md-2">Expire Date:</label>
+        <div class="col-md-10">
+            <input type="date" id="ExpireDate" name="ExpireDate" class="form-control" value="@Model.ExpireDate.ToString("yyyy-MM-dd")" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="NumberOfUses" class="control-label col-md-2">Number of Uses:</label>
+        <div class="col-md-10">
+            <input type="number" id="NumberOfUses" name="NumberOfUses" class="form-control" value="@Model.NumberOfUses" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-default">Save</button>
+        </div>
+    </div>
+</form>

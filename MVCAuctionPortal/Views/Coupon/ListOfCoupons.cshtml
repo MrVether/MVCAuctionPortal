@@ -1,0 +1,31 @@
+﻿@model IEnumerable<AuctionPortal.Models.Coupon>
+
+<table class="table table-striped table-bordered">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Description</th>
+        <th>Expire Date</th>
+        <th>Number of Uses</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var coupon in Model)
+    {
+        <tr>
+            <td>@coupon.Name</td>
+            <td>@coupon.Description</td>
+            <td>@coupon.ExpireDate.ToShortDateString()</td>
+            <td>@coupon.NumberOfUses</td>
+            <td>
+                <a href="@Url.Action("Edit", "Coupon", new { id = coupon.CouponID })" class="btn btn-primary">Edit</a>
+                <form method="post" action="@Url.Action("Delete", "Coupon", new { id = coupon.CouponID })" onsubmit="return confirm('Are you sure you want to delete this item?');" style="display:inline;">
+                    @Html.AntiForgeryToken()
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+                </form>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

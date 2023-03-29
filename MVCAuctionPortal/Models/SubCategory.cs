@@ -1,6 +1,5 @@
-﻿using ServicesAndInterfacesLibary.Models;
+﻿using MVCAuctionPortal.Models;
 using System.ComponentModel.DataAnnotations;
-using MVCAuctionPortal.Models;
 
 namespace AuctionPortal.Models
 {

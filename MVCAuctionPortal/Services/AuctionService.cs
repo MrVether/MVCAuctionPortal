@@ -1,7 +1,5 @@
 ﻿using AuctionPortal.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
 using MVCAuctionPortal.Models;
 
 namespace AuctionPortal.Services
@@ -23,7 +21,7 @@ namespace AuctionPortal.Services
                 .ToList();
         }
 
-        public Auction GetAuctionById(int auctionId)
+        public Auction GetAuctionById(int? auctionId)
         {
             return _context.Auction
                 .Include(a => a.Item)
@@ -33,7 +31,12 @@ namespace AuctionPortal.Services
         public List<Auction> GetAuctionsForUser(int id)
         {
             var user = _context.User.Find(id);
-            return _context.Auction.Where(c => c.UserID == user.UserID).ToList();
+            return _context.Auction
+                .Include(a => a.Item)
+                .Include(a => a.SubCategory)
+                .Where(c => c.UserID == user.UserID)
+                .ToList();
+
         }
 
 
@@ -59,7 +62,7 @@ namespace AuctionPortal.Services
             var auction = _context.Auction.FirstOrDefault(a => a.AuctionID == dto.AuctionID);
             var item = _context.Item.FirstOrDefault(a => a.ItemID == dto.ItemID);
 
-            if (auction != null&& item!=null)
+            if (auction != null && item != null)
             {
                 auction.Title = dto.Title;
                 auction.BuyItNow = dto.BuyItNow;
@@ -76,7 +79,7 @@ namespace AuctionPortal.Services
             _context.SaveChanges();
         }
 
-        public void DeleteAuction(int auctionId)
+        public void DeleteAuction(int? auctionId)
         {
             var auction = _context.Auction.FirstOrDefault(a => a.AuctionID == auctionId);
             if (auction != null)

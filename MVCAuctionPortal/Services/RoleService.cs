@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using AuctionPortal.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
+﻿using AuctionPortal.Models;
 using MVCAuctionPortal.Models;
 
 namespace ServicesAndInterfacesLibrary.Services

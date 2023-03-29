@@ -1,7 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using Microsoft.AspNetCore.Mvc.ViewEngines;
-using MVCAuctionPortal.Models;
-using ServicesAndInterfacesLibary.Models;
 
 namespace AuctionPortal.Models
 {

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using AuctionPortal.Models;
+﻿using AuctionPortal.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

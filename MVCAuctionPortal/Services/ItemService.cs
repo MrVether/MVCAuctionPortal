@@ -1,8 +1,4 @@
 ﻿using AuctionPortal.Models;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using System.Collections.Generic;
-using System.Linq;
 using MVCAuctionPortal.Models;
 
 namespace ServicesAndInterfacesLibary.Services
@@ -23,7 +19,7 @@ namespace ServicesAndInterfacesLibary.Services
             return item.ItemID;
         }
 
-        public int Delete(int id)
+        public int? Delete(int? id)
         {
             var item = _context.Item.FirstOrDefault(x => x.ItemID == id);
             if (item != null)
@@ -61,7 +57,7 @@ namespace ServicesAndInterfacesLibary.Services
             return _context.Item;
         }
 
-        public Item GetItemById(int id)
+        public Item GetItemById(int? id)
         {
             return _context.Item.FirstOrDefault(x => x.ItemID == id);
         }

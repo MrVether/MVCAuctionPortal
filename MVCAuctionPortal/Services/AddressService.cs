@@ -1,7 +1,5 @@
 ﻿using AuctionPortal.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
 using MVCAuctionPortal.Models;
 
 namespace ServicesAndInterfacesLibary.Services
@@ -43,10 +41,10 @@ namespace ServicesAndInterfacesLibary.Services
         public Address GetAddressById(int id)
         {
             return _context.Address.Find(id);
-        } 
+        }
         public IEnumerable<Address> GetAddressesForUser(User user)
         {
-            return _context.Address.Where(a=> a.AddressID== user.AddressID );
+            return _context.Address.Where(a => a.AddressID == user.AddressID);
         }
 
         public IEnumerable<Address> GetAllAddresses()

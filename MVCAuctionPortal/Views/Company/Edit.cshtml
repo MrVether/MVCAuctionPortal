@@ -1,0 +1,57 @@
+﻿@using AuctionPortal.Models
+@model EditCompanyViewModel
+
+@{
+    ViewData["Title"] = "Company Editing";
+}
+
+<form asp-action="Edit" asp-controller="Company">
+    <div class="form-group">
+        <input type="hidden" asp-for="Company.CompanyID" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="name">Name:</label>
+        <input asp-for="Company.Name" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="nip">NIP:</label>
+        <input asp-for="Company.Nip" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="regon">REGON:</label>
+        <input asp-for="Company.Regon" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="countryEstablishment">Country of Establishment:</label>
+        <input asp-for="Company.CountryEstablishment" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="dateOfEstablishment">Date of Establishment:</label>
+        <input asp-for="Company.DateOfEstablishment" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="description">Description:</label>
+        <input asp-for="Company.Description" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <input type="hidden" asp-for="Address.AddressID" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="street">Street:</label>
+        <input asp-for="Address.Street" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="houseNumber">House Number:</label>
+        <input asp-for="Address.HouseNumber" class="form-control" required />
+    </div>
+    <div class="form-group">
+        <label for="localNumber">Local Number:</label>
+        <input asp-for="Address.LocalNumber" class="form-control" />
+    </div>
+    <div class="form-group">
+        <label for="zipCode">Zip Code:</label>
+        <input asp-for="Address.ZipCode" class="form-control" required />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

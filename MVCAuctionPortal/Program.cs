@@ -1,7 +1,6 @@
 ﻿using AuctionPortal.Data.Seeders;
 using AuctionPortal.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using MVCAuctionPortal.Models;
 using ServicesAndInterfacesLibary.Services;
 using ServicesAndInterfacesLibrary.Services;

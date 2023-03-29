@@ -1,0 +1,85 @@
+﻿@model IEnumerable<AuctionPortal.Models.Item>
+
+@{
+    ViewData["Title"] = "List of Items";
+}
+<style>
+    .card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        height: 100%;
+    }
+
+    .card img {
+        max-width: 100%;
+        max-height: 80%;
+        object-fit: contain;
+    }
+
+    .card-body {
+        height: auto;
+        overflow-y: auto;
+    }
+
+    .card-container {
+        position: relative;
+        height: 450px;
+        margin-bottom: 50px;
+    }
+
+    .card-footer {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        margin-top: auto; 
+    }
+</style>
+<div class="row">
+    @foreach (var item in Model)
+    {
+        <div class="col-md-4 col-xs-6 border-primary mb-3">
+            <div class="card-container">
+                <div class="card mb-3" style="max-width: 540px;">
+                    <div class="row g-0 ">
+                        <div class="col-md-12">
+                            <div class="card-header text-white bg-info">
+                                <p class="card-text">
+                                    <h5 class="card-title">
+                                        @item.Name
+                                    </h5>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card-body">
+                                <p class="card-text">@item.Description</p>
+                                <p class="card-text"><b>Condition: </b>@item.Condition</p>
+                                <p class="card-text"><b>Model:</b>@item.Model</p>
+                                <p class="card-text"><b>Manufacturer:</b>@item.Manufacturer</p>
+                                <p class="card-text"><b>Other:</b>@item.Other</p>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="card-footer mt-auto">
+                                <div class="row">
+                                    <div class="col-6 mb-2">
+                                        <a class="btn btn-outline-primary w-100" asp-action="Edit" asp-route-id="@item.ItemID">
+                                            <i class="bi bi-pencil-fill"></i> Edit
+                                        </a>
+                                    </div>
+                                    <div class="col-6 mb-2">
+                                        <a class="btn btn-outline-danger w-100" asp-action="DeleteConfirmation" asp-route-id="@item.ItemID">
+                                            <i class="bi bi-trash-fill"></i> Delete
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

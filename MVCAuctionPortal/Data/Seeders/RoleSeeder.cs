@@ -1,7 +1,6 @@
 ﻿using AuctionPortal.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using System.Collections.Generic;
 
 namespace AuctionPortal.Data.Seeders
 {

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using AuctionPortal.Models;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace AuctionPortal.Models
 {

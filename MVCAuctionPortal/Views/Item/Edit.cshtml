@@ -1,0 +1,36 @@
+﻿@using AuctionPortal.Models
+@model AuctionPortal.Models.Item
+
+@{
+    ViewData["Title"] = "Item Editing";
+}
+
+<form action="../edit" method="post">
+    <div class="form-group">
+        <input type="hidden" name="ItemID" value="@Model.ItemID" />
+
+        <label for="name">Name:</label>
+        <input type="text" class="form-control" id="name" name="Name" value="@Model.Name" required>
+    </div>
+    <div class="form-group">
+        <label for="description">Description:</label>
+        <input type="text" class="form-control" id="description" name="Description" value="@Model.Description" required>
+    </div>
+    <div class="form-group">
+        <label for="manufacturer">Manufacturer:</label>
+        <input type="text" class="form-control" id="manufacturer" name="Manufacturer" value="@Model.Manufacturer">
+    </div>
+    <div class="form-group">
+        <label for="condition">Condition:</label>
+        <input type="text" class="form-control" id="condition" name="Condition" value="@Model.Condition" required>
+    </div>
+    <div class="form-group">
+        <label for="model">Model:</label>
+        <input type="text" class="form-control" id="model" name="Model" value="@Model.Model">
+    </div>
+    <div class="form-group">
+        <label for="other">Other:</label>
+        <input type="text" class="form-control" id="other" name="Other" value="@Model.Other">
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>

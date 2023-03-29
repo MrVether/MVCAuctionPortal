@@ -1,14 +1,12 @@
 ﻿using AuctionPortal.Data.Seeders;
 using AuctionPortal.Models;
 using Microsoft.EntityFrameworkCore;
-using MVCAuctionPortal.Models;
-using ServicesAndInterfacesLibary.Models;
 
 namespace MVCAuctionPortal.Models
 {
     public class AuctionDbContext : DbContext
     {
-        
+
 
         public AuctionDbContext(DbContextOptions<AuctionDbContext> options)
             : base(options)

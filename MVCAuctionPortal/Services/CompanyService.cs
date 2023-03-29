@@ -44,7 +44,7 @@ namespace ServicesAndInterfacesLibary.Services
             return _context.Company.Include(c => c.CompanyAddress)
                                       .FirstOrDefault(c => c.CompanyID == id);
         }
-        public IEnumerable<Company> GetCompaniesForUser(int id)
+        public IEnumerable<Company> GetCompaniesForUser(int? id)
         {
             var user = _context.User.Find(id);
             if (user == null)

@@ -1,0 +1,32 @@
+﻿@model AuctionPortal.Models.Warranty
+
+<form method="post" action="@Url.Action("Edit", "Warranty")" class="form-horizontal" role="form">
+    <input type="hidden" name="WarrantyID" value="@Model.WarrantyID" />
+
+    <div class="form-group">
+        <label for="Name" class="control-label col-md-2">Name:</label>
+        <div class="col-md-10">
+            <input type="text" id="Name" name="Name" class="form-control" value="@Model.Name" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="Duration" class="control-label col-md-2">Duration:</label>
+        <div class="col-md-10">
+            <input type="number" id="Durantion" name="Durantion" class="form-control" value="@Model.Durantion" />
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label for="Description" class="control-label col-md-2">Description:</label>
+        <div class="col-md-10">
+            <textarea id="Description" name="Description" class="form-control">@Model.Description</textarea>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-default">Save</button>
+        </div>
+    </div>
+</form>

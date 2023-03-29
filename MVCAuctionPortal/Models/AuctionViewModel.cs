@@ -1,5 +1,4 @@
 ﻿using AuctionPortal.Models;
-using System.ComponentModel.DataAnnotations;
 
 namespace MVCAuctionPortal.Models;
 
@@ -24,5 +23,5 @@ public class AuctionViewModel
     public IEnumerable<Item> Items { get; set; }
     public IEnumerable<Warranty> Warranties { get; set; }
     public IEnumerable<SubCategory> SubCategories { get; set; }
-  
+
 }

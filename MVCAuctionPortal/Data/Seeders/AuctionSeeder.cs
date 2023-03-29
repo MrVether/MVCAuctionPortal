@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using AuctionPortal.Models;
+﻿using AuctionPortal.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MVCAuctionPortal.Models;
-using ServicesAndInterfacesLibary.Models;
 
 namespace AuctionPortal.Data.Seeders
 {

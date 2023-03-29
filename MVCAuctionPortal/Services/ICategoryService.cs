@@ -1,5 +1,4 @@
 ﻿using MVCAuctionPortal.Models;
-using ServicesAndInterfacesLibary.Models;
 
 namespace AuctionPortal.Services;
 

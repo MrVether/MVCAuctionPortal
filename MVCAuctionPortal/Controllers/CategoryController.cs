@@ -10,7 +10,7 @@ namespace MVCAuctionPortal.Controllers
         private readonly ICategoryService _categoryService;
         private readonly ISubCategoryService _subCategoryService;
 
-        public CategoryController(ILogger<CategoryController> logger, ICategoryService categoryService,ISubCategoryService subCategoryService)
+        public CategoryController(ILogger<CategoryController> logger, ICategoryService categoryService, ISubCategoryService subCategoryService)
         {
             _logger = logger;
             _categoryService = categoryService;
@@ -20,13 +20,13 @@ namespace MVCAuctionPortal.Controllers
         {
             var allCategories = _categoryService.GetAllCategories();
             return View(allCategories);
-        }   
+        }
         public IActionResult SubCategories([FromRoute] int id)
         {
             var allSubCategories = _subCategoryService.GetAllSubCategories(id);
             return View(allSubCategories);
         }
 
-   
+
     }
 }

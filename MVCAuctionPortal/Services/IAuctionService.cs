@@ -5,11 +5,11 @@ namespace AuctionPortal.Services;
 public interface IAuctionService
 {
     IEnumerable<Auction> GetAllAuctions();
-    Auction GetAuctionById(int auctionId);
+    Auction GetAuctionById(int? auctionId);
     List<Auction> GetAuctionsForUser(int userId);
     IEnumerable<Auction> GetAuctionBySubCategory(int subCategoryId);
     void AddAuction(Auction auction);
     void UpdateAuction(Auction dto);
-    void DeleteAuction(int auctionId);
+    void DeleteAuction(int? auctionId);
 
 }

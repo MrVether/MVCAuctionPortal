@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using MVCAuctionPortal.Models;
-using System.Diagnostics;
-using AuctionPortal.Models;
+﻿using AuctionPortal.Models;
 using AuctionPortal.Services;
+using Microsoft.AspNetCore.Mvc;
+using MVCAuctionPortal.Models;
 using ServicesAndInterfacesLibary.Services;
-using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 
 namespace MVCAuctionPortal.Controllers
 {
@@ -27,7 +26,7 @@ namespace MVCAuctionPortal.Controllers
 
         public IActionResult Index()
         {
-            var allAuctions =  _auctionService.GetAllAuctions();
+            var allAuctions = _auctionService.GetAllAuctions();
             return View(allAuctions);
         }
         [HttpGet]
@@ -44,73 +43,81 @@ namespace MVCAuctionPortal.Controllers
         [HttpPost]
         public ActionResult Create(AuctionViewModel model)
         {
-           
-                if (model.ItemID == 0 && !string.IsNullOrEmpty(model.NewItemName))
-                {
-                    var newItem = new Item
-                    {
-                        Name = model.NewItemName,
-                        Description = model.NewItemDescription,
-                        Manufacturer = model.NewItemManufacturer,
-                        Condition = model.NewItemCondition,
-                        Model = model.NewItemModel,
-                        Other = model.NewItemOther
-                    };
-                    _itemService.Create(newItem);
 
-                    model.ItemID = newItem.ItemID;
-                 
-                }
-
+            if (model.ItemID == 0 && !string.IsNullOrEmpty(model.NewItemName))
+            {
+                var newItem = new Item
                 {
-                    var newAuction = new Auction
-                    {
-                        Title = model.Title,
-                        BuyItNow = model.BuyItNow,
-                        EndDate = model.EndDate,
-                        Price = model.Price,
-                        Pieces = model.Pieces,
-                        SubCategoryID = model.SubCategoryID,
-                        ItemID = model.ItemID,
-                        WarrantyID = model.WarrantyID,
-                        ImageURL = model.ImageURL
-                    };
-                    _auctionService.AddAuction(newAuction);
-                
+                    Name = model.NewItemName,
+                    Description = model.NewItemDescription,
+                    Manufacturer = model.NewItemManufacturer,
+                    Condition = model.NewItemCondition,
+                    Model = model.NewItemModel,
+                    Other = model.NewItemOther
+                };
+                _itemService.Create(newItem);
+
+                model.ItemID = newItem.ItemID;
+
+            }
+
+            {
+                var newAuction = new Auction
+                {
+                    Title = model.Title,
+                    BuyItNow = model.BuyItNow,
+                    EndDate = model.EndDate,
+                    Price = model.Price,
+                    Pieces = model.Pieces,
+                    SubCategoryID = model.SubCategoryID,
+                    ItemID = model.ItemID,
+                    WarrantyID = model.WarrantyID,
+                    ImageURL = model.ImageURL
+                };
+                _auctionService.AddAuction(newAuction);
+
 
 
                 return RedirectToAction("Index");
-                }
-                ;
-                
-
-                var viewModel = new AuctionViewModel
-            {
-                Items = _itemService.GetAllItems(),
-                Warranties = _warrantyService.GetAllWarranties(),
-                SubCategories = _subCategoryService.GetAllSubCategories()
-            };
-            model = viewModel;
-            return View(model);
+            }
         }
-
-        [HttpGet]
-        public IActionResult Edit()
+        [HttpPost]
+        public IActionResult Delete([FromRoute] int? id)
         {
-
-            return View();
+            _auctionService.DeleteAuction(id);
+            return RedirectToAction("Index");
         }
-        public IActionResult Edit([FromRoute] int id)
+
+        public IActionResult DeleteConfirmation(int id)
         {
             var auction = _auctionService.GetAuctionById(id);
+            if (auction == null)
+            {
+                return NotFound();
+            }
 
             return View(auction);
+        }
+
+        public IActionResult Edit([FromRoute] int? id)
+        {
+            if (id == null)
+            {
+                var auctions = _auctionService.GetAuctionsForUser(2);
+                return View("SellerAuctionList", auctions);
+            }
+            else
+            {
+                var auction = _auctionService.GetAuctionById(id);
+
+                return View(auction);
+            }
         }
         [HttpPost]
         public IActionResult Edit(Auction auction)
         {
 
-_auctionService.UpdateAuction(auction);
+            _auctionService.UpdateAuction(auction);
             return View(auction);
         }
         [HttpGet]
@@ -123,11 +130,6 @@ _auctionService.UpdateAuction(auction);
         {
             var auction = _auctionService.GetAuctionBySubCategory(id);
             return View(auction);
-        }
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
