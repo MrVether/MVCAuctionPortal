@@ -1,5 +1,7 @@
-﻿using AuctionPortal.Models;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using AuctionPortal.Models;
+
+namespace MVCAuctionPortal.Models;
 
 public class Basket
 {
@@ -10,5 +12,5 @@ public class Basket
     public float SummaryPrice { get; set; }
     public int UserID { get; set; }
     public User User { get; set; }
-    public List<Auction> Auctions { get; set; }
+    public List<BasketAndAuction> BasketAndAuctions { get; set; }
 }

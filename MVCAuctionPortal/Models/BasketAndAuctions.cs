@@ -1,16 +1,16 @@
 ﻿using AuctionPortal.Models;
 
-namespace ServicesAndInterfacesLibary.Models
+namespace MVCAuctionPortal.Models
 {
-    public class BasketAndAuction
+    public class BasketAndAuction 
     {
-        public int BasketID { get; set; }
-        public int AuctionID { get; set; }
-        public int Quanity { get; set; }
 
-        // Navigation properties
-        public Basket Basket { get; set; }
+        public int AuctionId { get; set; }
         public Auction Auction { get; set; }
+        public int BasketId { get; set; }
+        public Basket Basket { get; set; }
+        public bool Selected { get; set; }
+        public int Quantity { get; set; }
     }
 
 }

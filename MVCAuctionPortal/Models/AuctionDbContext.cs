@@ -26,9 +26,28 @@ namespace MVCAuctionPortal.Models
         public DbSet<User> User { get; set; }
         public DbSet<Warranty> Warranty { get; set; }
 
+        public DbSet<BasketAndAuction> BasketAndAuctions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<BasketAndAuction>(entity =>
+            {
+                entity.HasKey(ba => new { ba.AuctionId, ba.BasketId });
+                entity.ToTable("BasketAndAuctions");
+
+                entity.HasOne(ba => ba.Basket)
+                    .WithMany(b => b.BasketAndAuctions)
+                    .HasForeignKey(ba => ba.BasketId)
+                    .OnDelete(DeleteBehavior.NoAction);
+
+                entity.HasOne(ba => ba.Auction)
+                    .WithMany(a => a.BasketAndAuctions)
+                    .HasForeignKey(ba => ba.AuctionId)
+                    .OnDelete(DeleteBehavior.NoAction);
+            });
+
+
+
 
             modelBuilder.ApplyConfiguration(new AddressSeeder());
             modelBuilder.ApplyConfiguration(new AuctionSeeder());

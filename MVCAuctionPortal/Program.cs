@@ -2,6 +2,7 @@
 using AuctionPortal.Services;
 using Microsoft.EntityFrameworkCore;
 using MVCAuctionPortal.Models;
+using MVCAuctionPortal.Services;
 using ServicesAndInterfacesLibary.Services;
 using ServicesAndInterfacesLibrary.Services;
 
@@ -24,6 +25,7 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IWarrantyService, WarrantyService>();
 builder.Services.AddScoped<ISubCategoryService, SubCategoryService>();
 builder.Services.AddScoped<ISubCategoryService, SubCategoryService>();
+builder.Services.AddScoped<IBasketService, BasketService>();
 
 builder.Services.AddTransient<AddressSeeder>();
 builder.Services.AddTransient<AuctionSeeder>();

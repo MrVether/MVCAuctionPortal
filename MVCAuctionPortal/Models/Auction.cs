@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using MVCAuctionPortal.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace AuctionPortal.Models
 {
@@ -27,5 +28,7 @@ namespace AuctionPortal.Models
         public Item Item { get; set; }
         public Warranty Warranty { get; set; }
         public Review Review { get; set; }
+        public virtual ICollection<BasketAndAuction> BasketAndAuctions { get; set; }
+
     }
 }

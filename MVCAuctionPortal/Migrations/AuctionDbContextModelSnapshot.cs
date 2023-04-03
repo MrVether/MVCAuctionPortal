@@ -84,9 +84,6 @@ namespace MVCAuctionPortal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AuctionID"));
 
-                    b.Property<int?>("BasketID")
-                        .HasColumnType("int");
-
                     b.Property<bool>("BuyItNow")
                         .HasColumnType("bit");
 
@@ -133,8 +130,6 @@ namespace MVCAuctionPortal.Migrations
 
                     b.HasKey("AuctionID");
 
-                    b.HasIndex("BasketID");
-
                     b.HasIndex("CategoryID");
 
                     b.HasIndex("ItemID");
@@ -154,8 +149,8 @@ namespace MVCAuctionPortal.Migrations
                         {
                             AuctionID = 1,
                             BuyItNow = false,
-                            DateOfIssue = new DateTime(2023, 3, 24, 21, 40, 9, 862, DateTimeKind.Local).AddTicks(4129),
-                            EndDate = new DateTime(2023, 3, 31, 21, 40, 9, 862, DateTimeKind.Local).AddTicks(4164),
+                            DateOfIssue = new DateTime(2023, 4, 1, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2562),
+                            EndDate = new DateTime(2023, 4, 8, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2603),
                             ImageURL = "https://m.media-amazon.com/images/I/71dpTXFz+dL._AC_UF1000,1000_QL80_.jpg",
                             ItemID = 1,
                             Pieces = 5,
@@ -171,8 +166,8 @@ namespace MVCAuctionPortal.Migrations
                         {
                             AuctionID = 2,
                             BuyItNow = true,
-                            DateOfIssue = new DateTime(2023, 3, 24, 21, 40, 9, 862, DateTimeKind.Local).AddTicks(4174),
-                            EndDate = new DateTime(2023, 4, 7, 21, 40, 9, 862, DateTimeKind.Local).AddTicks(4176),
+                            DateOfIssue = new DateTime(2023, 4, 1, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2613),
+                            EndDate = new DateTime(2023, 4, 15, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2616),
                             ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg",
                             ItemID = 2,
                             Pieces = 3,
@@ -188,8 +183,8 @@ namespace MVCAuctionPortal.Migrations
                         {
                             AuctionID = 3,
                             BuyItNow = false,
-                            DateOfIssue = new DateTime(2023, 3, 24, 21, 40, 9, 862, DateTimeKind.Local).AddTicks(4179),
-                            EndDate = new DateTime(2023, 4, 14, 21, 40, 9, 862, DateTimeKind.Local).AddTicks(4180),
+                            DateOfIssue = new DateTime(2023, 4, 1, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2619),
+                            EndDate = new DateTime(2023, 4, 22, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2621),
                             ImageURL = "https://a.allegroimg.com/original/1e76f9/ba5267f249a8bb358f5d3cf50ec6",
                             ItemID = 3,
                             Pieces = 1,
@@ -591,7 +586,7 @@ namespace MVCAuctionPortal.Migrations
                             Email = "johndoe@example.com",
                             Name = "John",
                             Password = "password",
-                            RegistationDate = new DateTime(2023, 3, 17, 21, 40, 9, 862, DateTimeKind.Local).AddTicks(7666),
+                            RegistationDate = new DateTime(2023, 3, 25, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(6116),
                             RoleID = 1,
                             Surname = "Doe"
                         },
@@ -603,7 +598,7 @@ namespace MVCAuctionPortal.Migrations
                             Email = "janedoe@example.com",
                             Name = "Jane",
                             Password = "password",
-                            RegistationDate = new DateTime(2023, 3, 21, 21, 40, 9, 862, DateTimeKind.Local).AddTicks(7681),
+                            RegistationDate = new DateTime(2023, 3, 29, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(6138),
                             RoleID = 2,
                             Surname = "Doe"
                         });
@@ -656,7 +651,7 @@ namespace MVCAuctionPortal.Migrations
                         });
                 });
 
-            modelBuilder.Entity("Basket", b =>
+            modelBuilder.Entity("MVCAuctionPortal.Models.Basket", b =>
                 {
                     b.Property<int>("BasketID")
                         .ValueGeneratedOnAdd()
@@ -694,6 +689,27 @@ namespace MVCAuctionPortal.Migrations
                             SummaryPrice = 15f,
                             UserID = 2
                         });
+                });
+
+            modelBuilder.Entity("MVCAuctionPortal.Models.BasketAndAuction", b =>
+                {
+                    b.Property<int>("AuctionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BasketId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("Selected")
+                        .HasColumnType("bit");
+
+                    b.HasKey("AuctionId", "BasketId");
+
+                    b.HasIndex("BasketId");
+
+                    b.ToTable("BasketAndAuctions", (string)null);
                 });
 
             modelBuilder.Entity("MVCAuctionPortal.Models.Category", b =>
@@ -746,10 +762,6 @@ namespace MVCAuctionPortal.Migrations
 
             modelBuilder.Entity("AuctionPortal.Models.Auction", b =>
                 {
-                    b.HasOne("Basket", null)
-                        .WithMany("Auctions")
-                        .HasForeignKey("BasketID");
-
                     b.HasOne("MVCAuctionPortal.Models.Category", null)
                         .WithMany("Auctions")
                         .HasForeignKey("CategoryID");
@@ -846,7 +858,7 @@ namespace MVCAuctionPortal.Migrations
                     b.Navigation("Roles");
                 });
 
-            modelBuilder.Entity("Basket", b =>
+            modelBuilder.Entity("MVCAuctionPortal.Models.Basket", b =>
                 {
                     b.HasOne("AuctionPortal.Models.User", "User")
                         .WithMany()
@@ -857,9 +869,33 @@ namespace MVCAuctionPortal.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Basket", b =>
+            modelBuilder.Entity("MVCAuctionPortal.Models.BasketAndAuction", b =>
                 {
-                    b.Navigation("Auctions");
+                    b.HasOne("AuctionPortal.Models.Auction", "Auction")
+                        .WithMany("BasketAndAuctions")
+                        .HasForeignKey("AuctionId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("MVCAuctionPortal.Models.Basket", "Basket")
+                        .WithMany("BasketAndAuctions")
+                        .HasForeignKey("BasketId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Auction");
+
+                    b.Navigation("Basket");
+                });
+
+            modelBuilder.Entity("AuctionPortal.Models.Auction", b =>
+                {
+                    b.Navigation("BasketAndAuctions");
+                });
+
+            modelBuilder.Entity("MVCAuctionPortal.Models.Basket", b =>
+                {
+                    b.Navigation("BasketAndAuctions");
                 });
 
             modelBuilder.Entity("MVCAuctionPortal.Models.Category", b =>

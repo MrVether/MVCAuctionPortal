@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -209,6 +210,66 @@ namespace MVCAuctionPortal.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Auction",
+                columns: table => new
+                {
+                    AuctionID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    BuyItNow = table.Column<bool>(type: "bit", nullable: false),
+                    DateOfIssue = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Pieces = table.Column<int>(type: "int", nullable: false),
+                    PurchaseCounter = table.Column<int>(type: "int", nullable: false),
+                    SubCategoryID = table.Column<int>(type: "int", nullable: false),
+                    ItemID = table.Column<int>(type: "int", nullable: false),
+                    WarrantyID = table.Column<int>(type: "int", nullable: false),
+                    ReviewID = table.Column<int>(type: "int", nullable: true),
+                    UserID = table.Column<int>(type: "int", nullable: false),
+                    ImageURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CategoryID = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Auction", x => x.AuctionID);
+                    table.ForeignKey(
+                        name: "FK_Auction_Category_CategoryID",
+                        column: x => x.CategoryID,
+                        principalTable: "Category",
+                        principalColumn: "CategoryID");
+                    table.ForeignKey(
+                        name: "FK_Auction_Item_ItemID",
+                        column: x => x.ItemID,
+                        principalTable: "Item",
+                        principalColumn: "ItemID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Auction_Review_ReviewID",
+                        column: x => x.ReviewID,
+                        principalTable: "Review",
+                        principalColumn: "ReviewID");
+                    table.ForeignKey(
+                        name: "FK_Auction_SubCategory_SubCategoryID",
+                        column: x => x.SubCategoryID,
+                        principalTable: "SubCategory",
+                        principalColumn: "SubCategoryID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Auction_User_UserID",
+                        column: x => x.UserID,
+                        principalTable: "User",
+                        principalColumn: "UserID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Auction_Warranty_WarrantyID",
+                        column: x => x.WarrantyID,
+                        principalTable: "Warranty",
+                        principalColumn: "WarrantyID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Basket",
                 columns: table => new
                 {
@@ -230,70 +291,27 @@ namespace MVCAuctionPortal.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Auction",
+                name: "BasketAndAuctions",
                 columns: table => new
                 {
-                    AuctionID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BuyItNow = table.Column<bool>(type: "bit", nullable: false),
-                    DateOfIssue = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    Pieces = table.Column<int>(type: "int", nullable: false),
-                    PurchaseCounter = table.Column<int>(type: "int", nullable: false),
-                    SubCategoryID = table.Column<int>(type: "int", nullable: false),
-                    ItemID = table.Column<int>(type: "int", nullable: false),
-                    WarrantyID = table.Column<int>(type: "int", nullable: false),
-                    ReviewID = table.Column<int>(type: "int", nullable: false),
-                    UserID = table.Column<int>(type: "int", nullable: false),
-                    ImageURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BasketID = table.Column<int>(type: "int", nullable: true),
-                    CategoryID = table.Column<int>(type: "int", nullable: true)
+                    AuctionId = table.Column<int>(type: "int", nullable: false),
+                    BasketId = table.Column<int>(type: "int", nullable: false),
+                    Selected = table.Column<bool>(type: "bit", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Auction", x => x.AuctionID);
+                    table.PrimaryKey("PK_BasketAndAuctions", x => new { x.AuctionId, x.BasketId });
                     table.ForeignKey(
-                        name: "FK_Auction_Basket_BasketID",
-                        column: x => x.BasketID,
+                        name: "FK_BasketAndAuctions_Auction_AuctionId",
+                        column: x => x.AuctionId,
+                        principalTable: "Auction",
+                        principalColumn: "AuctionID");
+                    table.ForeignKey(
+                        name: "FK_BasketAndAuctions_Basket_BasketId",
+                        column: x => x.BasketId,
                         principalTable: "Basket",
                         principalColumn: "BasketID");
-                    table.ForeignKey(
-                        name: "FK_Auction_Category_CategoryID",
-                        column: x => x.CategoryID,
-                        principalTable: "Category",
-                        principalColumn: "CategoryID");
-                    table.ForeignKey(
-                        name: "FK_Auction_Item_ItemID",
-                        column: x => x.ItemID,
-                        principalTable: "Item",
-                        principalColumn: "ItemID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Auction_Review_ReviewID",
-                        column: x => x.ReviewID,
-                        principalTable: "Review",
-                        principalColumn: "ReviewID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Auction_SubCategory_SubCategoryID",
-                        column: x => x.SubCategoryID,
-                        principalTable: "SubCategory",
-                        principalColumn: "SubCategoryID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Auction_User_UserID",
-                        column: x => x.UserID,
-                        principalTable: "User",
-                        principalColumn: "UserID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Auction_Warranty_WarrantyID",
-                        column: x => x.WarrantyID,
-                        principalTable: "Warranty",
-                        principalColumn: "WarrantyID",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
@@ -389,7 +407,7 @@ namespace MVCAuctionPortal.Migrations
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "UserID", "AddressID", "CompanyID", "CouponID", "Email", "Name", "Nip", "Password", "RegistationDate", "RoleID", "Surname" },
-                values: new object[] { 1, 1, null, 1, "johndoe@example.com", "John", null, "password", new DateTime(2023, 3, 13, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(7754), 1, "Doe" });
+                values: new object[] { 1, 1, null, 1, "johndoe@example.com", "John", null, "password", new DateTime(2023, 3, 25, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(6116), 1, "Doe" });
 
             migrationBuilder.InsertData(
                 table: "Basket",
@@ -399,27 +417,22 @@ namespace MVCAuctionPortal.Migrations
             migrationBuilder.InsertData(
                 table: "User",
                 columns: new[] { "UserID", "AddressID", "CompanyID", "CouponID", "Email", "Name", "Nip", "Password", "RegistationDate", "RoleID", "Surname" },
-                values: new object[] { 2, 2, 1, null, "janedoe@example.com", "Jane", null, "password", new DateTime(2023, 3, 17, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(7770), 2, "Doe" });
+                values: new object[] { 2, 2, 1, null, "janedoe@example.com", "Jane", null, "password", new DateTime(2023, 3, 29, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(6138), 2, "Doe" });
 
             migrationBuilder.InsertData(
                 table: "Auction",
-                columns: new[] { "AuctionID", "BasketID", "BuyItNow", "CategoryID", "DateOfIssue", "EndDate", "ImageURL", "ItemID", "Pieces", "Price", "PurchaseCounter", "ReviewID", "SubCategoryID", "Title", "UserID", "WarrantyID" },
+                columns: new[] { "AuctionID", "BuyItNow", "CategoryID", "DateOfIssue", "EndDate", "ImageURL", "ItemID", "Pieces", "Price", "PurchaseCounter", "ReviewID", "SubCategoryID", "Title", "UserID", "WarrantyID" },
                 values: new object[,]
                 {
-                    { 1, null, false, null, new DateTime(2023, 3, 20, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(5165), new DateTime(2023, 3, 27, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(5201), "https://m.media-amazon.com/images/I/71dpTXFz+dL._AC_UF1000,1000_QL80_.jpg", 1, 5, 100m, 0, 1, 1, "Iphone", 2, 1 },
-                    { 2, null, true, null, new DateTime(2023, 3, 20, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(5210), new DateTime(2023, 4, 3, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(5212), "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", 2, 3, 200m, 0, 2, 2, "Shovel", 2, 2 },
-                    { 3, null, false, null, new DateTime(2023, 3, 20, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(5215), new DateTime(2023, 4, 10, 17, 55, 48, 19, DateTimeKind.Local).AddTicks(5217), "https://a.allegroimg.com/original/1e76f9/ba5267f249a8bb358f5d3cf50ec6", 3, 1, 300m, 0, 3, 3, "Boots", 2, 3 }
+                    { 1, false, null, new DateTime(2023, 4, 1, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2562), new DateTime(2023, 4, 8, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2603), "https://m.media-amazon.com/images/I/71dpTXFz+dL._AC_UF1000,1000_QL80_.jpg", 1, 5, 100m, 0, 1, 1, "Iphone", 2, 1 },
+                    { 2, true, null, new DateTime(2023, 4, 1, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2613), new DateTime(2023, 4, 15, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2616), "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", 2, 3, 200m, 0, 2, 2, "Shovel", 2, 2 },
+                    { 3, false, null, new DateTime(2023, 4, 1, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2619), new DateTime(2023, 4, 22, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2621), "https://a.allegroimg.com/original/1e76f9/ba5267f249a8bb358f5d3cf50ec6", 3, 1, 300m, 0, 3, 3, "Boots", 2, 3 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Basket",
                 columns: new[] { "BasketID", "NumberOfItems", "SummaryPrice", "UserID" },
                 values: new object[] { 2, 1, 15f, 2 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Auction_BasketID",
-                table: "Auction",
-                column: "BasketID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Auction_CategoryID",
@@ -457,6 +470,11 @@ namespace MVCAuctionPortal.Migrations
                 column: "UserID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BasketAndAuctions_BasketId",
+                table: "BasketAndAuctions",
+                column: "BasketId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Company_CompanyAddressID",
                 table: "Company",
                 column: "CompanyAddressID");
@@ -490,6 +508,9 @@ namespace MVCAuctionPortal.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "BasketAndAuctions");
+
             migrationBuilder.DropTable(
                 name: "Auction");
 
