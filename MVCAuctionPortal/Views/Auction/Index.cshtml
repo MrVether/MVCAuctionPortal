@@ -61,6 +61,7 @@
                                 <p class="card-text"><b>Seller: </b><a href="/company/GetByUserID/@item.UserID">@item.UserID</a></p>
                                 <p class="card-text"><b>Category: </b>@item.SubCategory.Name</p>
                                 <p class="card-text"><b>Start Date: </b>@item.DateOfIssue.ToString("dd MMM yyyy")</p>
+                                <p class="card-text"><b>Price: </b>@item.Price.ToString() $</p>
                                 <p class="card-text ">
                                     <b>Status: </b>
                                     @if (DateTime.Now >= item.DateOfIssue && DateTime.Now <= item.EndDate)
@@ -95,10 +96,13 @@
                                         <form method="post" asp-controller="Basket" asp-action="AddToBasket">
                                             <input type="hidden" name="auctionId" value="@item.AuctionID" />
                                             <div class="input-group">
-                                                <input type="number" class="form-control" id="quantity" name="quantity" min="1" max="@item.Pieces" value="1" />
-                                                <button type="submit" class="btn btn-success text-white w-100 @((DateTime.Now > item.EndDate) ? "disabled" : "")">
-                                                    <i class="bi bi-cart-plus"></i> Add to Cart (Price @item.Price.ToString("c"))
+                                                <button type="submit" class="btn btn-success @((DateTime.Now > item.EndDate) ? "disabled" : "")">
+                                                    <i class="bi bi-cart-plus"></i> Add to Cart
                                                 </button>
+                                                <input type="number" class="form-control" id="quantity" name="quantity" min="1" max="@item.Pieces" value="1"/>
+                                                <div class="input-group-append">
+
+                                                </div>
                                             </div>
                                         </form>
                                     </div>

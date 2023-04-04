@@ -4,46 +4,49 @@
 }
 
 <h2>Koszyk</h2>
-<form id="basket-form" method="post" asp-action="UpdateBasket" asp-controller="Basket">
+<form id="basket-form" method="post" action="@Url.Action("UpdateBasket", "Basket")">
     <table class="table">
         <thead>
-            <tr>
-                <th>Nazwa</th>
-                <th>Cena</th>
-                <th>Ilość</th>
-                <th>Usuń</th>
-                <th>Wybrane</th>
-            </tr>
+        <tr>
+            <th>Nazwa</th>
+            <th>Cena</th>
+            <th>Ilość</th>
+            <th>Usuń</th>
+            <th>Wybrane</th>
+        </tr>
         </thead>
         <tbody>
-            @for (var i = 0; i < Model.BasketAuctions.Count; i++)
-            {
-                <tr>
-                    <td>@Model.BasketAuctions[i].Title</td>
-                    <td>@Model.BasketAuctions[i].Price</td>
+        @foreach (var item in Model.BasketAuctions.Select((auction, i) => new { Auction = auction, Index = i }))
+        {
+            <tr>
+                <td>@item.Auction.Title</td>
+                <td>@item.Auction.Price</td>
 
-                    <td>
-                        <input type="number" min="0" value="@Model.BasketAuctions[i].Quantity" data-auction-id="@Model.BasketAuctions[i].AuctionId" data-price="@Model.BasketAuctions[i].Price" class="quantity-input" name="Quantity[@i]" />
-                        <input type="hidden" name="AuctionId[@i]" value="@Model.BasketAuctions[i].AuctionId" />
-                    </td>
-                    <td>
-                        <form method="post" action="@Url.Action("DeleteFromBasket", "Basket")">
-                            <input type="hidden" name="auctionId" value="@Model.BasketAuctions[i].AuctionId" />
-                            <button class="btn btn-danger remove-button">Usuń</button>
-                        </form>
-                    </td>
-                    <td>
-                        <input type="checkbox" @(Model.BasketAuctions[i].Selected ? "checked" : "") data-auction-id="@Model.BasketAuctions[i].AuctionId" class="selected-checkbox" name="Selected[@i]" />
-                    </td>
-                </tr>
-            }
+                <td>
+                    <input type="hidden" name="AuctionId[]" value="@item.Auction.AuctionId" />
+                    <input type="number" min="0" value="@item.Auction.Quantity" data-auction-id="@item.Auction.AuctionId" data-price="@item.Auction.Price" class="quantity-input" name="Quantity[]" />
+
+
+                </td>
+                <td>
+                    <form method="post" action="@Url.Action("DeleteFromBasket", "Basket")">
+                        <input type="hidden" name="auctionId" value="@item.Auction.AuctionId" />
+                        <button class="btn btn-danger remove-button">Usuń</button>
+                    </form>
+                </td>
+                <td>
+                    <input type="checkbox" @(item.Auction.Selected ? "checked" : "") data-auction-id="@item.Auction.AuctionId" class="selected-checkbox" name="Selected[@item.Index]" />
+                </td>
+            </tr>
+        }
         </tbody>
     </table>
     <input type="submit" value="Zapisz" class="btn btn-primary" />
 </form>
 
+
 <p>
-    <strong>Suma wybranych:</strong> <span id="summary-price">@Model.SummaryPrice</span>
+    <strong>Suma:</strong> <span id="summary-price">@Model.SummaryPrice</span>$
 </p>
 
 @section Scripts {

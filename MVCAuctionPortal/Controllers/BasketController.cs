@@ -46,8 +46,8 @@ namespace MVCAuctionPortal.Controllers
 
            
                 await _basketService.AddAuctionToBasket(userId, auctionId, quantity);
-                return Ok();
-         
+                return RedirectToAction(nameof(GetBasket), new { id = 2 });
+
         }
         [HttpPost]
         public async Task<IActionResult> DeleteFromBasket(int auctionId)
@@ -59,20 +59,19 @@ namespace MVCAuctionPortal.Controllers
             return RedirectToAction("GetBasket", new { id = userId });
         }
 
-        [HttpPost]
-        public async Task<IActionResult> UpdateBasket(List<int> AuctionId, List<int> Quantity)
+        public async Task<IActionResult> UpdateBasket(IFormCollection form)
         {
             int userId = 2;
 
-            for (int i = 0; i < AuctionId.Count; i++)
+            var auctionIdList = form["AuctionId[]"].Select(int.Parse).ToList();
+            var quantityList = form["Quantity[]"].Select(int.Parse).ToList();
+
+            for (int i = 0; i < auctionIdList.Count; i++)
             {
-                
-                int auctionId = AuctionId[i];
-                int quantity = Quantity[i];
+                int auctionId = auctionIdList[i];
+                int quantity = quantityList[i];
 
-
-                    await _basketService.UpdateAuctionQuantityInBasket(userId, auctionId, quantity);
-                
+                await _basketService.UpdateAuctionQuantityInBasket(userId, auctionId, quantity);
             }
 
             return RedirectToAction("GetBasket", new { id = userId });
