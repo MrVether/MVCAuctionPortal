@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace AuctionPortal.Models
 {
@@ -14,7 +16,14 @@ namespace AuctionPortal.Models
         [Required]
         public DateTime OrderDate { get; set; }
 
-        public string ShippingAddress { get; set; }
+        public string FirstName { get; set; }
+        public string Surname { get; set; }
+
+        public string City { get; set; }
+        public string Street { get; set; }
+        public string HouseNumber { get; set; }
+        public string LocalNumber { get; set; }
+        public string ZipCode { get; set; }
 
         public DateTime? ShippingDate { get; set; }
 
@@ -22,9 +31,7 @@ namespace AuctionPortal.Models
 
         public string PaymentMethod { get; set; }
 
-        public string OrderStatus { get; set; }
-
-        public virtual User User { get; set; }
+        public string OrderStatus { get; set; } = "Pending";
 
         public virtual ICollection<OrderItem> OrderItems { get; set; }
     }

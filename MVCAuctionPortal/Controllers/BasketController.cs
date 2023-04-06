@@ -19,11 +19,12 @@ namespace MVCAuctionPortal.Controllers
             _logger = logger;
             _basketService = basketService;
         }
+
         public async Task<IActionResult> GetBasket(int id)
         {
             id = 2;
-          await   _basketService.CreateBasket(id);
-             var basket = await _basketService.GetBasketByUserId(id);
+            await _basketService.CreateBasket(id);
+            var basket = await _basketService.GetBasketByUserId(id);
             var basketViewModel = new BasketViewModel
             {
                 BasketId = basket.BasketID,
@@ -40,15 +41,17 @@ namespace MVCAuctionPortal.Controllers
 
             return View(basketViewModel);
         }
+
         public async Task<IActionResult> AddToBasket(int auctionId, int quantity)
         {
             int userId = 2;
 
-           
-                await _basketService.AddAuctionToBasket(userId, auctionId, quantity);
-                return RedirectToAction(nameof(GetBasket), new { id = 2 });
+
+            await _basketService.AddAuctionToBasket(userId, auctionId, quantity);
+            return RedirectToAction(nameof(GetBasket), new { id = 2 });
 
         }
+
         [HttpPost]
         public async Task<IActionResult> DeleteFromBasket(int auctionId)
         {
@@ -77,7 +80,15 @@ namespace MVCAuctionPortal.Controllers
             return RedirectToAction("GetBasket", new { id = userId });
         }
 
+        public ActionResult OrderForm(IFormCollection form)
+        {
+            int userId = 2;
 
+            var auctionIds = form["AuctionId[]"].Select(int.Parse).ToList();
+            var quantities = form["Quantity[]"].Select(int.Parse).ToList();
+
+            return RedirectToAction("OrderForm", "Order", new { auctionIds = auctionIds, quantities = quantities });
+        }
 
     }
 }

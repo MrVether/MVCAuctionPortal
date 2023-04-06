@@ -11,5 +11,6 @@ public interface IAuctionService
     void AddAuction(Auction auction);
     void UpdateAuction(Auction dto);
     void DeleteAuction(int? auctionId);
+    Task<bool> ModifyQuantity(int auctionId, int quantity);
 
 }

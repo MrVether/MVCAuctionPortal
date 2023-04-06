@@ -26,6 +26,8 @@ builder.Services.AddScoped<IWarrantyService, WarrantyService>();
 builder.Services.AddScoped<ISubCategoryService, SubCategoryService>();
 builder.Services.AddScoped<ISubCategoryService, SubCategoryService>();
 builder.Services.AddScoped<IBasketService, BasketService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+
 
 builder.Services.AddTransient<AddressSeeder>();
 builder.Services.AddTransient<AuctionSeeder>();

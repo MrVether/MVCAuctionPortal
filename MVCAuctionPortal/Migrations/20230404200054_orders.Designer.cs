@@ -4,6 +4,7 @@ using MVCAuctionPortal.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVCAuctionPortal.Migrations
 {
     [DbContext(typeof(AuctionDbContext))]
-    partial class AuctionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230404200054_orders")]
+    partial class orders
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -149,8 +152,8 @@ namespace MVCAuctionPortal.Migrations
                         {
                             AuctionID = 1,
                             BuyItNow = false,
-                            DateOfIssue = new DateTime(2023, 4, 6, 20, 12, 55, 629, DateTimeKind.Local).AddTicks(8497),
-                            EndDate = new DateTime(2023, 4, 13, 20, 12, 55, 629, DateTimeKind.Local).AddTicks(8532),
+                            DateOfIssue = new DateTime(2023, 4, 4, 22, 0, 54, 142, DateTimeKind.Local).AddTicks(4626),
+                            EndDate = new DateTime(2023, 4, 11, 22, 0, 54, 142, DateTimeKind.Local).AddTicks(4658),
                             ImageURL = "https://m.media-amazon.com/images/I/71dpTXFz+dL._AC_UF1000,1000_QL80_.jpg",
                             ItemID = 1,
                             Pieces = 5,
@@ -166,8 +169,8 @@ namespace MVCAuctionPortal.Migrations
                         {
                             AuctionID = 2,
                             BuyItNow = true,
-                            DateOfIssue = new DateTime(2023, 4, 6, 20, 12, 55, 629, DateTimeKind.Local).AddTicks(8541),
-                            EndDate = new DateTime(2023, 4, 20, 20, 12, 55, 629, DateTimeKind.Local).AddTicks(8543),
+                            DateOfIssue = new DateTime(2023, 4, 4, 22, 0, 54, 142, DateTimeKind.Local).AddTicks(4666),
+                            EndDate = new DateTime(2023, 4, 18, 22, 0, 54, 142, DateTimeKind.Local).AddTicks(4668),
                             ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg",
                             ItemID = 2,
                             Pieces = 3,
@@ -183,8 +186,8 @@ namespace MVCAuctionPortal.Migrations
                         {
                             AuctionID = 3,
                             BuyItNow = false,
-                            DateOfIssue = new DateTime(2023, 4, 6, 20, 12, 55, 629, DateTimeKind.Local).AddTicks(8547),
-                            EndDate = new DateTime(2023, 4, 27, 20, 12, 55, 629, DateTimeKind.Local).AddTicks(8548),
+                            DateOfIssue = new DateTime(2023, 4, 4, 22, 0, 54, 142, DateTimeKind.Local).AddTicks(4672),
+                            EndDate = new DateTime(2023, 4, 25, 22, 0, 54, 142, DateTimeKind.Local).AddTicks(4673),
                             ImageURL = "https://a.allegroimg.com/original/1e76f9/ba5267f249a8bb358f5d3cf50ec6",
                             ItemID = 3,
                             Pieces = 1,
@@ -404,24 +407,8 @@ namespace MVCAuctionPortal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderID"));
 
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("DeliveryDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("HouseNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LocalNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("OrderDate")
                         .HasColumnType("datetime2");
@@ -434,23 +421,15 @@ namespace MVCAuctionPortal.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ShippingAddress")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("ShippingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Surname")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("UserID")
                         .HasColumnType("int");
-
-                    b.Property<string>("ZipCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("OrderID");
 
@@ -673,7 +652,7 @@ namespace MVCAuctionPortal.Migrations
                             Email = "johndoe@example.com",
                             Name = "John",
                             Password = "password",
-                            RegistationDate = new DateTime(2023, 3, 30, 20, 12, 55, 630, DateTimeKind.Local).AddTicks(1556),
+                            RegistationDate = new DateTime(2023, 3, 28, 22, 0, 54, 142, DateTimeKind.Local).AddTicks(7036),
                             RoleID = 1,
                             Surname = "Doe"
                         },
@@ -685,7 +664,7 @@ namespace MVCAuctionPortal.Migrations
                             Email = "janedoe@example.com",
                             Name = "Jane",
                             Password = "password",
-                            RegistationDate = new DateTime(2023, 4, 3, 20, 12, 55, 630, DateTimeKind.Local).AddTicks(1580),
+                            RegistationDate = new DateTime(2023, 4, 1, 22, 0, 54, 142, DateTimeKind.Local).AddTicks(7055),
                             RoleID = 2,
                             Surname = "Doe"
                         });

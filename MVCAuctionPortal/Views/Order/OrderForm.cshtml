@@ -1,0 +1,60 @@
+﻿@model MVCAuctionPortal.Models.OrderViewModel
+@{
+    ViewBag.Title = "Formularz zamówienia";
+}
+
+<h2>Formularz zamówienia</h2>
+
+<form method="post" action="@Url.Action("CreateOrder", "Order")">
+    <div class="form-group">
+        <label for="FirstName">Imię:</label>
+        <input type="text" class="form-control" id="FirstName" name="FirstName" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Surname">Nazwisko:</label>
+        <input type="text" class="form-control" id="Surname" name="Surname" required />
+    </div>
+
+    <div class="form-group">
+        <label for="City">Miasto:</label>
+        <input type="text" class="form-control" id="City" name="City" required />
+    </div>
+
+    <div class="form-group">
+        <label for="Street">Ulica:</label>
+        <input type="text" class="form-control" id="Street" name="Street" required />
+    </div>
+
+    <div class="form-group">
+        <label for="HouseNumber">Numer domu:</label>
+        <input type="text" class="form-control" id="HouseNumber" name="HouseNumber" required />
+    </div>
+
+    <div class="form-group">
+        <label for="LocalNumber">Numer lokalu:</label>
+        <input type="text" class="form-control" id="LocalNumber" name="LocalNumber" />
+    </div>
+
+    <div class="form-group">
+        <label for="ZipCode">Kod pocztowy:</label>
+        <input type="text" class="form-control" id="ZipCode" name="ZipCode" required />
+    </div>
+
+    <div class="form-group">
+        <label for="PaymentMethod">Metoda płatności:</label>
+        <select class="form-control" id="PaymentMethod" name="PaymentMethod" required>
+            <option value="CreditCard">Karta kredytowa</option>
+            <option value="BankTransfer">Przelew bankowy</option>
+            <option value="CashOnDelivery">Za pobraniem</option>
+        </select>
+    </div>
+
+    @for (int i = 0; i < Model.AuctionIds.Count; i++)
+    {
+        <input type="hidden" name="AuctionIds[]" value="@Model.AuctionIds[i]" />
+        <input type="hidden" name="Quantities[]" value="@Model.Quantities[i]" />
+    }
+
+    <button type="submit" class="btn btn-primary">Złóż zamówienie</button>
+</form>

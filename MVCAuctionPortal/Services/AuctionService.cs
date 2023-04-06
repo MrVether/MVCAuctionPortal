@@ -57,6 +57,19 @@ namespace AuctionPortal.Services
             _context.SaveChanges();
         }
 
+        public async Task<bool> ModifyQuantity(int auctionId, int quantity)
+        {
+            var auction = _context.Auction.FirstOrDefault(a => a.AuctionID == auctionId);
+            if (auction != null && auction.Pieces >= quantity)
+            {
+                auction.Pieces-=quantity;
+                await _context.SaveChangesAsync();
+                return true;
+            }
+            return false;
+
+        }
+
         public void UpdateAuction(Auction dto)
         {
             var auction = _context.Auction.FirstOrDefault(a => a.AuctionID == dto.AuctionID);

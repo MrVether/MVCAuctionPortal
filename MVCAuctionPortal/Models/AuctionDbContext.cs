@@ -25,6 +25,8 @@ namespace MVCAuctionPortal.Models
         public DbSet<SubCategory> SubCategory { get; set; }
         public DbSet<User> User { get; set; }
         public DbSet<Warranty> Warranty { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<OrderItem> OrderItems { get; set; }
 
         public DbSet<BasketAndAuction> BasketAndAuctions { get; set; }
 
