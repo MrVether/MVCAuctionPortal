@@ -29,7 +29,7 @@ namespace AuctionPortal.Models
 
         public DateTime? DeliveryDate { get; set; }
 
-        public string PaymentMethod { get; set; }
+        public string? PaymentMethod { get; set; }
 
         public string OrderStatus { get; set; } = "Pending";
 

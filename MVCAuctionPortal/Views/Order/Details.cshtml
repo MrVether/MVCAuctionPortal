@@ -1,0 +1,55 @@
+﻿@model AuctionPortal.Models.Order
+
+@{
+    ViewBag.Title = "Szczegóły zamówienia";
+}
+
+<h2>Szczegóły zamówienia #@Model.OrderID</h2>
+
+<table class="table">
+    <thead>
+    <tr>
+        <th>Id zamówienia</th>
+        <th>Data zamówienia</th>
+        <th>Status</th>
+        <th>Metoda płatności</th>
+        <th>Wartość zamówienia</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+        <td>@Model.OrderID</td>
+        <td>@Model.OrderDate</td>
+        <td>@Model.OrderStatus</td>
+        <td>@Model.PaymentMethod</td>
+        <td>@Model.OrderItems.Sum(oi => oi.Auction.Price * oi.Quantity)</td>
+    </tr>
+    </tbody>
+</table>
+
+<h3>Aukcje</h3>
+<table class="table">
+    <thead>
+    <tr>
+        <th>Tytuł aukcji</th>
+        <th>Cena</th>
+        <th>Ilość</th>
+        <th>Wartość</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var orderItem in Model.OrderItems)
+    {
+        <tr>
+            <td>@orderItem.Auction.Title</td>
+            <td>@orderItem.Auction.Price</td>
+            <td>@orderItem.Quantity</td>
+            <td>@(orderItem.Auction.Price * orderItem.Quantity)</td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<p>
+    <a href="@Url.Action("UserOrders", "Order", new { userId = Model.UserID })" class="btn btn-primary">Powrót do listy zamówień</a>
+</p>

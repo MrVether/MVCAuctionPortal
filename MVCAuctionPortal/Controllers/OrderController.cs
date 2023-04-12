@@ -1,6 +1,7 @@
 ﻿using AuctionPortal.Models;
 using AuctionPortal.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MVCAuctionPortal.Models;
 
 namespace MVCAuctionPortal.Controllers
@@ -12,6 +13,23 @@ namespace MVCAuctionPortal.Controllers
         public OrderController(IOrderService orderService)
         {
             _orderService = orderService;
+        }
+        public IActionResult Details(int id)
+        {
+            Order order = _orderService.GetOrderDetailsById(id);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            return View(order);
+        }
+
+        public IActionResult UserOrders(int userId)
+        {
+            userId = 2;
+            List<Order> orders = _orderService.GetOrdersByUserId(userId);
+            return View(orders);
         }
 
         [HttpGet]
@@ -26,6 +44,16 @@ namespace MVCAuctionPortal.Controllers
             return View(orderViewModel);
         }
 
+        public async Task<IActionResult> Payment(int id)
+        {
+            var order = await _orderService.GetOrderById(id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+            return View(order);
+        }
 
         [HttpPost]
         public async Task<IActionResult> CreateOrder(IFormCollection form)
@@ -48,6 +76,25 @@ namespace MVCAuctionPortal.Controllers
             await _orderService.CreateOrderAsync(order, auctionIds, quantities);
             return RedirectToAction("Payment", new { id = order.OrderID });
         }
+        public async Task<IActionResult> PaymentSuccess(int id, string paymentMethod)
+        {
+            var order = await _orderService.GetOrderById(id);
+
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            await _orderService.UpdateOrderStatusAsync(id, "Payment success", paymentMethod);
+
+            return View(order);
+        }
+        public async Task<IActionResult> PaymentFailed(int id)
+        {
+           
+            return View();
+        }
+
 
 
 

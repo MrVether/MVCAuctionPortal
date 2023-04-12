@@ -20,7 +20,34 @@ namespace AuctionPortal.Services
             _context = context;
             _auctionService = auctionService;
         }
+        public List<Order> GetOrdersByUserId(int userId)
+        {
+            List<Order> orders = _context.Orders
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Auction)
+                .Where(o => o.UserID == userId)
+                .ToList();
 
+            return orders;
+        }
+        public Order GetOrderDetailsById(int id)
+        {
+            Order order = _context.Orders
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Auction)
+                .FirstOrDefault(o => o.OrderID == id);
+
+            return order;
+        }
+
+        public async Task<Order> GetOrderById(int id)
+        {
+            var order = await _context.Orders
+                .Include(o => o.OrderItems)
+                .ThenInclude(oi => oi.Auction)
+                .FirstOrDefaultAsync(o => o.OrderID == id);
+            return order;
+        }
         public async Task CreateOrderAsync(Order order, List<int> auctionIds, List<int> quantities)
         {
             order.OrderDate = DateTime.Now;
@@ -56,6 +83,19 @@ namespace AuctionPortal.Services
             await _context.SaveChangesAsync();
         }
 
+        public async Task UpdateOrderStatusAsync(int orderId, string newStatus, string paymentMethod)
+        {
+            var order = await _context.Orders.FindAsync(orderId);
+            if (order == null)
+            {
+                throw new ArgumentException($"Order with ID {orderId} not found.");
+            }
+
+            order.OrderStatus = newStatus;
+            order.PaymentMethod = paymentMethod;
+            _context.Update(order);
+            await _context.SaveChangesAsync();
+        }
 
 
     }
