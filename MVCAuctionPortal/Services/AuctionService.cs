@@ -30,11 +30,11 @@ namespace AuctionPortal.Services
         }
         public List<Auction> GetAuctionsForUser(int id)
         {
-            var user = _context.User.Find(id);
+            var user = _context.Users.Find(id);
             return _context.Auction
                 .Include(a => a.Item)
                 .Include(a => a.SubCategory)
-                .Where(c => c.UserID == user.UserID)
+                .Where(c => c.UserID == user.Id)
                 .ToList();
 
         }
@@ -47,11 +47,12 @@ namespace AuctionPortal.Services
             return auctionList;
 
         }
-
+        public Auction GetAuctionByItemId(int itemId)
+        {
+            return _context.Auction.FirstOrDefault(a => a.ItemID == itemId);
+        }
         public void AddAuction(Auction auction)
         {
-            auction.UserID = 2;
-            auction.ReviewID = null;
             auction.DateOfIssue = DateTime.Now;
             _context.Auction.Add(auction);
             _context.SaveChanges();

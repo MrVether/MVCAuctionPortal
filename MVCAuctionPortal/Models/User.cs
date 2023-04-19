@@ -1,28 +1,29 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace AuctionPortal.Models
 {
-    public class User
+    public class User : IdentityUser<int>
     {
-        [Key]
-        [Required]
-        public int UserID { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
-        public string Email { get; set; }
         public int? Nip { get; set; }
-        public string Password { get; set; }
         public DateTime RegistationDate { get; set; }
-        public int RoleID { get; set; }
         public int? CouponID { get; set; }
         public int AddressID { get; set; }
         public int? CompanyID { get; set; }
 
-        public virtual Role Roles { get; set; }
         public virtual Coupon Coupons { get; set; }
         public virtual Address Address { get; set; }
         public virtual Company Companies { get; set; }
 
+        public User()
+        {
+            Name = "Default";
+            Surname = "Default";
+            Nip = 0000000000;
 
+        }
     }
 }

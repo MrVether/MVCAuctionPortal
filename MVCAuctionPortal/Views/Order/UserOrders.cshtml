@@ -16,6 +16,8 @@
         <th>Wartość zamówienia</th>
         <th>Aukcje</th>
         <th></th>
+        <th></th>
+        <th></th> <!-- Add an extra column for the Retry Payment button -->
     </tr>
     </thead>
     <tbody>
@@ -36,7 +38,16 @@
                 </ul>
             </td>
             <td>
-                <a href="@Url.Action("Details", "Order", new { id = order.OrderID })" class="btn btn-primary">Szczegóły</a>
+                <a href="@Url.Action("Details", "Order", new { id = order.OrderID })" class="btn btn-primary">Szczegóły Zamówienia</a>
+            </td>
+            <td>
+                <a asp-controller="Auction" asp-action="AddReview" asp-route-auctionId="@order.OrderItems.FirstOrDefault().Auction.AuctionID" class="btn btn-secondary">Dodaj recenzję</a>
+            </td>
+            <td>
+                @if (order.OrderStatus == "Pending")
+                {
+                    <a href="@Url.Action("Payment", "Order", new { id = order.OrderID })" class="btn btn-warning">Ponów płatność</a>
+                }
             </td>
         </tr>
     }

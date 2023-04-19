@@ -46,7 +46,7 @@ namespace ServicesAndInterfacesLibary.Services
         }
         public IEnumerable<Company> GetCompaniesForUser(int? id)
         {
-            var user = _context.User.Find(id);
+            var user = _context.Users.Find(id);
             if (user == null)
             {
                 return Enumerable.Empty<Company>();

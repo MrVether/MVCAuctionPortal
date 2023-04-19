@@ -9,4 +9,5 @@ public class UserPanelViewModel
     public List<Item> Items { get; set; }
     public List<Review> Reviews { get; set; }
     public List<Warranty> Warranties { get; set; }
+    public bool IsUserSeller { get; set; }
 }

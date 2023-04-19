@@ -1,4 +1,5 @@
 ﻿using AuctionPortal.Models;
+using Microsoft.EntityFrameworkCore;
 using MVCAuctionPortal.Models;
 
 namespace ServicesAndInterfacesLibary.Services
@@ -18,7 +19,10 @@ namespace ServicesAndInterfacesLibary.Services
             _context.SaveChanges();
             return review.ReviewID;
         }
-
+        public List<Review> GetReviewsByAuctionId(int auctionId)
+        {
+            return _context.Review.Where(r => r.AuctionID == auctionId).ToList();
+        }
         public void Update(Review review)
         {
             var existingReview = _context.Review.Find(review.ReviewID);

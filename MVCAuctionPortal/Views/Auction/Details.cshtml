@@ -1,7 +1,8 @@
 ﻿@model AuctionPortal.Models.Item
-
+@using AuctionPortal.Models
 @{
     ViewData["Title"] = "Item Details";
+    var reviews = ViewData["Reviews"] as List<Review>;
 }
 
 <div class="row">
@@ -27,5 +28,32 @@
             <dt class="col-sm-3">Other</dt>
             <dd class="col-sm-9">@Model.Other</dd>
         </dl>
+        <h3>Opinie</h3>
+        @if (reviews != null && reviews.Count > 0)
+        {
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>Tytuł</th>
+                    <th>Opis</th>
+                    <th>Pozytywna</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var review in reviews)
+                {
+                    <tr>
+                        <td>@review.Title</td>
+                        <td>@review.Description</td>
+                        <td>@(review.IsPositive ? "Tak" : "Nie")</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        }
+        else
+        {
+            <p>Brak opinii dla tego przedmiotu.</p>
+        }
     </div>
 </div>

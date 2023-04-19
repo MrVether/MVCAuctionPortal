@@ -1,0 +1,21 @@
+﻿@model AuctionPortal.Models.User
+
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <h2>Login</h2>
+            <div class="d-flex justify-content-center">
+                    <form id="external-login" method="post" asp-controller="Account" asp-action="ExternalLogin">
+                        <button type="submit" name="provider" value="Google">Login with Google</button>
+                        <button type="submit" name="provider" value="Facebook">Login with Facebook</button>
+                        <button type="submit" name="provider" value="Twitter">Login with Twitter</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+

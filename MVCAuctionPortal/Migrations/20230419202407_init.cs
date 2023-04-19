@@ -78,30 +78,113 @@ namespace MVCAuctionPortal.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Review",
+                name: "Orders",
                 columns: table => new
                 {
-                    ReviewID = table.Column<int>(type: "int", nullable: false)
+                    OrderID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    UserID = table.Column<int>(type: "int", nullable: false),
+                    OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    City = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HouseNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LocalNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ShippingDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeliveryDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    OrderStatus = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Review", x => x.ReviewID);
+                    table.PrimaryKey("PK_Orders", x => x.OrderID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Role",
+                name: "RoleClaims",
                 columns: table => new
                 {
-                    RoleID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Role", x => x.RoleID);
+                    table.PrimaryKey("PK_RoleClaims", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Roles",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Roles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserClaims",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserClaims", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserLogins",
+                columns: table => new
+                {
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserLogins", x => new { x.LoginProvider, x.ProviderKey });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserRoles",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    RoleId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRoles", x => new { x.UserId, x.RoleId });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserTokens",
+                columns: table => new
+                {
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserTokens", x => new { x.UserId, x.LoginProvider, x.Name });
                 });
 
             migrationBuilder.CreateTable(
@@ -166,47 +249,52 @@ namespace MVCAuctionPortal.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "User",
+                name: "Users",
                 columns: table => new
                 {
-                    UserID = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Nip = table.Column<int>(type: "int", nullable: true),
-                    Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RegistationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    RoleID = table.Column<int>(type: "int", nullable: false),
                     CouponID = table.Column<int>(type: "int", nullable: true),
                     AddressID = table.Column<int>(type: "int", nullable: false),
-                    CompanyID = table.Column<int>(type: "int", nullable: true)
+                    CompanyID = table.Column<int>(type: "int", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
+                    TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
+                    LockoutEnabled = table.Column<bool>(type: "bit", nullable: false),
+                    AccessFailedCount = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_User", x => x.UserID);
+                    table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_User_Address_AddressID",
+                        name: "FK_Users_Address_AddressID",
                         column: x => x.AddressID,
                         principalTable: "Address",
                         principalColumn: "AddressID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_User_Company_CompanyID",
+                        name: "FK_Users_Company_CompanyID",
                         column: x => x.CompanyID,
                         principalTable: "Company",
                         principalColumn: "CompanyID");
                     table.ForeignKey(
-                        name: "FK_User_Coupon_CouponID",
+                        name: "FK_Users_Coupon_CouponID",
                         column: x => x.CouponID,
                         principalTable: "Coupon",
                         principalColumn: "CouponID");
-                    table.ForeignKey(
-                        name: "FK_User_Role_RoleID",
-                        column: x => x.RoleID,
-                        principalTable: "Role",
-                        principalColumn: "RoleID",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -225,7 +313,6 @@ namespace MVCAuctionPortal.Migrations
                     SubCategoryID = table.Column<int>(type: "int", nullable: false),
                     ItemID = table.Column<int>(type: "int", nullable: false),
                     WarrantyID = table.Column<int>(type: "int", nullable: false),
-                    ReviewID = table.Column<int>(type: "int", nullable: true),
                     UserID = table.Column<int>(type: "int", nullable: false),
                     ImageURL = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CategoryID = table.Column<int>(type: "int", nullable: true)
@@ -245,21 +332,16 @@ namespace MVCAuctionPortal.Migrations
                         principalColumn: "ItemID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Auction_Review_ReviewID",
-                        column: x => x.ReviewID,
-                        principalTable: "Review",
-                        principalColumn: "ReviewID");
-                    table.ForeignKey(
                         name: "FK_Auction_SubCategory_SubCategoryID",
                         column: x => x.SubCategoryID,
                         principalTable: "SubCategory",
                         principalColumn: "SubCategoryID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Auction_User_UserID",
+                        name: "FK_Auction_Users_UserID",
                         column: x => x.UserID,
-                        principalTable: "User",
-                        principalColumn: "UserID",
+                        principalTable: "Users",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Auction_Warranty_WarrantyID",
@@ -283,11 +365,67 @@ namespace MVCAuctionPortal.Migrations
                 {
                     table.PrimaryKey("PK_Basket", x => x.BasketID);
                     table.ForeignKey(
-                        name: "FK_Basket_User_UserID",
+                        name: "FK_Basket_Users_UserID",
                         column: x => x.UserID,
-                        principalTable: "User",
-                        principalColumn: "UserID",
+                        principalTable: "Users",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderItems",
+                columns: table => new
+                {
+                    OrderItemId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AuctionId = table.Column<int>(type: "int", nullable: false),
+                    OrderId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderItems", x => x.OrderItemId);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Auction_AuctionId",
+                        column: x => x.AuctionId,
+                        principalTable: "Auction",
+                        principalColumn: "AuctionID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_OrderItems_Orders_OrderId",
+                        column: x => x.OrderId,
+                        principalTable: "Orders",
+                        principalColumn: "OrderID",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Review",
+                columns: table => new
+                {
+                    ReviewID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AuctionID = table.Column<int>(type: "int", nullable: false),
+                    UserID = table.Column<int>(type: "int", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    IsPositive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Review", x => x.ReviewID);
+                    table.ForeignKey(
+                        name: "FK_Review_Auction_AuctionID",
+                        column: x => x.AuctionID,
+                        principalTable: "Auction",
+                        principalColumn: "AuctionID",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Review_Users_UserID",
+                        column: x => x.UserID,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -356,22 +494,13 @@ namespace MVCAuctionPortal.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Review",
-                columns: new[] { "ReviewID", "Description", "Title" },
+                table: "Roles",
+                columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "I had a very positive experience with this seller. The item arrived quickly and was exactly as described.", "Great seller" },
-                    { 2, "I purchased this product and it exceeded my expectations. The quality was great and it worked perfectly.", "Excellent product" },
-                    { 3, "The item was shipped quickly and arrived in perfect condition. I would definitely buy from this seller again.", "Fast shipping" }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Role",
-                columns: new[] { "RoleID", "Name" },
-                values: new object[,]
-                {
-                    { 1, "Admin" },
-                    { 2, "User" }
+                    { 1, "7623fbdf-933d-4838-9b2a-2a1a75f510d9", "Admin", "ADMIN" },
+                    { 2, "1cc37411-960c-4ab7-8883-4449a8568ec3", "User", "USER" },
+                    { 3, "850ea983-8cb1-4b18-aef8-01fc1ec45328", "Seller", "SELLER" }
                 });
 
             migrationBuilder.InsertData(
@@ -405,9 +534,9 @@ namespace MVCAuctionPortal.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "User",
-                columns: new[] { "UserID", "AddressID", "CompanyID", "CouponID", "Email", "Name", "Nip", "Password", "RegistationDate", "RoleID", "Surname" },
-                values: new object[] { 1, 1, null, 1, "johndoe@example.com", "John", null, "password", new DateTime(2023, 3, 25, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(6116), 1, "Doe" });
+                table: "Users",
+                columns: new[] { "Id", "AccessFailedCount", "AddressID", "CompanyID", "ConcurrencyStamp", "CouponID", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "Nip", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RegistationDate", "SecurityStamp", "Surname", "TwoFactorEnabled", "UserName" },
+                values: new object[] { 1, 0, 1, null, "ef578bfc-42bd-43f4-840b-20c7e6a2159d", 1, "johndoe@example.com", false, false, null, "John", 0, null, null, null, null, false, new DateTime(2023, 4, 12, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(3984), null, "Doe", false, null });
 
             migrationBuilder.InsertData(
                 table: "Basket",
@@ -415,24 +544,34 @@ namespace MVCAuctionPortal.Migrations
                 values: new object[] { 1, 2, 50f, 1 });
 
             migrationBuilder.InsertData(
-                table: "User",
-                columns: new[] { "UserID", "AddressID", "CompanyID", "CouponID", "Email", "Name", "Nip", "Password", "RegistationDate", "RoleID", "Surname" },
-                values: new object[] { 2, 2, 1, null, "janedoe@example.com", "Jane", null, "password", new DateTime(2023, 3, 29, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(6138), 2, "Doe" });
+                table: "Users",
+                columns: new[] { "Id", "AccessFailedCount", "AddressID", "CompanyID", "ConcurrencyStamp", "CouponID", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "Nip", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RegistationDate", "SecurityStamp", "Surname", "TwoFactorEnabled", "UserName" },
+                values: new object[] { 2, 0, 2, 1, "dbe9b105-c584-4388-96a9-41610e7a252c", null, "janedoe@example.com", false, false, null, "Jane", 0, null, null, null, null, false, new DateTime(2023, 4, 16, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(4028), null, "Doe", false, null });
 
             migrationBuilder.InsertData(
                 table: "Auction",
-                columns: new[] { "AuctionID", "BuyItNow", "CategoryID", "DateOfIssue", "EndDate", "ImageURL", "ItemID", "Pieces", "Price", "PurchaseCounter", "ReviewID", "SubCategoryID", "Title", "UserID", "WarrantyID" },
+                columns: new[] { "AuctionID", "BuyItNow", "CategoryID", "DateOfIssue", "EndDate", "ImageURL", "ItemID", "Pieces", "Price", "PurchaseCounter", "SubCategoryID", "Title", "UserID", "WarrantyID" },
                 values: new object[,]
                 {
-                    { 1, false, null, new DateTime(2023, 4, 1, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2562), new DateTime(2023, 4, 8, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2603), "https://m.media-amazon.com/images/I/71dpTXFz+dL._AC_UF1000,1000_QL80_.jpg", 1, 5, 100m, 0, 1, 1, "Iphone", 2, 1 },
-                    { 2, true, null, new DateTime(2023, 4, 1, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2613), new DateTime(2023, 4, 15, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2616), "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", 2, 3, 200m, 0, 2, 2, "Shovel", 2, 2 },
-                    { 3, false, null, new DateTime(2023, 4, 1, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2619), new DateTime(2023, 4, 22, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2621), "https://a.allegroimg.com/original/1e76f9/ba5267f249a8bb358f5d3cf50ec6", 3, 1, 300m, 0, 3, 3, "Boots", 2, 3 }
+                    { 1, false, null, new DateTime(2023, 4, 19, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7121), new DateTime(2023, 4, 26, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7159), "https://m.media-amazon.com/images/I/71dpTXFz+dL._AC_UF1000,1000_QL80_.jpg", 1, 5, 100m, 0, 1, "Iphone", 2, 1 },
+                    { 2, true, null, new DateTime(2023, 4, 19, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7203), new DateTime(2023, 5, 3, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7205), "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", 2, 3, 200m, 0, 2, "Shovel", 2, 2 },
+                    { 3, false, null, new DateTime(2023, 4, 19, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7216), new DateTime(2023, 5, 10, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7219), "https://a.allegroimg.com/original/1e76f9/ba5267f249a8bb358f5d3cf50ec6", 3, 1, 300m, 0, 3, "Boots", 2, 3 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Basket",
                 columns: new[] { "BasketID", "NumberOfItems", "SummaryPrice", "UserID" },
                 values: new object[] { 2, 1, 15f, 2 });
+
+            migrationBuilder.InsertData(
+                table: "Review",
+                columns: new[] { "ReviewID", "AuctionID", "Description", "IsPositive", "Title", "UserID" },
+                values: new object[,]
+                {
+                    { 1, 1, "I had a very positive experience with this seller. The item arrived quickly and was exactly as described.", true, "Great seller", 1 },
+                    { 2, 2, "I purchased this product and it exceeded my expectations. The quality was great and it worked perfectly.", true, "Excellent product", 1 },
+                    { 3, 3, "The item was shipped quickly and arrived in perfect condition. I would definitely buy from this seller again.", true, "Fast shipping", 1 }
+                });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Auction_CategoryID",
@@ -443,11 +582,6 @@ namespace MVCAuctionPortal.Migrations
                 name: "IX_Auction_ItemID",
                 table: "Auction",
                 column: "ItemID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Auction_ReviewID",
-                table: "Auction",
-                column: "ReviewID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Auction_SubCategoryID",
@@ -480,29 +614,44 @@ namespace MVCAuctionPortal.Migrations
                 column: "CompanyAddressID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_AuctionId",
+                table: "OrderItems",
+                column: "AuctionId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderItems_OrderId",
+                table: "OrderItems",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Review_AuctionID",
+                table: "Review",
+                column: "AuctionID");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Review_UserID",
+                table: "Review",
+                column: "UserID");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SubCategory_CategoryID",
                 table: "SubCategory",
                 column: "CategoryID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_AddressID",
-                table: "User",
+                name: "IX_Users_AddressID",
+                table: "Users",
                 column: "AddressID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_CompanyID",
-                table: "User",
+                name: "IX_Users_CompanyID",
+                table: "Users",
                 column: "CompanyID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_CouponID",
-                table: "User",
+                name: "IX_Users_CouponID",
+                table: "Users",
                 column: "CouponID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_User_RoleID",
-                table: "User",
-                column: "RoleID");
         }
 
         /// <inheritdoc />
@@ -512,25 +661,49 @@ namespace MVCAuctionPortal.Migrations
                 name: "BasketAndAuctions");
 
             migrationBuilder.DropTable(
-                name: "Auction");
-
-            migrationBuilder.DropTable(
-                name: "Basket");
-
-            migrationBuilder.DropTable(
-                name: "Item");
+                name: "OrderItems");
 
             migrationBuilder.DropTable(
                 name: "Review");
 
             migrationBuilder.DropTable(
+                name: "RoleClaims");
+
+            migrationBuilder.DropTable(
+                name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "UserClaims");
+
+            migrationBuilder.DropTable(
+                name: "UserLogins");
+
+            migrationBuilder.DropTable(
+                name: "UserRoles");
+
+            migrationBuilder.DropTable(
+                name: "UserTokens");
+
+            migrationBuilder.DropTable(
+                name: "Basket");
+
+            migrationBuilder.DropTable(
+                name: "Orders");
+
+            migrationBuilder.DropTable(
+                name: "Auction");
+
+            migrationBuilder.DropTable(
+                name: "Item");
+
+            migrationBuilder.DropTable(
                 name: "SubCategory");
 
             migrationBuilder.DropTable(
-                name: "Warranty");
+                name: "Users");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Warranty");
 
             migrationBuilder.DropTable(
                 name: "Category");
@@ -540,9 +713,6 @@ namespace MVCAuctionPortal.Migrations
 
             migrationBuilder.DropTable(
                 name: "Coupon");
-
-            migrationBuilder.DropTable(
-                name: "Role");
 
             migrationBuilder.DropTable(
                 name: "Address");

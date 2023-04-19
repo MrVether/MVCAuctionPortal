@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVCAuctionPortal.Migrations
 {
     [DbContext(typeof(AuctionDbContext))]
-    [Migration("20230401161846_init")]
+    [Migration("20230419202407_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -115,9 +115,6 @@ namespace MVCAuctionPortal.Migrations
                     b.Property<int>("PurchaseCounter")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ReviewID")
-                        .HasColumnType("int");
-
                     b.Property<int>("SubCategoryID")
                         .HasColumnType("int");
 
@@ -137,8 +134,6 @@ namespace MVCAuctionPortal.Migrations
 
                     b.HasIndex("ItemID");
 
-                    b.HasIndex("ReviewID");
-
                     b.HasIndex("SubCategoryID");
 
                     b.HasIndex("UserID");
@@ -152,14 +147,13 @@ namespace MVCAuctionPortal.Migrations
                         {
                             AuctionID = 1,
                             BuyItNow = false,
-                            DateOfIssue = new DateTime(2023, 4, 1, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2562),
-                            EndDate = new DateTime(2023, 4, 8, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2603),
+                            DateOfIssue = new DateTime(2023, 4, 19, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7121),
+                            EndDate = new DateTime(2023, 4, 26, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7159),
                             ImageURL = "https://m.media-amazon.com/images/I/71dpTXFz+dL._AC_UF1000,1000_QL80_.jpg",
                             ItemID = 1,
                             Pieces = 5,
                             Price = 100m,
                             PurchaseCounter = 0,
-                            ReviewID = 1,
                             SubCategoryID = 1,
                             Title = "Iphone",
                             UserID = 2,
@@ -169,14 +163,13 @@ namespace MVCAuctionPortal.Migrations
                         {
                             AuctionID = 2,
                             BuyItNow = true,
-                            DateOfIssue = new DateTime(2023, 4, 1, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2613),
-                            EndDate = new DateTime(2023, 4, 15, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2616),
+                            DateOfIssue = new DateTime(2023, 4, 19, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7203),
+                            EndDate = new DateTime(2023, 5, 3, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7205),
                             ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg",
                             ItemID = 2,
                             Pieces = 3,
                             Price = 200m,
                             PurchaseCounter = 0,
-                            ReviewID = 2,
                             SubCategoryID = 2,
                             Title = "Shovel",
                             UserID = 2,
@@ -186,14 +179,13 @@ namespace MVCAuctionPortal.Migrations
                         {
                             AuctionID = 3,
                             BuyItNow = false,
-                            DateOfIssue = new DateTime(2023, 4, 1, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2619),
-                            EndDate = new DateTime(2023, 4, 22, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(2621),
+                            DateOfIssue = new DateTime(2023, 4, 19, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7216),
+                            EndDate = new DateTime(2023, 5, 10, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7219),
                             ImageURL = "https://a.allegroimg.com/original/1e76f9/ba5267f249a8bb358f5d3cf50ec6",
                             ItemID = 3,
                             Pieces = 1,
                             Price = 300m,
                             PurchaseCounter = 0,
-                            ReviewID = 3,
                             SubCategoryID = 3,
                             Title = "Boots",
                             UserID = 2,
@@ -399,6 +391,92 @@ namespace MVCAuctionPortal.Migrations
                         });
                 });
 
+            modelBuilder.Entity("AuctionPortal.Models.Order", b =>
+                {
+                    b.Property<int>("OrderID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderID"));
+
+                    b.Property<string>("City")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DeliveryDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("FirstName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HouseNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LocalNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("OrderDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("OrderStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentMethod")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("ShippingDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Street")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Surname")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ZipCode")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("OrderID");
+
+                    b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("AuctionPortal.Models.OrderItem", b =>
+                {
+                    b.Property<int>("OrderItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderItemId"));
+
+                    b.Property<int>("AuctionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("OrderItemId");
+
+                    b.HasIndex("AuctionId");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("OrderItems");
+                });
+
             modelBuilder.Entity("AuctionPortal.Models.Review", b =>
                 {
                     b.Property<int>("ReviewID")
@@ -407,15 +485,28 @@ namespace MVCAuctionPortal.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReviewID"));
 
+                    b.Property<int>("AuctionID")
+                        .HasColumnType("int");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsPositive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("UserID")
+                        .HasColumnType("int");
+
                     b.HasKey("ReviewID");
+
+                    b.HasIndex("AuctionID");
+
+                    b.HasIndex("UserID");
 
                     b.ToTable("Review");
 
@@ -423,49 +514,29 @@ namespace MVCAuctionPortal.Migrations
                         new
                         {
                             ReviewID = 1,
+                            AuctionID = 1,
                             Description = "I had a very positive experience with this seller. The item arrived quickly and was exactly as described.",
-                            Title = "Great seller"
+                            IsPositive = true,
+                            Title = "Great seller",
+                            UserID = 1
                         },
                         new
                         {
                             ReviewID = 2,
+                            AuctionID = 2,
                             Description = "I purchased this product and it exceeded my expectations. The quality was great and it worked perfectly.",
-                            Title = "Excellent product"
+                            IsPositive = true,
+                            Title = "Excellent product",
+                            UserID = 1
                         },
                         new
                         {
                             ReviewID = 3,
+                            AuctionID = 3,
                             Description = "The item was shipped quickly and arrived in perfect condition. I would definitely buy from this seller again.",
-                            Title = "Fast shipping"
-                        });
-                });
-
-            modelBuilder.Entity("AuctionPortal.Models.Role", b =>
-                {
-                    b.Property<int>("RoleID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleID"));
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("RoleID");
-
-                    b.ToTable("Role");
-
-                    b.HasData(
-                        new
-                        {
-                            RoleID = 1,
-                            Name = "Admin"
-                        },
-                        new
-                        {
-                            RoleID = 2,
-                            Name = "User"
+                            IsPositive = true,
+                            Title = "Fast shipping",
+                            UserID = 1
                         });
                 });
 
@@ -528,11 +599,14 @@ namespace MVCAuctionPortal.Migrations
 
             modelBuilder.Entity("AuctionPortal.Models.User", b =>
                 {
-                    b.Property<int>("UserID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AccessFailedCount")
+                        .HasColumnType("int");
 
                     b.Property<int>("AddressID")
                         .HasColumnType("int");
@@ -540,12 +614,23 @@ namespace MVCAuctionPortal.Migrations
                     b.Property<int?>("CompanyID")
                         .HasColumnType("int");
 
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int?>("CouponID")
                         .HasColumnType("int");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("EmailConfirmed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("LockoutEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd")
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -554,21 +639,38 @@ namespace MVCAuctionPortal.Migrations
                     b.Property<int?>("Nip")
                         .HasColumnType("int");
 
-                    b.Property<string>("Password")
-                        .IsRequired()
+                    b.Property<string>("NormalizedEmail")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedUserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PasswordHash")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("PhoneNumberConfirmed")
+                        .HasColumnType("bit");
 
                     b.Property<DateTime>("RegistationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("RoleID")
-                        .HasColumnType("int");
+                    b.Property<string>("SecurityStamp")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("UserID");
+                    b.Property<bool>("TwoFactorEnabled")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
 
                     b.HasIndex("AddressID");
 
@@ -576,34 +678,42 @@ namespace MVCAuctionPortal.Migrations
 
                     b.HasIndex("CouponID");
 
-                    b.HasIndex("RoleID");
-
-                    b.ToTable("User");
+                    b.ToTable("Users");
 
                     b.HasData(
                         new
                         {
-                            UserID = 1,
+                            Id = 1,
+                            AccessFailedCount = 0,
                             AddressID = 1,
+                            ConcurrencyStamp = "ef578bfc-42bd-43f4-840b-20c7e6a2159d",
                             CouponID = 1,
                             Email = "johndoe@example.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
                             Name = "John",
-                            Password = "password",
-                            RegistationDate = new DateTime(2023, 3, 25, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(6116),
-                            RoleID = 1,
-                            Surname = "Doe"
+                            Nip = 0,
+                            PhoneNumberConfirmed = false,
+                            RegistationDate = new DateTime(2023, 4, 12, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(3984),
+                            Surname = "Doe",
+                            TwoFactorEnabled = false
                         },
                         new
                         {
-                            UserID = 2,
+                            Id = 2,
+                            AccessFailedCount = 0,
                             AddressID = 2,
                             CompanyID = 1,
+                            ConcurrencyStamp = "dbe9b105-c584-4388-96a9-41610e7a252c",
                             Email = "janedoe@example.com",
+                            EmailConfirmed = false,
+                            LockoutEnabled = false,
                             Name = "Jane",
-                            Password = "password",
-                            RegistationDate = new DateTime(2023, 3, 29, 18, 18, 46, 508, DateTimeKind.Local).AddTicks(6138),
-                            RoleID = 2,
-                            Surname = "Doe"
+                            Nip = 0,
+                            PhoneNumberConfirmed = false,
+                            RegistationDate = new DateTime(2023, 4, 16, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(4028),
+                            Surname = "Doe",
+                            TwoFactorEnabled = false
                         });
                 });
 
@@ -763,6 +873,146 @@ namespace MVCAuctionPortal.Migrations
                         });
                 });
 
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NormalizedName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ConcurrencyStamp = "7623fbdf-933d-4838-9b2a-2a1a75f510d9",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ConcurrencyStamp = "1cc37411-960c-4ab7-8883-4449a8568ec3",
+                            Name = "User",
+                            NormalizedName = "USER"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ConcurrencyStamp = "850ea983-8cb1-4b18-aef8-01fc1ec45328",
+                            Name = "Seller",
+                            NormalizedName = "SELLER"
+                        });
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("RoleClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<int>", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ClaimType")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ClaimValue")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("UserClaims");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<int>", b =>
+                {
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderKey")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("ProviderDisplayName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.ToTable("UserLogins");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<int>", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RoleId")
+                        .HasColumnType("int");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.ToTable("UserRoles");
+                });
+
+            modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<int>", b =>
+                {
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("LoginProvider")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("UserTokens");
+                });
+
             modelBuilder.Entity("AuctionPortal.Models.Auction", b =>
                 {
                     b.HasOne("MVCAuctionPortal.Models.Category", null)
@@ -774,10 +1024,6 @@ namespace MVCAuctionPortal.Migrations
                         .HasForeignKey("ItemID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("AuctionPortal.Models.Review", "Review")
-                        .WithMany()
-                        .HasForeignKey("ReviewID");
 
                     b.HasOne("AuctionPortal.Models.SubCategory", "SubCategory")
                         .WithMany()
@@ -799,8 +1045,6 @@ namespace MVCAuctionPortal.Migrations
 
                     b.Navigation("Item");
 
-                    b.Navigation("Review");
-
                     b.Navigation("SubCategory");
 
                     b.Navigation("User");
@@ -817,6 +1061,44 @@ namespace MVCAuctionPortal.Migrations
                         .IsRequired();
 
                     b.Navigation("CompanyAddress");
+                });
+
+            modelBuilder.Entity("AuctionPortal.Models.OrderItem", b =>
+                {
+                    b.HasOne("AuctionPortal.Models.Auction", "Auction")
+                        .WithMany()
+                        .HasForeignKey("AuctionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AuctionPortal.Models.Order", "Order")
+                        .WithMany("OrderItems")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Auction");
+
+                    b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("AuctionPortal.Models.Review", b =>
+                {
+                    b.HasOne("AuctionPortal.Models.Auction", "Auction")
+                        .WithMany("Reviews")
+                        .HasForeignKey("AuctionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("AuctionPortal.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Auction");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("AuctionPortal.Models.SubCategory", b =>
@@ -846,19 +1128,11 @@ namespace MVCAuctionPortal.Migrations
                         .WithMany()
                         .HasForeignKey("CouponID");
 
-                    b.HasOne("AuctionPortal.Models.Role", "Roles")
-                        .WithMany()
-                        .HasForeignKey("RoleID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("Address");
 
                     b.Navigation("Companies");
 
                     b.Navigation("Coupons");
-
-                    b.Navigation("Roles");
                 });
 
             modelBuilder.Entity("MVCAuctionPortal.Models.Basket", b =>
@@ -894,6 +1168,13 @@ namespace MVCAuctionPortal.Migrations
             modelBuilder.Entity("AuctionPortal.Models.Auction", b =>
                 {
                     b.Navigation("BasketAndAuctions");
+
+                    b.Navigation("Reviews");
+                });
+
+            modelBuilder.Entity("AuctionPortal.Models.Order", b =>
+                {
+                    b.Navigation("OrderItems");
                 });
 
             modelBuilder.Entity("MVCAuctionPortal.Models.Basket", b =>

@@ -1,4 +1,5 @@
 ﻿using AuctionPortal.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MVCAuctionPortal.Models;
 using ServicesAndInterfacesLibary.Services;
@@ -10,12 +11,15 @@ namespace MVCAuctionPortal.Controllers
         private readonly ILogger<CompanyController> _logger;
         private readonly ICompanyService _companyService;
         private readonly IAddressService _addressService;
+        private readonly UserManager<User> _userManager;
 
-        public CompanyController(ILogger<CompanyController> logger, ICompanyService companyService, IAddressService addressService)
+
+        public CompanyController(ILogger<CompanyController> logger, ICompanyService companyService, IAddressService addressService, UserManager<User> userManager)
         {
             _logger = logger;
             _companyService = companyService;
             _addressService = addressService;
+            _userManager = userManager;
         }
         public IActionResult GetByUserID([FromRoute] int? id)
         {
@@ -25,8 +29,18 @@ namespace MVCAuctionPortal.Controllers
 
         public IActionResult Edit()
         {
-            var companies = _companyService.GetCompaniesForUser(2);
+            var userId = _userManager.GetUserId(User);
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var companies = _companyService.GetCompaniesForUser(int.Parse(userId));
             var company = companies.FirstOrDefault();
+            if (company == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             var viewModel = new EditCompanyViewModel
             {
                 Company = company,
@@ -38,8 +52,14 @@ namespace MVCAuctionPortal.Controllers
         [HttpPost]
         public IActionResult Edit(EditCompanyViewModel viewModel)
         {
-         
-                var company = new Company
+            var userId = _userManager.GetUserId(User);
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var company = new Company
                 {
                     CompanyID = viewModel.Company.CompanyID,
                     Name = viewModel.Company.Name,
@@ -63,7 +83,7 @@ namespace MVCAuctionPortal.Controllers
                 _companyService.Update(company);
                 _addressService.Update(address);
 
-                return RedirectToAction(nameof(GetByUserID), new { id = 2 });
+                return RedirectToAction(nameof(GetByUserID), new { id = userId });
             
 
         }

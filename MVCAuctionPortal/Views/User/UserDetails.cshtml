@@ -1,0 +1,24 @@
+﻿@model UserDetailsViewModel
+
+@{
+    ViewData["Title"] = "User Details";
+}
+
+<h2>@Model.Name @Model.Surname</h2>
+
+<dl class="row">
+    <dt class="col-sm-3">Name</dt>
+    <dd class="col-sm-9">@Model.Name</dd>
+
+    <dt class="col-sm-3">Surname</dt>
+    <dd class="col-sm-9">@Model.Surname</dd>
+
+    <dt class="col-sm-3">Email</dt>
+    <dd class="col-sm-9">@Model.Email</dd>
+
+    <dt class="col-sm-3">NIP</dt>
+    <dd class="col-sm-9">@Model.Nip</dd>
+
+    <dt class="col-sm-3">Registration Date</dt>
+    <dd class="col-sm-9">@Model.RegistrationDate.ToString("yyyy-MM-dd")</dd>
+</dl>

@@ -51,7 +51,6 @@ namespace AuctionPortal.Services
         public async Task CreateOrderAsync(Order order, List<int> auctionIds, List<int> quantities)
         {
             order.OrderDate = DateTime.Now;
-            order.UserID = 2;
 
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();

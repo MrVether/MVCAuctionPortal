@@ -9,4 +9,5 @@ public interface IReviewService
     int Delete(int id);
     Review GetReviewById(int id);
     IEnumerable<Review> GetAllReviews();
+    List<Review> GetReviewsByAuctionId(int auctionId);
 }

@@ -18,7 +18,6 @@ namespace AuctionPortal.Models
         public int SubCategoryID { get; set; }
         public int ItemID { get; set; }
         public int WarrantyID { get; set; }
-        public int? ReviewID { get; set; }
         public int UserID { get; set; }
 
         public string ImageURL { get; set; }
@@ -27,8 +26,8 @@ namespace AuctionPortal.Models
         public SubCategory SubCategory { get; set; }
         public Item Item { get; set; }
         public Warranty Warranty { get; set; }
-        public Review Review { get; set; }
         public virtual ICollection<BasketAndAuction> BasketAndAuctions { get; set; }
+        public virtual ICollection<Review> Reviews { get; set; }
 
     }
 }

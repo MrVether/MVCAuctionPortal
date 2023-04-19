@@ -1,4 +1,5 @@
 ﻿using AuctionPortal.Models;
+using AuctionPortal.Models.ViewModels;
 
 namespace ServicesAndInterfacesLibary.Services;
 
@@ -10,5 +11,6 @@ public interface IUserService
     User GetUserById(int userId);
     User GetUserByEmail(string email);
     IEnumerable<User> GetAllUsers();
-    User Authenticate(string email, string password);
+    void UpdateUserProfile(UpdateUserViewModel model);
+    UserDetailsViewModel GetUserDetails(int id);
 }

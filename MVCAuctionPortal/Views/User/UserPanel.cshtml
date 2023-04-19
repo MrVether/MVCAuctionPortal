@@ -17,30 +17,33 @@
         <h1 class="text-center">User Panel</h1>
         <hr>
         <div class="row">
-            <!-- Seller actions -->
-            <div class="col-md-6">
-                <h2>Seller Actions</h2>
-                <ul class="list-group">
-                    <li class="list-group-item"><a href="@Url.Action("Create", "Auction")">Add Auction</a></li>
-                    <li class="list-group-item"><a href="@Url.Action("Edit", "Auction")">Edit Auction</a></li>
-                    <li class="list-group-item"><a href="@Url.Action("ListOfItems", "Item")">Edit Item</a></li>
-                    <li class="list-group-item"><a href="@Url.Action("Edit", "Company")">Edit Company Info</a></li>
-                    <li class="list-group-item"><a href="@Url.Action("Create", "Warranty")">Add Warranty</a></li>
-                    <li class="list-group-item"><a href="@Url.Action("ListOfWarranties", "Warranty")">Edit Warranty</a></li>
-                    <li class="list-group-item"><a href="@Url.Action("Create", "Coupon")">Add Coupon</a></li>
-                    <li class="list-group-item"><a href="@Url.Action("Edit", "Coupon")">Edit Coupon</a></li>
-                </ul>
-            </div>
+            @if (Model.IsUserSeller)
+            {
+                <!-- Seller actions -->
+                <div class="col-md-6">
+                    <h2>Seller Actions</h2>
+                    <ul class="list-group">
+                        <li class="list-group-item"><a href="@Url.Action("Create", "Auction")">Add Auction</a></li>
+                        <li class="list-group-item"><a href="@Url.Action("Edit", "Auction")">Edit Auction</a></li>
+                        <li class="list-group-item"><a href="@Url.Action("ListOfItems", "Item")">Edit Item</a></li>
+                        <li class="list-group-item"><a href="@Url.Action("Edit", "Company")">Edit Company Info</a></li>
+                        <li class="list-group-item"><a href="@Url.Action("Create", "Warranty")">Add Warranty</a></li>
+                        <li class="list-group-item"><a href="@Url.Action("ListOfWarranties", "Warranty")">Edit Warranty</a></li>
+                        <li class="list-group-item"><a href="@Url.Action("Create", "Coupon")">Add Coupon</a></li>
+                        <li class="list-group-item"><a href="@Url.Action("Edit", "Coupon")">Edit Coupon</a></li>
+                    </ul>
+                </div>
+            }
 
             <!-- User actions -->
-            <div class="col-md-6">
+            <div class="col-md-@(Model.IsUserSeller ? "6" : "12")">    
                 <h2>User Actions</h2>
                 <ul class="list-group">
                     <li class="list-group-item"><a href="@Url.Action("UserOrders", "Order")">Manage Purchases</a></li>
                     <li class="list-group-item"><a href="@Url.Action("GetBasket", "Basket")">Manage Cart</a></li>
-                    <li class="list-group-item"><a href="@Url.Action("AddReview", "User")">Add Review</a></li>
-                    <li class="list-group-item"><a href="@Url.Action("ViewCoupons", "User")">View Coupons</a></li>
-                    <li class="list-group-item"><a href="@Url.Action("EditUserDetails", "User")">Edit User Details</a></li>
+                    <li class="list-group-item"><a href="@Url.Action("ListOfCoupons", "Coupon")">View Coupons</a></li>
+                    <li class="list-group-item"><a href="@Url.Action("UserDetails", "User")">Show my account information</a></li>
+                    <li class="list-group-item"><a href="@Url.Action("UpdateProfile", "User")">Edit User Details</a></li>
                 </ul>
             </div>
         </div>

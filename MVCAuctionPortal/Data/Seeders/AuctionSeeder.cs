@@ -22,7 +22,6 @@ namespace AuctionPortal.Data.Seeders
                     SubCategoryID = 1,
                     ItemID = 1,
                     WarrantyID = 1,
-                    ReviewID = 1,
                     UserID = 2,
                     ImageURL = "https://m.media-amazon.com/images/I/71dpTXFz+dL._AC_UF1000,1000_QL80_.jpg"
                 },
@@ -39,7 +38,6 @@ namespace AuctionPortal.Data.Seeders
                     SubCategoryID = 2,
                     ItemID = 2,
                     WarrantyID = 2,
-                    ReviewID = 2,
                     UserID = 2,
                     ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg"
                 },
@@ -56,7 +54,6 @@ namespace AuctionPortal.Data.Seeders
                     SubCategoryID = 3,
                     ItemID = 3,
                     WarrantyID = 3,
-                    ReviewID = 3,
                     UserID = 2,
                     ImageURL = "https://a.allegroimg.com/original/1e76f9/ba5267f249a8bb358f5d3cf50ec6"
                 }

@@ -1,0 +1,31 @@
+﻿@model AuctionPortal.Models.ViewModels.UpdateUserViewModel
+
+@{
+    ViewData["Title"] = "Update Profile";
+}
+
+<h2>Update Profile</h2>
+
+<form asp-action="UpdateProfile" method="post">
+    <input type="hidden" asp-for="UserID" />
+    <div class="form-group">
+        <label asp-for="Name">Name:</label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Surname">Surname:</label>
+        <input asp-for="Surname" class="form-control" />
+        <span asp-validation-for="Surname" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email">Email:</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Nip">NIP:</label>
+        <input asp-for="Nip" class="form-control" />
+    </div>
+    <button type="submit" class="btn btn-primary">Update</button>
+</form>

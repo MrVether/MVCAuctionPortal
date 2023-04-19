@@ -1,6 +1,8 @@
 ﻿using AuctionPortal.Models;
 using AuctionPortal.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using MVCAuctionPortal.Models;
 using ServicesAndInterfacesLibary.Services;
 using System.Diagnostics;
@@ -14,14 +16,19 @@ namespace MVCAuctionPortal.Controllers
         private readonly IItemService _itemService;
         private readonly IWarrantyService _warrantyService;
         private readonly ISubCategoryService _subCategoryService;
+        private readonly IReviewService _reviewService;
+        private readonly UserManager<User> _userManager;
 
-        public AuctionController(ILogger<AuctionController> logger, IAuctionService auctionService, IItemService itemService, IWarrantyService warrantyService, ISubCategoryService subCategoryService)
+
+        public AuctionController(ILogger<AuctionController> logger, IAuctionService auctionService, IItemService itemService, IWarrantyService warrantyService, ISubCategoryService subCategoryService,IReviewService reviewService, UserManager<User> userManager)
         {
             _logger = logger;
             _auctionService = auctionService;
             _itemService = itemService;
             _warrantyService = warrantyService;
             _subCategoryService = subCategoryService;
+            _reviewService= reviewService;
+            _userManager = userManager;
         }
 
         public IActionResult Index()
@@ -101,9 +108,15 @@ namespace MVCAuctionPortal.Controllers
 
         public IActionResult Edit([FromRoute] int? id)
         {
+            var userId = _userManager.GetUserId(User);
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
             if (id == null)
             {
-                var auctions = _auctionService.GetAuctionsForUser(2);
+                var auctions = _auctionService.GetAuctionsForUser(int.Parse(userId));
                 return View("SellerAuctionList", auctions);
             }
             else
@@ -124,12 +137,38 @@ namespace MVCAuctionPortal.Controllers
         public IActionResult Details([FromRoute] int id)
         {
             var item = _itemService.GetItemById(id);
+            var auction = _auctionService.GetAuctionByItemId(id);
+            var reviews = _reviewService.GetReviewsByAuctionId(auction.AuctionID);
+            ViewData["Reviews"] = reviews;
             return View(item);
         }
+
         public IActionResult SubCategoryAuctionsList([FromRoute] int id)
         {
             var auction = _auctionService.GetAuctionBySubCategory(id);
             return View(auction);
+        }
+        [HttpGet]
+        public IActionResult AddReview(int auctionId)
+        {
+            var review = new Review { AuctionID = auctionId };
+            return View(review);
+        }
+
+        [HttpPost]
+        public IActionResult AddReview(Review review)
+        {
+            var userId = _userManager.GetUserId(User);
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            review.UserID = int.Parse(userId); 
+                _reviewService.Create(review);
+                return RedirectToAction("UserOrders", "Order"); 
+            
+            return View(review);
         }
     }
 }

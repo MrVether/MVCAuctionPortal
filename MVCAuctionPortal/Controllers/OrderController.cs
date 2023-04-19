@@ -1,5 +1,6 @@
 ﻿using AuctionPortal.Models;
 using AuctionPortal.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MVCAuctionPortal.Models;
@@ -9,10 +10,13 @@ namespace MVCAuctionPortal.Controllers
     public class OrderController : Controller
     {
         private readonly IOrderService _orderService;
+        private readonly UserManager<User> _userManager;
 
-        public OrderController(IOrderService orderService)
+
+        public OrderController(IOrderService orderService, UserManager<User> userManager)
         {
             _orderService = orderService;
+            _userManager = userManager;
         }
         public IActionResult Details(int id)
         {
@@ -25,10 +29,15 @@ namespace MVCAuctionPortal.Controllers
             return View(order);
         }
 
-        public IActionResult UserOrders(int userId)
+        public IActionResult UserOrders()
         {
-            userId = 2;
-            List<Order> orders = _orderService.GetOrdersByUserId(userId);
+            var userId = _userManager.GetUserId(User);
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            List<Order> orders = _orderService.GetOrdersByUserId(int.Parse(userId));
             return View(orders);
         }
 

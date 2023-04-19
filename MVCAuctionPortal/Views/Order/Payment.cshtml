@@ -18,9 +18,6 @@
 
         paypal.Buttons({
             createOrder: function (data, actions) {
-                // This function sets up the details of the transaction, including the amount and line item details.
-
-                // Calculate the total price
                 var totalPrice = 0;
                 for (var i = 0; i < items.length; i++) {
                     totalPrice += items[i].price * items[i].quantity;
@@ -56,29 +53,18 @@
                     document.getElementById('payment-method').value = 'paypal';
 
                     var paymentMethod = document.getElementById('payment-method').value;
-
-                    // Redirect to the PaymentSuccess action
                     window.location.href = '/Order/PaymentSuccess?id=' + orderId + '&paymentMethod=' + paymentMethod;
                 }).catch(function (error) {
-                    // Handle any errors that occurred during capture
                     console.error('Capture error:', error);
-
-                    // Redirect to the PaymentFailed action
                     window.location.href = '/Order/PaymentFailed?id=' + orderId;
                 });
             },
             onError: function (err) {
-                // Handle any errors that occurred during the payment process
                 console.error('Payment error:', err);
-
-                // Redirect to the PaymentFailed action
                 window.location.href = '/Order/PaymentFailed?id=' + orderId;
             },
             onCancel: function (data) {
-                // This function is called when the user cancels the payment
                 console.log('Payment cancelled.');
-
-                // Redirect to the PaymentFailed action
                 window.location.href = '/Order/PaymentFailed?id=' + orderId;
             }
         }).render('#paypal-button-container');

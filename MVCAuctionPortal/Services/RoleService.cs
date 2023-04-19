@@ -1,67 +1,34 @@
-﻿using AuctionPortal.Models;
-using MVCAuctionPortal.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using AuctionPortal.Models;
+// ... inne using ...
 
-namespace ServicesAndInterfacesLibrary.Services
+public class RoleService : IRoleService
 {
-    public class RoleService : IRoleService
+    private readonly UserManager<User> _userManager;
+    private readonly RoleManager<IdentityRole<int>> _roleManager;
+
+    public RoleService(UserManager<User> userManager, RoleManager<IdentityRole<int>> roleManager)
     {
+        _userManager = userManager;
+        _roleManager = roleManager;
+    }
 
-        private readonly AuctionDbContext _context;
+    public async Task AssignRoleToUserAsync(int userId, int roleId)
+    {
+        var user = await _userManager.FindByIdAsync(userId.ToString());
 
-        public RoleService(AuctionDbContext context)
+        var role = await _roleManager.FindByIdAsync(roleId.ToString());
+
+        if (user == null || role == null)
         {
-            _context = context;
+            throw new Exception("User or role not found.");
         }
 
-        public IEnumerable<Role> GetAllRoles()
+        var result = await _userManager.AddToRoleAsync(user, role.Name);
+
+        if (!result.Succeeded)
         {
-            return _context.Role.ToList();
-        }
-
-        public Role GetRoleById(int id)
-        {
-            return _context.Role.Find(id);
-        }
-
-        public Role CreateRole(Role dto)
-        {
-            _context.Role.Add(dto);
-            _context.SaveChanges();
-            return dto;
-        }
-
-        public void UpdateRole(Role dto)
-        {
-            var role = GetRoleById(dto.RoleID);
-
-            if (role == null)
-            {
-                throw new RoleNotFoundException();
-            }
-
-            _context.Entry(role).CurrentValues.SetValues(dto);
-            _context.SaveChanges();
-        }
-
-        public void DeleteRole(int id)
-        {
-            var role = GetRoleById(id);
-
-            if (role == null)
-            {
-                throw new RoleNotFoundException();
-            }
-
-            _context.Role.Remove(role);
-            _context.SaveChanges();
-        }
-
-        public class RoleNotFoundException : Exception
-        {
-            public RoleNotFoundException()
-                : base("Role not found")
-            {
-            }
+            throw new Exception("Failed to assign role to user.");
         }
     }
 }

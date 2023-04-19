@@ -1,5 +1,6 @@
 ﻿using AuctionPortal.Models;
 using AuctionPortal.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MVCAuctionPortal.Models;
 using ServicesAndInterfacesLibary.Services;
@@ -12,19 +13,28 @@ namespace MVCAuctionPortal.Controllers
         private readonly ILogger<AuctionController> _logger;
         private readonly IAuctionService _auctionService;
         private readonly IItemService _itemService;
+        private readonly UserManager<User> _userManager;
+
 
 
         public ItemController(ILogger<AuctionController> logger, IAuctionService auctionService,
-            IItemService itemService)
+            IItemService itemService, UserManager<User> userManager)
         {
             _logger = logger;
             _auctionService = auctionService;
             _itemService = itemService;
+            _userManager = userManager;
         }
 
         public IActionResult ListOfItems()
         {
-            var auctions = _auctionService.GetAuctionsForUser(2);
+            var userId = _userManager.GetUserId(User);
+
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+            var auctions = _auctionService.GetAuctionsForUser(int.Parse(userId));
             var items = new List<Item>();
 
             foreach (var auction in auctions)
