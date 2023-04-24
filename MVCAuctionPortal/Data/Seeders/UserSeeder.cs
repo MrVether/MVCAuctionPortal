@@ -17,7 +17,6 @@ namespace AuctionPortal.Data.Seeders
                     Surname = "Doe",
                     Email = "johndoe@example.com",
                     RegistationDate = DateTime.Now.AddDays(-7),
-                    CouponID = 1,
                     AddressID = 1,
                     CompanyID = null
                 },
@@ -28,7 +27,6 @@ namespace AuctionPortal.Data.Seeders
                     Surname = "Doe",
                     Email = "janedoe@example.com",
                     RegistationDate = DateTime.Now.AddDays(-3),
-                    CouponID = null,
                     AddressID = 2,
                     CompanyID = 1
                 }

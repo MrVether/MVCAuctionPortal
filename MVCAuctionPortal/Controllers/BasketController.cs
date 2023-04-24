@@ -15,13 +15,15 @@ namespace MVCAuctionPortal.Controllers
         private readonly ILogger<BasketController> _logger;
         private readonly IBasketService _basketService;
         private readonly UserManager<User> _userManager;
+        private readonly ICouponService _couponService;
 
 
-        public BasketController(ILogger<BasketController> logger, IBasketService basketService,UserManager<User> userManager)
+        public BasketController(ILogger<BasketController> logger, IBasketService basketService,UserManager<User> userManager, ICouponService couponService)
         {
             _logger = logger;
             _basketService = basketService;
             _userManager = userManager;
+            _couponService = couponService;
         }
 
         public async Task<IActionResult> GetBasket()
@@ -35,6 +37,10 @@ namespace MVCAuctionPortal.Controllers
 
             await _basketService.CreateBasket(int.Parse(userId));
             var basket = await _basketService.GetBasketByUserId(int.Parse(userId));
+
+            var user = await _userManager.FindByIdAsync(userId);
+            var availableCoupons = user != null ? _couponService.GetCouponsForUser(user).ToList() : new List<Coupon>();
+
             var basketViewModel = new BasketViewModel
             {
                 BasketId = basket.BasketID,
@@ -46,11 +52,14 @@ namespace MVCAuctionPortal.Controllers
                     Price = ba.Auction.Price,
                     Quantity = ba.Quantity,
                     Selected = ba.Selected
-                }).ToList()
+                }).ToList(),
+                AvailableCoupons = availableCoupons 
             };
 
             return View(basketViewModel);
         }
+
+
 
         public async Task<IActionResult> AddToBasket(int auctionId, int quantity)
         {
@@ -116,9 +125,11 @@ namespace MVCAuctionPortal.Controllers
 
             var auctionIds = form["AuctionId[]"].Select(int.Parse).ToList();
             var quantities = form["Quantity[]"].Select(int.Parse).ToList();
+            decimal discountPercentage = decimal.Parse(form["DiscountPercentage"]);
 
-            return RedirectToAction("OrderForm", "Order", new { auctionIds = auctionIds, quantities = quantities });
+            return RedirectToAction("OrderForm", "Order", new { auctionIds = auctionIds, quantities = quantities, discountPercentage });
         }
+
 
     }
 }

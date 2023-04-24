@@ -4,6 +4,7 @@ using MVCAuctionPortal.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVCAuctionPortal.Migrations
 {
     [DbContext(typeof(AuctionDbContext))]
-    partial class AuctionDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230421180531_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -144,8 +147,8 @@ namespace MVCAuctionPortal.Migrations
                         {
                             AuctionID = 1,
                             BuyItNow = false,
-                            DateOfIssue = new DateTime(2023, 4, 24, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3045),
-                            EndDate = new DateTime(2023, 5, 1, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3079),
+                            DateOfIssue = new DateTime(2023, 4, 21, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(2893),
+                            EndDate = new DateTime(2023, 4, 28, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(2905),
                             ImageURL = "https://m.media-amazon.com/images/I/71dpTXFz+dL._AC_UF1000,1000_QL80_.jpg",
                             ItemID = 1,
                             Pieces = 5,
@@ -160,8 +163,8 @@ namespace MVCAuctionPortal.Migrations
                         {
                             AuctionID = 2,
                             BuyItNow = true,
-                            DateOfIssue = new DateTime(2023, 4, 24, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3088),
-                            EndDate = new DateTime(2023, 5, 8, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3090),
+                            DateOfIssue = new DateTime(2023, 4, 21, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(2916),
+                            EndDate = new DateTime(2023, 5, 5, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(2918),
                             ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg",
                             ItemID = 2,
                             Pieces = 3,
@@ -176,8 +179,8 @@ namespace MVCAuctionPortal.Migrations
                         {
                             AuctionID = 3,
                             BuyItNow = false,
-                            DateOfIssue = new DateTime(2023, 4, 24, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3093),
-                            EndDate = new DateTime(2023, 5, 15, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3096),
+                            DateOfIssue = new DateTime(2023, 4, 21, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(2921),
+                            EndDate = new DateTime(2023, 5, 12, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(2922),
                             ImageURL = "https://a.allegroimg.com/original/1e76f9/ba5267f249a8bb358f5d3cf50ec6",
                             ItemID = 3,
                             Pieces = 1,
@@ -301,7 +304,7 @@ namespace MVCAuctionPortal.Migrations
                             CouponID = 1,
                             Description = "10% discount on your first purchase",
                             DiscountPercentage = 10,
-                            ExpireDate = new DateTime(2023, 5, 24, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3503),
+                            ExpireDate = new DateTime(2023, 5, 21, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(3244),
                             Name = "WELCOME10",
                             NumberOfUses = 0,
                             UserId = 1
@@ -311,7 +314,7 @@ namespace MVCAuctionPortal.Migrations
                             CouponID = 2,
                             Description = "15% discount on your next purchase",
                             DiscountPercentage = 15,
-                            ExpireDate = new DateTime(2023, 6, 24, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3509),
+                            ExpireDate = new DateTime(2023, 6, 21, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(3251),
                             Name = "SPRING15",
                             NumberOfUses = 0,
                             UserId = 1
@@ -407,9 +410,6 @@ namespace MVCAuctionPortal.Migrations
                     b.Property<DateTime?>("DeliveryDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("DiscountPercentage")
-                        .HasColumnType("decimal(18,2)");
-
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -442,9 +442,6 @@ namespace MVCAuctionPortal.Migrations
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("UserID")
                         .HasColumnType("int");
@@ -688,14 +685,14 @@ namespace MVCAuctionPortal.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             AddressID = 1,
-                            ConcurrencyStamp = "f4138ce2-057f-4528-9fc6-67b5139212f6",
+                            ConcurrencyStamp = "16cc088d-8ad4-49e8-a33a-6806e7822733",
                             Email = "johndoe@example.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             Name = "John",
                             Nip = 0,
                             PhoneNumberConfirmed = false,
-                            RegistationDate = new DateTime(2023, 4, 17, 23, 13, 36, 451, DateTimeKind.Local).AddTicks(9296),
+                            RegistationDate = new DateTime(2023, 4, 14, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(38),
                             Surname = "Doe",
                             TwoFactorEnabled = false
                         },
@@ -705,14 +702,14 @@ namespace MVCAuctionPortal.Migrations
                             AccessFailedCount = 0,
                             AddressID = 2,
                             CompanyID = 1,
-                            ConcurrencyStamp = "2614112f-4005-4925-bfe3-0199b85a8ec7",
+                            ConcurrencyStamp = "b8ec5191-f1a6-4f57-b271-fc8adc7e8dec",
                             Email = "janedoe@example.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             Name = "Jane",
                             Nip = 0,
                             PhoneNumberConfirmed = false,
-                            RegistationDate = new DateTime(2023, 4, 21, 23, 13, 36, 451, DateTimeKind.Local).AddTicks(9341),
+                            RegistationDate = new DateTime(2023, 4, 18, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(76),
                             Surname = "Doe",
                             TwoFactorEnabled = false
                         });
@@ -899,21 +896,21 @@ namespace MVCAuctionPortal.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "dd6b1aca-cce9-451b-b746-9bd95eda16fa",
+                            ConcurrencyStamp = "92ea290d-063a-4b17-b411-874bdde1d35e",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "3cc48986-020f-405b-a4d4-fc747afd0778",
+                            ConcurrencyStamp = "fa483a23-822c-474f-8de2-fdd6ad3e7de0",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "1e056af0-bb65-4702-b384-10838120fc41",
+                            ConcurrencyStamp = "33bfea3d-113c-4251-9c3c-6ad54a09072b",
                             Name = "Seller",
                             NormalizedName = "SELLER"
                         });

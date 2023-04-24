@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using MVCAuctionPortal.Models;
+using System.Security.Claims;
 
 namespace AuctionPortal.Services
 {
@@ -48,12 +49,14 @@ namespace AuctionPortal.Services
                 .FirstOrDefaultAsync(o => o.OrderID == id);
             return order;
         }
-        public async Task CreateOrderAsync(Order order, List<int> auctionIds, List<int> quantities)
+        public async Task CreateOrderAsync(Order order, List<int> auctionIds, List<int> quantities, ClaimsPrincipal user, decimal discountPercentage)
         {
             order.OrderDate = DateTime.Now;
 
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
+
+            decimal orderTotal = 0;
 
             for (int i = 0; i < auctionIds.Count; i++)
             {
@@ -76,11 +79,18 @@ namespace AuctionPortal.Services
                     };
 
                     _context.OrderItems.Add(orderItem);
+                    orderTotal += quantities[i] * auction.Price;
                 }
             }
 
+            order.Total = orderTotal * (1 - discountPercentage / 100);
+            order.DiscountPercentage = discountPercentage;
+
+            _context.Orders.Update(order);
             await _context.SaveChangesAsync();
         }
+
+
 
         public async Task UpdateOrderStatusAsync(int orderId, string newStatus, string paymentMethod)
         {

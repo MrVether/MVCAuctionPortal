@@ -44,22 +44,6 @@ namespace MVCAuctionPortal.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Coupon",
-                columns: table => new
-                {
-                    CouponID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    ExpireDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    NumberOfUses = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Coupon", x => x.CouponID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Item",
                 columns: table => new
                 {
@@ -258,7 +242,6 @@ namespace MVCAuctionPortal.Migrations
                     Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Nip = table.Column<int>(type: "int", nullable: true),
                     RegistationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    CouponID = table.Column<int>(type: "int", nullable: true),
                     AddressID = table.Column<int>(type: "int", nullable: false),
                     CompanyID = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -290,11 +273,6 @@ namespace MVCAuctionPortal.Migrations
                         column: x => x.CompanyID,
                         principalTable: "Company",
                         principalColumn: "CompanyID");
-                    table.ForeignKey(
-                        name: "FK_Users_Coupon_CouponID",
-                        column: x => x.CouponID,
-                        principalTable: "Coupon",
-                        principalColumn: "CouponID");
                 });
 
             migrationBuilder.CreateTable(
@@ -367,6 +345,30 @@ namespace MVCAuctionPortal.Migrations
                     table.ForeignKey(
                         name: "FK_Basket_Users_UserID",
                         column: x => x.UserID,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Coupon",
+                columns: table => new
+                {
+                    CouponID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    DiscountPercentage = table.Column<int>(type: "int", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    ExpireDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    NumberOfUses = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Coupon", x => x.CouponID);
+                    table.ForeignKey(
+                        name: "FK_Coupon_Users_UserId",
+                        column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -474,16 +476,6 @@ namespace MVCAuctionPortal.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Coupon",
-                columns: new[] { "CouponID", "Description", "ExpireDate", "Name", "NumberOfUses" },
-                values: new object[,]
-                {
-                    { 1, "10% off", new DateTime(2023, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), "SALE10", 100 },
-                    { 2, "20% off", new DateTime(2023, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), "SALE20", 50 },
-                    { 3, "30% off", new DateTime(2023, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified), "SALE30", 25 }
-                });
-
-            migrationBuilder.InsertData(
                 table: "Item",
                 columns: new[] { "ItemID", "Condition", "Description", "Manufacturer", "Model", "Name", "Other" },
                 values: new object[,]
@@ -498,9 +490,9 @@ namespace MVCAuctionPortal.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "7623fbdf-933d-4838-9b2a-2a1a75f510d9", "Admin", "ADMIN" },
-                    { 2, "1cc37411-960c-4ab7-8883-4449a8568ec3", "User", "USER" },
-                    { 3, "850ea983-8cb1-4b18-aef8-01fc1ec45328", "Seller", "SELLER" }
+                    { 1, "92ea290d-063a-4b17-b411-874bdde1d35e", "Admin", "ADMIN" },
+                    { 2, "fa483a23-822c-474f-8de2-fdd6ad3e7de0", "User", "USER" },
+                    { 3, "33bfea3d-113c-4251-9c3c-6ad54a09072b", "Seller", "SELLER" }
                 });
 
             migrationBuilder.InsertData(
@@ -535,8 +527,8 @@ namespace MVCAuctionPortal.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "AccessFailedCount", "AddressID", "CompanyID", "ConcurrencyStamp", "CouponID", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "Nip", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RegistationDate", "SecurityStamp", "Surname", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, 1, null, "ef578bfc-42bd-43f4-840b-20c7e6a2159d", 1, "johndoe@example.com", false, false, null, "John", 0, null, null, null, null, false, new DateTime(2023, 4, 12, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(3984), null, "Doe", false, null });
+                columns: new[] { "Id", "AccessFailedCount", "AddressID", "CompanyID", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "Nip", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RegistationDate", "SecurityStamp", "Surname", "TwoFactorEnabled", "UserName" },
+                values: new object[] { 1, 0, 1, null, "16cc088d-8ad4-49e8-a33a-6806e7822733", "johndoe@example.com", false, false, null, "John", 0, null, null, null, null, false, new DateTime(2023, 4, 14, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(38), null, "Doe", false, null });
 
             migrationBuilder.InsertData(
                 table: "Basket",
@@ -544,18 +536,27 @@ namespace MVCAuctionPortal.Migrations
                 values: new object[] { 1, 2, 50f, 1 });
 
             migrationBuilder.InsertData(
+                table: "Coupon",
+                columns: new[] { "CouponID", "Description", "DiscountPercentage", "ExpireDate", "Name", "NumberOfUses", "UserId" },
+                values: new object[,]
+                {
+                    { 1, "10% discount on your first purchase", 10, new DateTime(2023, 5, 21, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(3244), "WELCOME10", 0, 1 },
+                    { 2, "15% discount on your next purchase", 15, new DateTime(2023, 6, 21, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(3251), "SPRING15", 0, 1 }
+                });
+
+            migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "AccessFailedCount", "AddressID", "CompanyID", "ConcurrencyStamp", "CouponID", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "Nip", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RegistationDate", "SecurityStamp", "Surname", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 2, 0, 2, 1, "dbe9b105-c584-4388-96a9-41610e7a252c", null, "janedoe@example.com", false, false, null, "Jane", 0, null, null, null, null, false, new DateTime(2023, 4, 16, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(4028), null, "Doe", false, null });
+                columns: new[] { "Id", "AccessFailedCount", "AddressID", "CompanyID", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "Nip", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RegistationDate", "SecurityStamp", "Surname", "TwoFactorEnabled", "UserName" },
+                values: new object[] { 2, 0, 2, 1, "b8ec5191-f1a6-4f57-b271-fc8adc7e8dec", "janedoe@example.com", false, false, null, "Jane", 0, null, null, null, null, false, new DateTime(2023, 4, 18, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(76), null, "Doe", false, null });
 
             migrationBuilder.InsertData(
                 table: "Auction",
                 columns: new[] { "AuctionID", "BuyItNow", "CategoryID", "DateOfIssue", "EndDate", "ImageURL", "ItemID", "Pieces", "Price", "PurchaseCounter", "SubCategoryID", "Title", "UserID", "WarrantyID" },
                 values: new object[,]
                 {
-                    { 1, false, null, new DateTime(2023, 4, 19, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7121), new DateTime(2023, 4, 26, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7159), "https://m.media-amazon.com/images/I/71dpTXFz+dL._AC_UF1000,1000_QL80_.jpg", 1, 5, 100m, 0, 1, "Iphone", 2, 1 },
-                    { 2, true, null, new DateTime(2023, 4, 19, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7203), new DateTime(2023, 5, 3, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7205), "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", 2, 3, 200m, 0, 2, "Shovel", 2, 2 },
-                    { 3, false, null, new DateTime(2023, 4, 19, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7216), new DateTime(2023, 5, 10, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7219), "https://a.allegroimg.com/original/1e76f9/ba5267f249a8bb358f5d3cf50ec6", 3, 1, 300m, 0, 3, "Boots", 2, 3 }
+                    { 1, false, null, new DateTime(2023, 4, 21, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(2893), new DateTime(2023, 4, 28, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(2905), "https://m.media-amazon.com/images/I/71dpTXFz+dL._AC_UF1000,1000_QL80_.jpg", 1, 5, 100m, 0, 1, "Iphone", 2, 1 },
+                    { 2, true, null, new DateTime(2023, 4, 21, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(2916), new DateTime(2023, 5, 5, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(2918), "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", 2, 3, 200m, 0, 2, "Shovel", 2, 2 },
+                    { 3, false, null, new DateTime(2023, 4, 21, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(2921), new DateTime(2023, 5, 12, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(2922), "https://a.allegroimg.com/original/1e76f9/ba5267f249a8bb358f5d3cf50ec6", 3, 1, 300m, 0, 3, "Boots", 2, 3 }
                 });
 
             migrationBuilder.InsertData(
@@ -614,6 +615,11 @@ namespace MVCAuctionPortal.Migrations
                 column: "CompanyAddressID");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Coupon_UserId",
+                table: "Coupon",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderItems_AuctionId",
                 table: "OrderItems",
                 column: "AuctionId");
@@ -647,11 +653,6 @@ namespace MVCAuctionPortal.Migrations
                 name: "IX_Users_CompanyID",
                 table: "Users",
                 column: "CompanyID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_CouponID",
-                table: "Users",
-                column: "CouponID");
         }
 
         /// <inheritdoc />
@@ -659,6 +660,9 @@ namespace MVCAuctionPortal.Migrations
         {
             migrationBuilder.DropTable(
                 name: "BasketAndAuctions");
+
+            migrationBuilder.DropTable(
+                name: "Coupon");
 
             migrationBuilder.DropTable(
                 name: "OrderItems");
@@ -710,9 +714,6 @@ namespace MVCAuctionPortal.Migrations
 
             migrationBuilder.DropTable(
                 name: "Company");
-
-            migrationBuilder.DropTable(
-                name: "Coupon");
 
             migrationBuilder.DropTable(
                 name: "Address");

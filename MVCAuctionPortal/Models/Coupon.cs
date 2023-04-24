@@ -11,14 +11,21 @@ namespace AuctionPortal.Models
         [Required]
         [StringLength(10)]
         public string Name { get; set; }
+        [Required]
+        [Range(1, 100)]
+        public int DiscountPercentage { get; set; }
 
         [Required]
-        [StringLength(30)]
+        [StringLength(50)]
         public string Description { get; set; }
+
 
         [Required]
         public DateTime ExpireDate { get; set; }
 
         [Required] public int NumberOfUses { get; set; } = 0;
+
+        public int UserId { get; set; } 
+        public virtual User User { get; set; } 
     }
 }

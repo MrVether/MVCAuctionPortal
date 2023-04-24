@@ -15,10 +15,11 @@ namespace AuctionPortal.Models
 
         [Required]
         public DateTime OrderDate { get; set; }
+        public decimal Total { get; set; }
 
         public string FirstName { get; set; }
         public string Surname { get; set; }
-
+        public decimal DiscountPercentage { get; set; }
         public string City { get; set; }
         public string Street { get; set; }
         public string HouseNumber { get; set; }

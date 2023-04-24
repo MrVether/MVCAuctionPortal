@@ -10,4 +10,5 @@ public interface ICouponService
     IEnumerable<Coupon> GetAllCoupons();
     Coupon GetCouponById(int id);
     IEnumerable<Coupon> GetCouponsForUser(User user);
+    Task<bool> CreateUserCouponAsync(Coupon coupon, string userEmail);
 }

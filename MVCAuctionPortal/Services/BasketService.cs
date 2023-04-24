@@ -44,12 +44,20 @@ namespace MVCAuctionPortal.Services
 
         public async Task<Basket> GetBasketByUserId(int userId)
         {
-            return await _context.Basket.AsNoTracking()
+            var basket = await _context.Basket.AsNoTracking()
                 .Include(b => b.BasketAndAuctions)
                 .ThenInclude(ba => ba.Auction)
                 .FirstOrDefaultAsync(b => b.UserID == userId)
                 .ConfigureAwait(false);
+
+            if (basket == null)
+            {
+                basket = await CreateBasket(userId);
+            }
+
+            return basket;
         }
+
 
         public async Task RemoveAuctionFromBasket(int userId, int auctionId)
         {

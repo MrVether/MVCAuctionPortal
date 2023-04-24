@@ -5,6 +5,7 @@
 
 <h2>Koszyk</h2>
 <form id="basket-form" method="post" action="@Url.Action("UpdateBasket", "Basket")">
+    <input type="hidden" id="discount-percentage" name="DiscountPercentage" value="" />
     <table class="table">
         <thead>
         <tr>
@@ -23,27 +24,38 @@
                 <td>@item.Auction.Price</td>
 
                 <td>
-                    <input type="hidden" name="AuctionId[]" value="@item.Auction.AuctionId" />
-                    <input type="number" min="0" value="@item.Auction.Quantity" data-auction-id="@item.Auction.AuctionId" data-price="@item.Auction.Price" class="quantity-input" name="Quantity[]" />
+                    <input type="hidden" name="AuctionId[]" value="@item.Auction.AuctionId"/>
+                    <input type="number" min="0" value="@item.Auction.Quantity" data-auction-id="@item.Auction.AuctionId" data-price="@item.Auction.Price" class="quantity-input" name="Quantity[]"/>
 
 
                 </td>
                 <td>
                     <form method="post" action="@Url.Action("DeleteFromBasket", "Basket")">
-                        <input type="hidden" name="auctionId" value="@item.Auction.AuctionId" />
+                        <input type="hidden" name="auctionId" value="@item.Auction.AuctionId"/>
                         <button class="btn btn-danger remove-button">Usuń</button>
                     </form>
                 </td>
                 <td>
-                    <input type="checkbox" @(item.Auction.Selected ? "checked" : "") data-auction-id="@item.Auction.AuctionId" class="selected-checkbox" name="Selected[@item.Index]" />
+                    <input type="checkbox" @(item.Auction.Selected ? "checked" : "") data-auction-id="@item.Auction.AuctionId" class="selected-checkbox" name="Selected[@item.Index]"/>
                 </td>
             </tr>
         }
         </tbody>
     </table>
+
+    <p>
+        <strong>Wybierz kupon:</strong>
+        <select id="coupon-select">
+            <option value="">Brak kuponu</option>
+            @foreach (var coupon in Model.AvailableCoupons)
+            {
+                <option value="@coupon.DiscountPercentage">@coupon.Name - @coupon.DiscountPercentage% zniżki</option>
+            }
+        </select>
+    </p>
+
     <button type="button" class="btn btn-success" id="submit-order-button">Złóż zamówienie</button>
 </form>
-
 
 <p>
     <strong>Suma:</strong> <span id="summary-price">@Model.SummaryPrice</span>$
@@ -51,21 +63,26 @@
 
 @section Scripts {
     <script>
-        $(function () {
-            function updateSummaryPrice() {
-                var summaryPrice = 0;
-                $(".selected-checkbox:checked").each(function () {
-                    var auctionId = $(this).data("auction-id");
-                    var quantityInput = $(".quantity-input[data-auction-id='" + auctionId + "']");
-                    var price = parseFloat(quantityInput.data("price"));
-                    var quantity = parseInt(quantityInput.val());
+        function updateSummaryPrice() {
+            var summaryPrice = 0;
+            $(".selected-checkbox:checked").each(function () {
+                var auctionId = $(this).data("auction-id");
+                var quantityInput = $(".quantity-input[data-auction-id='" + auctionId + "']");
+                var price = parseFloat(quantityInput.data("price"));
+                var quantity = parseInt(quantityInput.val());
 
-                    summaryPrice += price * quantity;
-                });
+                summaryPrice += price * quantity;
+            });
 
-                $("#summary-price").text(summaryPrice.toFixed(2));
+            var discountPercentage = parseFloat($("#discount-percentage").val());
+            if (!isNaN(discountPercentage)) {
+                summaryPrice *= 1 - discountPercentage / 100;
             }
 
+            $("#summary-price").text(summaryPrice.toFixed(2));
+        }
+
+        $(function () {
             $(".quantity-input").on("change", updateSummaryPrice);
             $(".selected-checkbox").on("change", updateSummaryPrice);
 
@@ -83,6 +100,13 @@
 
             updateSummaryPrice();
         });
+
+        $("#coupon-select").on("change", function () {
+            var discountPercentage = parseFloat($(this).val());
+            $("#discount-percentage").val(discountPercentage);
+            updateSummaryPrice();
+        });
+
         $("#submit-order-button").on("click", function () {
             var selectedAuctions = [];
             var quantities = [];
@@ -105,6 +129,7 @@
             }
 
         });
+    
     </script>
 }
 

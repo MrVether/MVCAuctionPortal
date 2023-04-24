@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace MVCAuctionPortal.Migrations
 {
     [DbContext(typeof(AuctionDbContext))]
-    [Migration("20230419202407_init")]
-    partial class init
+    [Migration("20230424211336_addtot")]
+    partial class addtot
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -147,8 +147,8 @@ namespace MVCAuctionPortal.Migrations
                         {
                             AuctionID = 1,
                             BuyItNow = false,
-                            DateOfIssue = new DateTime(2023, 4, 19, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7121),
-                            EndDate = new DateTime(2023, 4, 26, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7159),
+                            DateOfIssue = new DateTime(2023, 4, 24, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3045),
+                            EndDate = new DateTime(2023, 5, 1, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3079),
                             ImageURL = "https://m.media-amazon.com/images/I/71dpTXFz+dL._AC_UF1000,1000_QL80_.jpg",
                             ItemID = 1,
                             Pieces = 5,
@@ -163,8 +163,8 @@ namespace MVCAuctionPortal.Migrations
                         {
                             AuctionID = 2,
                             BuyItNow = true,
-                            DateOfIssue = new DateTime(2023, 4, 19, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7203),
-                            EndDate = new DateTime(2023, 5, 3, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7205),
+                            DateOfIssue = new DateTime(2023, 4, 24, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3088),
+                            EndDate = new DateTime(2023, 5, 8, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3090),
                             ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg",
                             ItemID = 2,
                             Pieces = 3,
@@ -179,8 +179,8 @@ namespace MVCAuctionPortal.Migrations
                         {
                             AuctionID = 3,
                             BuyItNow = false,
-                            DateOfIssue = new DateTime(2023, 4, 19, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7216),
-                            EndDate = new DateTime(2023, 5, 10, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(7219),
+                            DateOfIssue = new DateTime(2023, 4, 24, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3093),
+                            EndDate = new DateTime(2023, 5, 15, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3096),
                             ImageURL = "https://a.allegroimg.com/original/1e76f9/ba5267f249a8bb358f5d3cf50ec6",
                             ItemID = 3,
                             Pieces = 1,
@@ -272,8 +272,11 @@ namespace MVCAuctionPortal.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int>("DiscountPercentage")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("ExpireDate")
                         .HasColumnType("datetime2");
@@ -286,7 +289,12 @@ namespace MVCAuctionPortal.Migrations
                     b.Property<int>("NumberOfUses")
                         .HasColumnType("int");
 
+                    b.Property<int>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("CouponID");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Coupon");
 
@@ -294,26 +302,22 @@ namespace MVCAuctionPortal.Migrations
                         new
                         {
                             CouponID = 1,
-                            Description = "10% off",
-                            ExpireDate = new DateTime(2023, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "SALE10",
-                            NumberOfUses = 100
+                            Description = "10% discount on your first purchase",
+                            DiscountPercentage = 10,
+                            ExpireDate = new DateTime(2023, 5, 24, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3503),
+                            Name = "WELCOME10",
+                            NumberOfUses = 0,
+                            UserId = 1
                         },
                         new
                         {
                             CouponID = 2,
-                            Description = "20% off",
-                            ExpireDate = new DateTime(2023, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "SALE20",
-                            NumberOfUses = 50
-                        },
-                        new
-                        {
-                            CouponID = 3,
-                            Description = "30% off",
-                            ExpireDate = new DateTime(2023, 12, 31, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Name = "SALE30",
-                            NumberOfUses = 25
+                            Description = "15% discount on your next purchase",
+                            DiscountPercentage = 15,
+                            ExpireDate = new DateTime(2023, 6, 24, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3509),
+                            Name = "SPRING15",
+                            NumberOfUses = 0,
+                            UserId = 1
                         });
                 });
 
@@ -406,6 +410,9 @@ namespace MVCAuctionPortal.Migrations
                     b.Property<DateTime?>("DeliveryDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<decimal>("DiscountPercentage")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -438,6 +445,9 @@ namespace MVCAuctionPortal.Migrations
                     b.Property<string>("Surname")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("Total")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("UserID")
                         .HasColumnType("int");
@@ -617,9 +627,6 @@ namespace MVCAuctionPortal.Migrations
                     b.Property<string>("ConcurrencyStamp")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("CouponID")
-                        .HasColumnType("int");
-
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
 
@@ -676,8 +683,6 @@ namespace MVCAuctionPortal.Migrations
 
                     b.HasIndex("CompanyID");
 
-                    b.HasIndex("CouponID");
-
                     b.ToTable("Users");
 
                     b.HasData(
@@ -686,15 +691,14 @@ namespace MVCAuctionPortal.Migrations
                             Id = 1,
                             AccessFailedCount = 0,
                             AddressID = 1,
-                            ConcurrencyStamp = "ef578bfc-42bd-43f4-840b-20c7e6a2159d",
-                            CouponID = 1,
+                            ConcurrencyStamp = "f4138ce2-057f-4528-9fc6-67b5139212f6",
                             Email = "johndoe@example.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             Name = "John",
                             Nip = 0,
                             PhoneNumberConfirmed = false,
-                            RegistationDate = new DateTime(2023, 4, 12, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(3984),
+                            RegistationDate = new DateTime(2023, 4, 17, 23, 13, 36, 451, DateTimeKind.Local).AddTicks(9296),
                             Surname = "Doe",
                             TwoFactorEnabled = false
                         },
@@ -704,14 +708,14 @@ namespace MVCAuctionPortal.Migrations
                             AccessFailedCount = 0,
                             AddressID = 2,
                             CompanyID = 1,
-                            ConcurrencyStamp = "dbe9b105-c584-4388-96a9-41610e7a252c",
+                            ConcurrencyStamp = "2614112f-4005-4925-bfe3-0199b85a8ec7",
                             Email = "janedoe@example.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             Name = "Jane",
                             Nip = 0,
                             PhoneNumberConfirmed = false,
-                            RegistationDate = new DateTime(2023, 4, 16, 22, 24, 7, 159, DateTimeKind.Local).AddTicks(4028),
+                            RegistationDate = new DateTime(2023, 4, 21, 23, 13, 36, 451, DateTimeKind.Local).AddTicks(9341),
                             Surname = "Doe",
                             TwoFactorEnabled = false
                         });
@@ -898,21 +902,21 @@ namespace MVCAuctionPortal.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "7623fbdf-933d-4838-9b2a-2a1a75f510d9",
+                            ConcurrencyStamp = "dd6b1aca-cce9-451b-b746-9bd95eda16fa",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "1cc37411-960c-4ab7-8883-4449a8568ec3",
+                            ConcurrencyStamp = "3cc48986-020f-405b-a4d4-fc747afd0778",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "850ea983-8cb1-4b18-aef8-01fc1ec45328",
+                            ConcurrencyStamp = "1e056af0-bb65-4702-b384-10838120fc41",
                             Name = "Seller",
                             NormalizedName = "SELLER"
                         });
@@ -1063,6 +1067,17 @@ namespace MVCAuctionPortal.Migrations
                     b.Navigation("CompanyAddress");
                 });
 
+            modelBuilder.Entity("AuctionPortal.Models.Coupon", b =>
+                {
+                    b.HasOne("AuctionPortal.Models.User", "User")
+                        .WithMany("Coupons")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("AuctionPortal.Models.OrderItem", b =>
                 {
                     b.HasOne("AuctionPortal.Models.Auction", "Auction")
@@ -1124,15 +1139,9 @@ namespace MVCAuctionPortal.Migrations
                         .WithMany()
                         .HasForeignKey("CompanyID");
 
-                    b.HasOne("AuctionPortal.Models.Coupon", "Coupons")
-                        .WithMany()
-                        .HasForeignKey("CouponID");
-
                     b.Navigation("Address");
 
                     b.Navigation("Companies");
-
-                    b.Navigation("Coupons");
                 });
 
             modelBuilder.Entity("MVCAuctionPortal.Models.Basket", b =>
@@ -1175,6 +1184,11 @@ namespace MVCAuctionPortal.Migrations
             modelBuilder.Entity("AuctionPortal.Models.Order", b =>
                 {
                     b.Navigation("OrderItems");
+                });
+
+            modelBuilder.Entity("AuctionPortal.Models.User", b =>
+                {
+                    b.Navigation("Coupons");
                 });
 
             modelBuilder.Entity("MVCAuctionPortal.Models.Basket", b =>

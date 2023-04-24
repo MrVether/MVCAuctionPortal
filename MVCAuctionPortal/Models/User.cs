@@ -10,11 +10,10 @@ namespace AuctionPortal.Models
         public string Surname { get; set; }
         public int? Nip { get; set; }
         public DateTime RegistationDate { get; set; }
-        public int? CouponID { get; set; }
         public int AddressID { get; set; }
         public int? CompanyID { get; set; }
 
-        public virtual Coupon Coupons { get; set; }
+        public virtual ICollection<Coupon> Coupons { get; set; } 
         public virtual Address Address { get; set; }
         public virtual Company Companies { get; set; }
 
@@ -23,7 +22,7 @@ namespace AuctionPortal.Models
             Name = "Default";
             Surname = "Default";
             Nip = 0000000000;
-
+            Coupons = new List<Coupon>();
         }
     }
 }

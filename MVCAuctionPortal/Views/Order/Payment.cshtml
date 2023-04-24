@@ -7,6 +7,7 @@
 
 <form id="payment-form">
     <input type="hidden" id="payment-method" name="payment-method" value="" />
+    <input type="hidden" id="discount-percentage" name="discount-percentage" value="@ViewData["DiscountPercentage"]" />
     <div id="paypal-button-container"></div>
 </form>
 
@@ -18,10 +19,16 @@
 
         paypal.Buttons({
             createOrder: function (data, actions) {
+                var discountPercentage = parseFloat(document.getElementById('discount-percentage').value);
                 var totalPrice = 0;
+                var itemTotalPrice = 0;
+
                 for (var i = 0; i < items.length; i++) {
-                    totalPrice += items[i].price * items[i].quantity;
+                    itemTotalPrice += items[i].price * items[i].quantity;
                 }
+
+                var discountAmount = itemTotalPrice * (discountPercentage / 100); // Dodaj tę linijkę
+                totalPrice = itemTotalPrice - discountAmount; // Dodaj tę linijkę
 
                 return actions.order.create({
                     purchase_units: [{
@@ -31,7 +38,11 @@
                             breakdown: {
                                 item_total: {
                                     currency_code: "USD",
-                                    value: totalPrice.toFixed(2)
+                                    value: itemTotalPrice.toFixed(2)
+                                },
+                                discount: { // Dodaj tę sekcję
+                                    currency_code: "USD",
+                                    value: discountAmount.toFixed(2)
                                 }
                             }
                         },

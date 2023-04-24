@@ -42,12 +42,13 @@ namespace MVCAuctionPortal.Controllers
         }
 
         [HttpGet]
-        public ActionResult OrderForm(List<int> auctionIds, List<int> quantities)
+        public async Task<IActionResult> OrderForm(List<int> auctionIds, List<int> quantities, decimal discountPercentage)
         {
             var orderViewModel = new OrderViewModel
             {
                 AuctionIds = auctionIds,
-                Quantities = quantities
+                Quantities = quantities,
+                DiscountPercentage = discountPercentage
             };
 
             return View(orderViewModel);
@@ -61,11 +62,13 @@ namespace MVCAuctionPortal.Controllers
             {
                 return NotFound();
             }
+
+            ViewData["DiscountPercentage"] = order.DiscountPercentage;
+
             return View(order);
         }
-
         [HttpPost]
-        public async Task<IActionResult> CreateOrder(IFormCollection form)
+public async Task<IActionResult> CreateOrder(IFormCollection form, decimal discountPercentage)
         {
             var order = new Order
             {
@@ -82,7 +85,7 @@ namespace MVCAuctionPortal.Controllers
             var auctionIds = form["AuctionIds[]"].Select(int.Parse).ToList();
             var quantities = form["Quantities[]"].Select(int.Parse).ToList();
 
-            await _orderService.CreateOrderAsync(order, auctionIds, quantities);
+            await _orderService.CreateOrderAsync(order, auctionIds, quantities, User, discountPercentage);
             return RedirectToAction("Payment", new { id = order.OrderID });
         }
         public async Task<IActionResult> PaymentSuccess(int id, string paymentMethod)

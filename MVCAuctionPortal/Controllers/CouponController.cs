@@ -17,18 +17,32 @@ namespace MVCAuctionPortal.Controllers
         {
             return View();
         }
-
         [HttpPost]
-        public IActionResult Create(Coupon coupon)
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create(IFormCollection formCollection)
         {
-            _couponService.Create(coupon);
-            return RedirectToAction("ListOfCoupons");
-        }
+            if (ModelState.IsValid)
+            {
+                Coupon coupon = new Coupon
+                {
+                    Name = formCollection["Name"],
+                    Description = formCollection["Description"],
+                    ExpireDate = DateTime.Parse(formCollection["ExpireDate"]),
+                    DiscountPercentage = int.Parse(formCollection["DiscountPercentage"]),
+                    NumberOfUses = int.Parse(formCollection["NumberOfUses"])
 
-        public IActionResult Edit(int id)
-        {
-            var coupon = _couponService.GetCouponById(id);
-            return View(coupon);
+                };
+
+                string userEmail = formCollection["UserEmail"];
+
+                bool created = await _couponService.CreateUserCouponAsync(coupon, userEmail);
+                if (created)
+                {
+                    return RedirectToAction("ListOfCoupons");
+                }
+                ModelState.AddModelError("UserEmail", "User not found with the provided email.");
+            }
+            return RedirectToAction("ListOfCoupons");
         }
 
         [HttpPost]
