@@ -14,7 +14,6 @@ public class AuctionViewModel
     public string NewItemModel { get; set; }
     public string NewItemOther { get; set; }
     public string Title { get; set; }
-    public bool BuyItNow { get; set; }
     public DateTime? EndDate { get; set; }
     public decimal Price { get; set; }
     public int Pieces { get; set; }

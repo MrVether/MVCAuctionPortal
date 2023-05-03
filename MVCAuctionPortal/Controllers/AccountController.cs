@@ -3,13 +3,22 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MVCAuctionPortal.Models;
+using MVCAuctionPortal.ViewModels;
+using ServicesAndInterfacesLibary.Services;
 using System.Security.Claims;
 
 namespace MVCAuctionPortal.Controllers
 {
     public class AccountController : Controller
     {
-      
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Auction");
+        }
 
         [HttpGet]
         [AllowAnonymous]
@@ -29,14 +38,26 @@ namespace MVCAuctionPortal.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly UserManager<User> _userManager;
         private readonly IRoleService _roleService;
+        private readonly ICompanyService _companyService;
 
-        public AccountController(SignInManager<User> signInManager, UserManager<User> userManager, IRoleService roleService)
+
+        public AccountController(SignInManager<User> signInManager, UserManager<User> userManager,
+            IRoleService roleService, ICompanyService companyService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _roleService = roleService;
+            _companyService = companyService;
+
         }
 
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult SellerRegistration()
+        {
+            var model = new SellerRegistrationViewModel();
+            return View(model);
+        }
 
 
         [HttpPost]
@@ -52,7 +73,7 @@ namespace MVCAuctionPortal.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> ExternalLoginCallback()
         {
-          
+
 
             var info = await _signInManager.GetExternalLoginInfoAsync();
             if (info == null)
@@ -105,6 +126,7 @@ namespace MVCAuctionPortal.Controllers
 
 
         [HttpGet]
+        [AllowAnonymous]
         public IActionResult ExternalUserRegistration(string email)
         {
             var model = new ExternalUserRegistrationViewModel { Email = email };
@@ -112,15 +134,11 @@ namespace MVCAuctionPortal.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
+
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ExternalUserRegistration(ExternalUserRegistrationViewModel model)
         {
-            var existingUser = await _userManager.FindByEmailAsync(model.Email);
-            if (existingUser != null)
-            {
-                ModelState.AddModelError(string.Empty, "Error: user with this email address already exists.");
-                return View(model);
-            }
             if (ModelState.IsValid)
             {
                 var user = new User
@@ -129,30 +147,32 @@ namespace MVCAuctionPortal.Controllers
                     Email = model.Email,
                     Name = model.Name,
                     Surname = model.Surname,
-                    Nip = model.Nip,
-                    RegistationDate = DateTime.Now,
-                    AddressID = 1,
+                    RegistationDate = DateTime.UtcNow
                 };
 
-                var createUserResult = await _userManager.CreateAsync(user);
+                var result = await _userManager.CreateAsync(user);
 
-                if (createUserResult.Succeeded)
+                if (result.Succeeded)
                 {
-                    user = await _userManager.FindByEmailAsync(model.Email);
+                    int defaultRoleId = 2;
+                    await _roleService.AssignRoleToUserAsync(user.Id, defaultRoleId, model.IsSeller);
 
-                    await _roleService.AssignRoleToUserAsync(user.Id, 2);
+                    await _signInManager.SignInAsync(user, isPersistent: false);
 
-                    if (user != null)
+                    if (model.IsSeller)
                     {
-                        await _signInManager.SignInAsync(user, isPersistent: false);
-                        return RedirectToAction("Index", "Auction");
+                        return RedirectToAction("RegisterCompany", "Company", new { email = model.Email });
                     }
                     else
                     {
-                        ModelState.AddModelError(string.Empty, "Error: user not found.");
+                        return RedirectToAction("Index", "Auction");
                     }
                 }
 
+                foreach (var error in result.Errors)
+                {
+                    ModelState.AddModelError(string.Empty, error.Description);
+                }
             }
 
             return View(model);

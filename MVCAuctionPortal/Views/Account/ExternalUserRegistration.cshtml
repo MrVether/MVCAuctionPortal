@@ -17,20 +17,19 @@
 
             <div class="form-group">
                 <label asp-for="Name"></label>
-                <input asp-for="Name" class="form-control"/>
+                <input asp-for="Name" class="form-control" />
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
 
             <div class="form-group">
                 <label asp-for="Surname"></label>
-                <input asp-for="Surname" class="form-control"/>
+                <input asp-for="Surname" class="form-control" />
                 <span asp-validation-for="Surname" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="Nip"></label>
-                <input asp-for="Nip" class="form-control"/>
-                <span asp-validation-for="Nip" class="text-danger"></span>
+                <label asp-for="IsSeller">I want to become a seller</label>
+                <input asp-for="IsSeller" type="checkbox" class="form-check-input" id="isSellerCheckbox" />
             </div>
 
             <div class="form-group">
@@ -44,4 +43,15 @@
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
+
+    <script>
+        document.getElementById('isSellerCheckbox').addEventListener('change', function () {
+            var sellerRegistrationButton = document.getElementById('sellerRegistrationButton');
+            if (this.checked) {
+                sellerRegistrationButton.style.display = 'block';
+            } else {
+                sellerRegistrationButton.style.display = 'none';
+            }
+        });
+    </script>
 }

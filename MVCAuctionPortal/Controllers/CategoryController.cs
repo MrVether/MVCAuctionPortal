@@ -1,4 +1,5 @@
 ﻿using AuctionPortal.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServicesAndInterfacesLibary.Services;
 
@@ -16,11 +17,13 @@ namespace MVCAuctionPortal.Controllers
             _categoryService = categoryService;
             _subCategoryService = subCategoryService;
         }
+        [AllowAnonymous]
         public IActionResult Index()
         {
             var allCategories = _categoryService.GetAllCategories();
             return View(allCategories);
         }
+        [AllowAnonymous]
         public IActionResult SubCategories([FromRoute] int id)
         {
             var allSubCategories = _subCategoryService.GetAllSubCategories(id);

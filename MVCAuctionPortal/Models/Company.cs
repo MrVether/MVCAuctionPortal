@@ -29,9 +29,6 @@ namespace AuctionPortal.Models
         [Required]
         public string Description { get; set; }
 
-        [Required]
-        public int CompanyAddressID { get; set; }
 
-        public Address CompanyAddress { get; set; }
     }
 }

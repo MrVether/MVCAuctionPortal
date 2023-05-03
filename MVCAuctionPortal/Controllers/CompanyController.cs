@@ -1,7 +1,9 @@
 ﻿using AuctionPortal.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using MVCAuctionPortal.Models;
+using MVCAuctionPortal.ViewModels;
 using ServicesAndInterfacesLibary.Services;
 
 namespace MVCAuctionPortal.Controllers
@@ -10,23 +12,78 @@ namespace MVCAuctionPortal.Controllers
     {
         private readonly ILogger<CompanyController> _logger;
         private readonly ICompanyService _companyService;
-        private readonly IAddressService _addressService;
         private readonly UserManager<User> _userManager;
 
 
-        public CompanyController(ILogger<CompanyController> logger, ICompanyService companyService, IAddressService addressService, UserManager<User> userManager)
+        public CompanyController(ILogger<CompanyController> logger, ICompanyService companyService, UserManager<User> userManager)
         {
             _logger = logger;
             _companyService = companyService;
-            _addressService = addressService;
             _userManager = userManager;
         }
+        [HttpGet]
+        [AllowAnonymous]
+        public async Task<IActionResult> RegisterCompany(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            var model = new SellerRegistrationViewModel { UserId = user.Id.ToString() };
+            return View(model);
+        }
+
+
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> RegisterCompany(SellerRegistrationViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var user = await _userManager.FindByIdAsync(model.UserId);
+                if (user != null)
+                {
+                    var company = new Company
+                    {
+                        Name = model.Company.Name,
+                        Nip = model.Company.Nip,
+                        Regon = model.Company.Regon,
+                        CountryEstablishment = model.Company.CountryEstablishment,
+                        DateOfEstablishment = model.Company.DateOfEstablishment,
+                        Description = model.Company.Description,
+                    };
+
+                    _companyService.Create(company);
+
+                    user.CompanyID = company.CompanyID;
+                    await _userManager.UpdateAsync(user);
+
+                    return RedirectToAction("Index", "Auction");
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Error: user not found.");
+                }
+            }
+
+            return View(model);
+        }
+
+        [AllowAnonymous]
         public IActionResult GetByUserID([FromRoute] int? id)
         {
             var company = _companyService.GetCompaniesForUser(id);
             return View(company);
         }
-
+        [Authorize(Roles = "Seller,Admin")]
         public IActionResult Edit()
         {
             var userId = _userManager.GetUserId(User);
@@ -35,21 +92,26 @@ namespace MVCAuctionPortal.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
+
+            var user = _userManager.FindByIdAsync(userId).Result;
             var companies = _companyService.GetCompaniesForUser(int.Parse(userId));
             var company = companies.FirstOrDefault();
-            if (company == null)
+
+            if (company == null || user.CompanyID != company.CompanyID)
             {
-                return RedirectToAction("Login", "Account");
+                return Unauthorized(); // Return unauthorized if the company IDs do not match
             }
+
             var viewModel = new EditCompanyViewModel
             {
                 Company = company,
-                Address = _addressService.GetAddressById(company.CompanyAddressID)
             };
+
             return View(viewModel);
         }
 
         [HttpPost]
+        [Authorize(Roles = "Seller,Admin")]
         public IActionResult Edit(EditCompanyViewModel viewModel)
         {
             var userId = _userManager.GetUserId(User);
@@ -59,33 +121,25 @@ namespace MVCAuctionPortal.Controllers
                 return RedirectToAction("Login", "Account");
             }
 
-            var company = new Company
-                {
-                    CompanyID = viewModel.Company.CompanyID,
-                    Name = viewModel.Company.Name,
-                    Nip = viewModel.Company.Nip,
-                    Regon = viewModel.Company.Regon,
-                    CountryEstablishment = viewModel.Company.CountryEstablishment,
-                    DateOfEstablishment = viewModel.Company.DateOfEstablishment,
-                    Description = viewModel.Company.Description,
-                    CompanyAddressID = viewModel.Address.AddressID
-                };
+            var user = _userManager.FindByIdAsync(userId).Result;
+            var company = _companyService.GetCompanyById(viewModel.Company.CompanyID);
 
-                var address = new Address
-                {
-                    AddressID = viewModel.Address.AddressID,
-                    Street = viewModel.Address.Street,
-                    HouseNumber = viewModel.Address.HouseNumber,
-                    LocalNumber = viewModel.Address.LocalNumber,
-                    ZipCode = viewModel.Address.ZipCode
-                };
+            if (company == null || user.CompanyID != company.CompanyID)
+            {
+                return Unauthorized(); // Return unauthorized if the company IDs do not match
+            }
 
-                _companyService.Update(company);
-                _addressService.Update(address);
+            company.Name = viewModel.Company.Name;
+            company.Nip = viewModel.Company.Nip;
+            company.Regon = viewModel.Company.Regon;
+            company.CountryEstablishment = viewModel.Company.CountryEstablishment;
+            company.DateOfEstablishment = viewModel.Company.DateOfEstablishment;
+            company.Description = viewModel.Company.Description;
 
-                return RedirectToAction(nameof(GetByUserID), new { id = userId });
-            
+            _companyService.Update(company);
 
+            return RedirectToAction(nameof(GetByUserID), new { id = userId });
         }
+
     }
 }

@@ -1,11 +1,11 @@
 ﻿using AuctionPortal.Models;
 using AuctionPortal.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MVCAuctionPortal.Models;
+using MVCAuctionPortal.ViewModels;
 using ServicesAndInterfacesLibary.Services;
-using System.Diagnostics;
 
 namespace MVCAuctionPortal.Controllers
 {
@@ -17,26 +17,52 @@ namespace MVCAuctionPortal.Controllers
         private readonly IWarrantyService _warrantyService;
         private readonly ISubCategoryService _subCategoryService;
         private readonly IReviewService _reviewService;
+
         private readonly UserManager<User> _userManager;
+        private readonly IOrderService _orderService;
 
 
-        public AuctionController(ILogger<AuctionController> logger, IAuctionService auctionService, IItemService itemService, IWarrantyService warrantyService, ISubCategoryService subCategoryService,IReviewService reviewService, UserManager<User> userManager)
+        public AuctionController(ILogger<AuctionController> logger, IAuctionService auctionService,
+            IItemService itemService, IWarrantyService warrantyService, ISubCategoryService subCategoryService,
+            IReviewService reviewService, UserManager<User> userManager, IOrderService orderService)
         {
             _logger = logger;
             _auctionService = auctionService;
             _itemService = itemService;
             _warrantyService = warrantyService;
             _subCategoryService = subCategoryService;
-            _reviewService= reviewService;
+            _reviewService = reviewService;
             _userManager = userManager;
+            _orderService = orderService;
         }
 
+        [AllowAnonymous]
         public IActionResult Index()
         {
             var allAuctions = _auctionService.GetAllAuctions();
-            return View(allAuctions);
+
+            if (allAuctions == null || !allAuctions.Any())
+            {
+                return NotFound();
+            }
+
+            var auctionViewModels = allAuctions.Select(a => new AuctionAndWarrantyViewModel()
+            {
+                Auction = a,
+                Warranty = _warrantyService.GetWarrantyById(a.WarrantyID)
+            }).ToList();
+
+            var random = new Random();
+            auctionViewModels = auctionViewModels.OrderBy(a => random.Next()).ToList();
+
+            var selectedAuctionViewModels = auctionViewModels.Take(6).ToList();
+
+            return View(selectedAuctionViewModels);
         }
+
+
         [HttpGet]
+        [Authorize(Roles = "Seller,Admin")]
         public ActionResult Create()
         {
             var viewModel = new AuctionViewModel
@@ -47,9 +73,13 @@ namespace MVCAuctionPortal.Controllers
             };
             return View(viewModel);
         }
+
         [HttpPost]
+        [Authorize(Roles = "Seller,Admin")]
+
         public ActionResult Create(AuctionViewModel model)
         {
+            var userId = _userManager.GetUserId(User);
 
             if (model.ItemID == 0 && !string.IsNullOrEmpty(model.NewItemName))
             {
@@ -72,14 +102,14 @@ namespace MVCAuctionPortal.Controllers
                 var newAuction = new Auction
                 {
                     Title = model.Title,
-                    BuyItNow = model.BuyItNow,
                     EndDate = model.EndDate,
                     Price = model.Price,
                     Pieces = model.Pieces,
                     SubCategoryID = model.SubCategoryID,
                     ItemID = model.ItemID,
                     WarrantyID = model.WarrantyID,
-                    ImageURL = model.ImageURL
+                    ImageURL = model.ImageURL,
+                    UserID= Int32.Parse(userId)
                 };
                 _auctionService.AddAuction(newAuction);
 
@@ -88,16 +118,34 @@ namespace MVCAuctionPortal.Controllers
                 return RedirectToAction("Index");
             }
         }
+
         [HttpPost]
+        [Authorize(Roles = "Seller,Admin")]
         public IActionResult Delete([FromRoute] int? id)
         {
+            var auction = _auctionService.GetAuctionById(id);
+            var userId = _userManager.GetUserId(User);
+
+            if (auction.UserID != int.Parse(userId))
+            {
+                return Unauthorized(); 
+            }
+
             _auctionService.DeleteAuction(id);
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "Seller,Admin")]
         public IActionResult DeleteConfirmation(int id)
         {
             var auction = _auctionService.GetAuctionById(id);
+            var userId = _userManager.GetUserId(User);
+
+            if (auction.UserID != int.Parse(userId))
+            {
+                return Unauthorized(); 
+            }
+
             if (auction == null)
             {
                 return NotFound();
@@ -106,6 +154,7 @@ namespace MVCAuctionPortal.Controllers
             return View(auction);
         }
 
+        [Authorize(Roles = "Seller,Admin")]
         public IActionResult Edit([FromRoute] int? id)
         {
             var userId = _userManager.GetUserId(User);
@@ -114,6 +163,7 @@ namespace MVCAuctionPortal.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
+
             if (id == null)
             {
                 var auctions = _auctionService.GetAuctionsForUser(int.Parse(userId));
@@ -123,40 +173,94 @@ namespace MVCAuctionPortal.Controllers
             {
                 var auction = _auctionService.GetAuctionById(id);
 
+                if (auction.UserID != int.Parse(userId))
+                {
+                    return Unauthorized();
+                }
+
                 return View(auction);
             }
         }
+
+        [Authorize(Roles = "Seller,Admin")]
         [HttpPost]
         public IActionResult Edit(Auction auction)
         {
+            var userId = _userManager.GetUserId(User);
+
+            if (auction.UserID != int.Parse(userId))
+            {
+                return Unauthorized();
+            }
 
             _auctionService.UpdateAuction(auction);
-            return View(auction);
+            return RedirectToAction("UserPanel", "User");
         }
+
+        [AllowAnonymous]
         [HttpGet]
         public IActionResult Details([FromRoute] int id)
         {
             var item = _itemService.GetItemById(id);
             var auction = _auctionService.GetAuctionByItemId(id);
             var reviews = _reviewService.GetReviewsByAuctionId(auction.AuctionID);
+            ViewData["ImageUrl"] = auction.ImageURL;
             ViewData["Reviews"] = reviews;
             return View(item);
         }
 
+        [AllowAnonymous]
         public IActionResult SubCategoryAuctionsList([FromRoute] int id)
         {
-            var auction = _auctionService.GetAuctionBySubCategory(id);
-            return View(auction);
-        }
-        [HttpGet]
-        public IActionResult AddReview(int auctionId)
-        {
-            var review = new Review { AuctionID = auctionId };
-            return View(review);
+            var auctions = _auctionService.GetAuctionBySubCategory(id).ToList();
+
+            var auctionViewModels = auctions.Select(a => new AuctionAndWarrantyViewModel()
+            {
+                Auction = a,
+                Warranty = _warrantyService.GetWarrantyById(a.WarrantyID)
+            }).ToList();
+
+            var auctionAndWarrantyViewModels = auctions.Select(auction => new AuctionAndWarrantyViewModel
+            {
+                Auction = auction,
+                Warranty = auction.Warranty != null
+                    ? _warrantyService.GetWarrantyById(auction.Warranty.WarrantyID)
+                    : null
+            }).ToList();
+
+            return View(auctionAndWarrantyViewModels);
         }
 
+
+        [Authorize(Roles = "User,Seller,Admin")]
+
+        [HttpGet]
+        public IActionResult AddReviews(int orderId)
+        {
+            var order = _orderService.GetOrderDetailsById(orderId);
+            if (order == null)
+            {
+                return NotFound();
+            }
+
+            var model = new OrderReviewsViewModel
+            {
+                OrderId = orderId,
+                Reviews = order.OrderItems.Select(oi => new ReviewViewModel
+                {
+                    AuctionID = oi.Auction.AuctionID,
+                    AuctionName = oi.Auction.Title
+                }).ToList()
+            };
+
+            return View(model);
+        }
+
+
+
+        [Authorize(Roles = "User,Seller,Admin")]
         [HttpPost]
-        public IActionResult AddReview(Review review)
+        public IActionResult AddReviews(OrderReviewsViewModel model)
         {
             var userId = _userManager.GetUserId(User);
 
@@ -164,11 +268,28 @@ namespace MVCAuctionPortal.Controllers
             {
                 return RedirectToAction("Login", "Account");
             }
-            review.UserID = int.Parse(userId); 
+
+
+            foreach (var reviewViewModel in model.Reviews)
+            {
+                var review = new Review
+                {
+                    AuctionID = reviewViewModel.AuctionID,
+                    UserID = int.Parse(userId),
+                    Title = reviewViewModel.Title,
+                    Description = reviewViewModel.Description,
+                    IsPositive = reviewViewModel.IsPositive
+                };
+
                 _reviewService.Create(review);
-                return RedirectToAction("UserOrders", "Order"); 
-            
-            return View(review);
+            }
+
+            return RedirectToAction("UserOrders", "Order");
+
+
+            return View(model);
         }
+
+
     }
 }

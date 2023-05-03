@@ -63,7 +63,7 @@ namespace AuctionPortal.Services
             var auction = _context.Auction.FirstOrDefault(a => a.AuctionID == auctionId);
             if (auction != null && auction.Pieces >= quantity)
             {
-                auction.Pieces-=quantity;
+                auction.Pieces -= quantity;
                 await _context.SaveChangesAsync();
                 return true;
             }
@@ -79,7 +79,6 @@ namespace AuctionPortal.Services
             if (auction != null && item != null)
             {
                 auction.Title = dto.Title;
-                auction.BuyItNow = dto.BuyItNow;
                 auction.EndDate = dto.EndDate;
                 auction.Price = dto.Price;
                 auction.Pieces = dto.Pieces;

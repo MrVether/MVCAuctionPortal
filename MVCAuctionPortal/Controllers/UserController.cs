@@ -2,6 +2,7 @@
 using AuctionPortal.Models;
 using AuctionPortal.Models.ViewModels;
 using AuctionPortal.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using ServicesAndInterfacesLibary.Services;
@@ -16,7 +17,6 @@ namespace MVCAuctionPortal.Controllers
         private readonly IAuctionService _auctionService;
         private readonly ICompanyService _companyService;
         private readonly ICouponService _couponService;
-        private readonly IAddressService _addressService;
         private readonly IItemService _itemService;
         private readonly IReviewService _reviewService;
         private readonly IWarrantyService _warrantyService;
@@ -24,14 +24,13 @@ namespace MVCAuctionPortal.Controllers
         private readonly SignInManager<User> _signInManager;
 
 
-        public UserController(ILogger<UserController> logger, IAuctionService auctionService, ICompanyService companyService, ICouponService couponService, IAddressService addressService
+        public UserController(ILogger<UserController> logger, IAuctionService auctionService, ICompanyService companyService, ICouponService couponService
         , IItemService itemService, IReviewService reviewService, IWarrantyService warrantyService, IUserService userService, SignInManager<User> signInManager, UserManager<User> userManager)
         {
             _logger = logger;
             _auctionService = auctionService;
             _companyService = companyService;
             _couponService = couponService;
-            _addressService = addressService;
             _itemService = itemService;
             _reviewService = reviewService;
             _warrantyService = warrantyService;
@@ -39,6 +38,8 @@ namespace MVCAuctionPortal.Controllers
             _signInManager = signInManager;
             _userManager = userManager;
         }
+        [Authorize(Roles = "User,Seller,Admin")]
+
         public async Task<IActionResult> UserPanel()
         {
             var userId = _userManager.GetUserId(User);
@@ -49,8 +50,7 @@ namespace MVCAuctionPortal.Controllers
             var user = _userService.GetUserById(int.Parse(userId));
             List<Auction> auctions = _auctionService.GetAuctionsForUser(user.Id);
             IEnumerable<Company> companies = _companyService.GetCompaniesForUser(user.Id);
-            IEnumerable<Coupon> coupons = _couponService.GetCouponsForUser(user);
-            IEnumerable<Address> addresses = _addressService.GetAddressesForUser(user);
+            IEnumerable<Coupon> coupons = await _couponService.GetCouponsForUser(userId);
             var reviews = _reviewService.GetReviewById(user.Id);
 
             var viewModel = new UserPanelViewModel
@@ -58,7 +58,6 @@ namespace MVCAuctionPortal.Controllers
                 Auctions = auctions,
                 Companies = companies,
                 Coupons = coupons,
-                Addresses = addresses,
                 IsUserSeller = await IsUserSellerAsync()
             };
 
@@ -67,6 +66,8 @@ namespace MVCAuctionPortal.Controllers
 
 
         [HttpGet]
+        [Authorize(Roles = "User,Seller,Admin")]
+
         public IActionResult UpdateProfile()
         {
             var userId = _userManager.GetUserId(User);
@@ -81,13 +82,14 @@ namespace MVCAuctionPortal.Controllers
                 Name = user.Name,
                 Surname = user.Surname,
                 Email = user.Email,
-                Nip = user.Nip
             };
 
             return View(viewModel);
         }
 
         [HttpPost]
+        [Authorize(Roles = "User,Seller,Admin")]
+
         [ValidateAntiForgeryToken]
         public IActionResult UpdateProfile(UpdateUserViewModel model)
         {
@@ -100,6 +102,8 @@ namespace MVCAuctionPortal.Controllers
 
             return View(model);
         }
+        [Authorize(Roles = "User,Seller,Admin")]
+
         public IActionResult UserDetails()
         {
             var userId = _userManager.GetUserId(User);
@@ -110,6 +114,7 @@ namespace MVCAuctionPortal.Controllers
             var userDetails = _userService.GetUserDetails(int.Parse(userId));
             return View(userDetails);
         }
+        [Authorize(Roles = "User,Seller,Admin")]
 
         public async Task<bool> IsUserSellerAsync()
         {

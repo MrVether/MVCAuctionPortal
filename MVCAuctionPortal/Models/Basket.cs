@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
-using AuctionPortal.Models;
+﻿using AuctionPortal.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace MVCAuctionPortal.Models;
 

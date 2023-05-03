@@ -1,9 +1,9 @@
 ﻿@model AuctionPortal.Models.Order
 @{
-    ViewBag.Title = "Płatność";
+    ViewBag.Title = "Payment";
 }
 
-<h2>Wybierz opcję płatności</h2>
+<h2>Select a payment option</h2>
 
 <form id="payment-form">
     <input type="hidden" id="payment-method" name="payment-method" value="" />
@@ -27,8 +27,8 @@
                     itemTotalPrice += items[i].price * items[i].quantity;
                 }
 
-                var discountAmount = itemTotalPrice * (discountPercentage / 100); // Dodaj tę linijkę
-                totalPrice = itemTotalPrice - discountAmount; // Dodaj tę linijkę
+                var discountAmount = itemTotalPrice * (discountPercentage / 100);
+                totalPrice = itemTotalPrice - discountAmount;
 
                 return actions.order.create({
                     purchase_units: [{
@@ -40,7 +40,7 @@
                                     currency_code: "USD",
                                     value: itemTotalPrice.toFixed(2)
                                 },
-                                discount: { // Dodaj tę sekcję
+                                discount: {
                                     currency_code: "USD",
                                     value: discountAmount.toFixed(2)
                                 }

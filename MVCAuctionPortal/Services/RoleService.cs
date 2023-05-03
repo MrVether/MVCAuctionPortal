@@ -1,5 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
-using AuctionPortal.Models;
+﻿using AuctionPortal.Models;
+using Microsoft.AspNetCore.Identity;
 // ... inne using ...
 
 public class RoleService : IRoleService
@@ -13,7 +13,7 @@ public class RoleService : IRoleService
         _roleManager = roleManager;
     }
 
-    public async Task AssignRoleToUserAsync(int userId, int roleId)
+    public async Task AssignRoleToUserAsync(int userId, int roleId, bool isSeller = false)
     {
         var user = await _userManager.FindByIdAsync(userId.ToString());
 
@@ -30,5 +30,22 @@ public class RoleService : IRoleService
         {
             throw new Exception("Failed to assign role to user.");
         }
+
+        if (isSeller)
+        {
+            var sellerRole = await _roleManager.FindByIdAsync("3");
+            if (sellerRole == null)
+            {
+                throw new Exception("Seller role not found.");
+            }
+
+            var sellerResult = await _userManager.AddToRoleAsync(user, sellerRole.Name);
+
+            if (!sellerResult.Succeeded)
+            {
+                throw new Exception("Failed to assign seller role to user.");
+            }
+        }
     }
+
 }

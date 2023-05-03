@@ -18,7 +18,6 @@ namespace AuctionPortal.Data.Seeders
                     CountryEstablishment = "Poland",
                     DateOfEstablishment = new DateTime(2000, 1, 1),
                     Description = "This is the first example company.",
-                    CompanyAddressID = 1
                 },
                 new Company
                 {
@@ -29,7 +28,6 @@ namespace AuctionPortal.Data.Seeders
                     CountryEstablishment = "USA",
                     DateOfEstablishment = new DateTime(1990, 5, 10),
                     Description = "This is the second example company.",
-                    CompanyAddressID = 2
                 }
             );
         }

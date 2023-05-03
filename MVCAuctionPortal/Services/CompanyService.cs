@@ -41,8 +41,7 @@ namespace ServicesAndInterfacesLibary.Services
 
         public Company GetCompanyById(int id)
         {
-            return _context.Company.Include(c => c.CompanyAddress)
-                                      .FirstOrDefault(c => c.CompanyID == id);
+            return _context.Company.FirstOrDefault(c => c.CompanyID == id);
         }
         public IEnumerable<Company> GetCompaniesForUser(int? id)
         {
@@ -52,7 +51,7 @@ namespace ServicesAndInterfacesLibary.Services
                 return Enumerable.Empty<Company>();
             }
 
-            var companies = _context.Company.Include(c => c.CompanyAddress)
+            var companies = _context.Company
                 .Where(c => c.CompanyID == user.CompanyID)
                 .ToList();
 
@@ -61,7 +60,7 @@ namespace ServicesAndInterfacesLibary.Services
 
         public IEnumerable<Company> GetAllCompanies()
         {
-            return _context.Company.Include(c => c.CompanyAddress).ToList();
+            return _context.Company.ToList();
         }
     }
 }

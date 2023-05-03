@@ -1,12 +1,10 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using AuctionPortal.Models;
-using AuctionPortal.Services;
+﻿using AuctionPortal.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using MVCAuctionPortal.Models;
 using ServicesAndInterfacesLibary.Services;
+using System.Data;
 
 namespace MVCAuctionPortal.Controllers
 {
@@ -18,14 +16,14 @@ namespace MVCAuctionPortal.Controllers
         private readonly ICouponService _couponService;
 
 
-        public BasketController(ILogger<BasketController> logger, IBasketService basketService,UserManager<User> userManager, ICouponService couponService)
+        public BasketController(ILogger<BasketController> logger, IBasketService basketService, UserManager<User> userManager, ICouponService couponService)
         {
             _logger = logger;
             _basketService = basketService;
             _userManager = userManager;
             _couponService = couponService;
         }
-
+        [Authorize(Roles = "User,Seller,Admin")]
         public async Task<IActionResult> GetBasket()
         {
             var userId = _userManager.GetUserId(User);
@@ -39,21 +37,23 @@ namespace MVCAuctionPortal.Controllers
             var basket = await _basketService.GetBasketByUserId(int.Parse(userId));
 
             var user = await _userManager.FindByIdAsync(userId);
-            var availableCoupons = user != null ? _couponService.GetCouponsForUser(user).ToList() : new List<Coupon>();
+            var availableCoupons = user != null ? (await _couponService.GetCouponsForUser(userId)).ToList() : new List<Coupon>();
 
             var basketViewModel = new BasketViewModel
             {
                 BasketId = basket.BasketID,
                 SummaryPrice = basket.SummaryPrice,
-                BasketAuctions = basket.BasketAndAuctions.Select(ba => new BasketAuctionViewModel
-                {
-                    AuctionId = ba.AuctionId,
-                    Title = ba.Auction.Title,
-                    Price = ba.Auction.Price,
-                    Quantity = ba.Quantity,
-                    Selected = ba.Selected
-                }).ToList(),
-                AvailableCoupons = availableCoupons 
+                BasketAuctions = basket.BasketAndAuctions
+                    .Where(ba => ba.Auction.Pieces > 0)
+                    .Select(ba => new BasketAuctionViewModel
+                    {
+                        AuctionId = ba.AuctionId,
+                        Title = ba.Auction.Title,
+                        Price = ba.Auction.Price,
+                        Quantity = ba.Quantity,
+                        Selected = ba.Selected
+                    }).ToList(),
+                AvailableCoupons = availableCoupons
             };
 
             return View(basketViewModel);
@@ -61,6 +61,7 @@ namespace MVCAuctionPortal.Controllers
 
 
 
+        [Authorize(Roles = "User,Seller,Admin")]
         public async Task<IActionResult> AddToBasket(int auctionId, int quantity)
         {
             var userId = _userManager.GetUserId(User);
@@ -75,7 +76,7 @@ namespace MVCAuctionPortal.Controllers
             return RedirectToAction(nameof(GetBasket));
 
         }
-
+        [Authorize(Roles = "User,Seller,Admin")]
         [HttpPost]
         public async Task<IActionResult> DeleteFromBasket(int auctionId)
         {
@@ -90,7 +91,7 @@ namespace MVCAuctionPortal.Controllers
 
             return RedirectToAction("GetBasket", new { id = userId });
         }
-
+        [Authorize(Roles = "User,Seller,Admin")]
         public async Task<IActionResult> UpdateBasket(IFormCollection form)
         {
             var userId = _userManager.GetUserId(User);
@@ -113,7 +114,7 @@ namespace MVCAuctionPortal.Controllers
 
             return RedirectToAction("GetBasket", new { id = userId });
         }
-
+        [Authorize(Roles = "User,Seller,Admin")]
         public ActionResult OrderForm(IFormCollection form)
         {
             var userId = _userManager.GetUserId(User);
@@ -125,10 +126,16 @@ namespace MVCAuctionPortal.Controllers
 
             var auctionIds = form["AuctionId[]"].Select(int.Parse).ToList();
             var quantities = form["Quantity[]"].Select(int.Parse).ToList();
-            decimal discountPercentage = decimal.Parse(form["DiscountPercentage"]);
+            decimal discountPercentage;
+
+            if (!decimal.TryParse(form["DiscountPercentage"], out discountPercentage))
+            {
+                discountPercentage = 0;
+            }
 
             return RedirectToAction("OrderForm", "Order", new { auctionIds = auctionIds, quantities = quantities, discountPercentage });
         }
+
 
 
     }

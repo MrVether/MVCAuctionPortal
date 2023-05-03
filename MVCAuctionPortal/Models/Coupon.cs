@@ -25,7 +25,7 @@ namespace AuctionPortal.Models
 
         [Required] public int NumberOfUses { get; set; } = 0;
 
-        public int UserId { get; set; } 
-        public virtual User User { get; set; } 
+        public int UserId { get; set; }
+        public virtual User User { get; set; }
     }
 }

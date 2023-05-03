@@ -1,0 +1,59 @@
+﻿@using Microsoft.AspNetCore.Mvc.TagHelpers
+@model MVCAuctionPortal.ViewModels.SellerRegistrationViewModel
+@{
+    ViewData["Title"] = "Seller Registration";
+}
+
+<h1>Seller Registration</h1>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-controller="Company" asp-action="RegisterCompany" method="post">
+            <input type="hidden" asp-for="UserId" />
+
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="hidden" asp-for="UserId" />
+
+            <h3>Company Details</h3>
+            <div class="form-group">
+                <label asp-for="Company.Name">Company Name</label>
+                <input asp-for="Company.Name" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Company.Nip">NIP</label>
+                <input asp-for="Company.Nip" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Company.Regon">REGON</label>
+                <input asp-for="Company.Regon" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Company.CountryEstablishment">Country of Establishment</label>
+                <input asp-for="Company.CountryEstablishment" class="form-control" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Company.DateOfEstablishment">Date of Establishment</label>
+                <input asp-for="Company.DateOfEstablishment" class="form-control" type="date" />
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Company.Description">Description</label>
+                <textarea asp-for="Company.Description" class="form-control"></textarea>
+            </div>
+
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary">Register</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

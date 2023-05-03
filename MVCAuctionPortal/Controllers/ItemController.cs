@@ -1,10 +1,9 @@
 ﻿using AuctionPortal.Models;
 using AuctionPortal.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using MVCAuctionPortal.Models;
 using ServicesAndInterfacesLibary.Services;
-using System.Diagnostics;
 
 namespace MVCAuctionPortal.Controllers
 {
@@ -26,6 +25,7 @@ namespace MVCAuctionPortal.Controllers
             _userManager = userManager;
         }
 
+        [AllowAnonymous]
         public IActionResult ListOfItems()
         {
             var userId = _userManager.GetUserId(User);
@@ -44,13 +44,16 @@ namespace MVCAuctionPortal.Controllers
 
             return View(items);
         }
+        [Authorize(Roles = "Seller,Admin")]
         public IActionResult Edit([FromRoute] int? id)
         {
-          
-                var item = _itemService.GetItemById(id);
-                return View(item);
-        
+
+            var item = _itemService.GetItemById(id);
+            return View(item);
+
         }
+        [Authorize(Roles = "Seller,Admin")]
+
         [HttpPost]
         public IActionResult Edit(Item item)
         {
@@ -60,11 +63,14 @@ namespace MVCAuctionPortal.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Seller,Admin")]
+
         public IActionResult Delete([FromRoute] int? id)
         {
             _itemService.Delete(id);
             return RedirectToAction("ListOfItems");
         }
+        [Authorize(Roles = "Seller,Admin")]
 
         public IActionResult DeleteConfirmation(int id)
         {
@@ -80,4 +86,4 @@ namespace MVCAuctionPortal.Controllers
     }
 }
 
-    
+

@@ -4,18 +4,64 @@
     ViewData["Title"] = "Login";
 }
 
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+
+    .login-container {
+        margin-top: 5%;
+    }
+
+    .login-panel {
+        background-color: #ffffff;
+        padding: 25px;
+        border-radius: 5px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-panel h2 {
+        margin-bottom: 25px;
+    }
+
+    .btn {
+        width: 100%;
+        font-size: 14px;
+        font-weight: 700;
+        padding: 10px;
+        border-radius: 3px;
+        cursor: pointer;
+        margin-bottom: 10px;
+    }
+
+    .btn-google {
+        background-color: #4285F4;
+        color: #ffffff;
+    }
+
+    .btn-facebook {
+        background-color: #1877F2;
+        color: #ffffff;
+    }
+
+    .btn-twitter {
+        background-color: #1DA1F2;
+        color: #ffffff;
+    }
+</style>
+
 <div class="container">
-    <div class="row justify-content-center">
+    <div class="row justify-content-center login-container">
         <div class="col-md-6">
-            <h2>Login</h2>
-            <div class="d-flex justify-content-center">
+            <div class="login-panel">
+                <h2>Login</h2>
+                <div class="d-flex justify-content-center">
                     <form id="external-login" method="post" asp-controller="Account" asp-action="ExternalLogin">
-                        <button type="submit" name="provider" value="Google">Login with Google</button>
-                        <button type="submit" name="provider" value="Facebook">Login with Facebook</button>
-                        <button type="submit" name="provider" value="Twitter">Login with Twitter</button>
+                        <button type="submit" class="btn btn-google" name="provider" value="Google">Login with Google</button>
+                        <button type="submit" class="btn btn-facebook" name="provider" value="Facebook">Login with Facebook</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-
+</div>

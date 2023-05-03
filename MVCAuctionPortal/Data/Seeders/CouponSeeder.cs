@@ -1,6 +1,6 @@
 ﻿using AuctionPortal.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 public class CouponSeeder : IEntityTypeConfiguration<Coupon>
 {
@@ -15,8 +15,8 @@ public class CouponSeeder : IEntityTypeConfiguration<Coupon>
                 Description = "10% discount on your first purchase",
                 ExpireDate = DateTime.Now.AddMonths(1),
                 DiscountPercentage = 10,
-                NumberOfUses = 0,
-                UserId = 1 
+                NumberOfUses = 5,
+                UserId = 1
             },
             new Coupon
             {
@@ -25,8 +25,8 @@ public class CouponSeeder : IEntityTypeConfiguration<Coupon>
                 Description = "15% discount on your next purchase",
                 ExpireDate = DateTime.Now.AddMonths(2),
                 DiscountPercentage = 15,
-                NumberOfUses = 0,
-                UserId = 1 
+                NumberOfUses = 5,
+                UserId = 1
             }
         );
     }

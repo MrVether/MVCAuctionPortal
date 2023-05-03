@@ -9,12 +9,10 @@ namespace AuctionPortal.Models
         [Required]
         public int AuctionID { get; set; }
         public string Title { get; set; }
-        public bool BuyItNow { get; set; }
         public DateTime DateOfIssue { get; set; }
         public DateTime? EndDate { get; set; }
         public decimal Price { get; set; }
         public int Pieces { get; set; }
-        public int PurchaseCounter { get; set; }
         public int SubCategoryID { get; set; }
         public int ItemID { get; set; }
         public int WarrantyID { get; set; }

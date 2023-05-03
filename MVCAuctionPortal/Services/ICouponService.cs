@@ -9,6 +9,6 @@ public interface ICouponService
     void Update(Coupon coupon);
     IEnumerable<Coupon> GetAllCoupons();
     Coupon GetCouponById(int id);
-    IEnumerable<Coupon> GetCouponsForUser(User user);
+    Task<IEnumerable<Coupon>> GetCouponsForUser(string userId);
     Task<bool> CreateUserCouponAsync(Coupon coupon, string userEmail);
 }

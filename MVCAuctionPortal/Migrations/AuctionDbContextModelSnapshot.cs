@@ -22,60 +22,6 @@ namespace MVCAuctionPortal.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("AuctionPortal.Models.Address", b =>
-                {
-                    b.Property<int>("AddressID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AddressID"));
-
-                    b.Property<string>("HouseNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("LocalNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Street")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("ZipCode")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("AddressID");
-
-                    b.ToTable("Address");
-
-                    b.HasData(
-                        new
-                        {
-                            AddressID = 1,
-                            HouseNumber = "10",
-                            LocalNumber = "1",
-                            Street = "Main Street",
-                            ZipCode = "12345"
-                        },
-                        new
-                        {
-                            AddressID = 2,
-                            HouseNumber = "5",
-                            LocalNumber = "3",
-                            Street = "Park Avenue",
-                            ZipCode = "54321"
-                        },
-                        new
-                        {
-                            AddressID = 3,
-                            HouseNumber = "27",
-                            LocalNumber = "2",
-                            Street = "Broadway",
-                            ZipCode = "67890"
-                        });
-                });
-
             modelBuilder.Entity("AuctionPortal.Models.Auction", b =>
                 {
                     b.Property<int>("AuctionID")
@@ -83,9 +29,6 @@ namespace MVCAuctionPortal.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AuctionID"));
-
-                    b.Property<bool>("BuyItNow")
-                        .HasColumnType("bit");
 
                     b.Property<int?>("CategoryID")
                         .HasColumnType("int");
@@ -108,9 +51,6 @@ namespace MVCAuctionPortal.Migrations
 
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18,2)");
-
-                    b.Property<int>("PurchaseCounter")
-                        .HasColumnType("int");
 
                     b.Property<int>("SubCategoryID")
                         .HasColumnType("int");
@@ -143,50 +83,114 @@ namespace MVCAuctionPortal.Migrations
                         new
                         {
                             AuctionID = 1,
-                            BuyItNow = false,
-                            DateOfIssue = new DateTime(2023, 4, 24, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3045),
-                            EndDate = new DateTime(2023, 5, 1, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3079),
-                            ImageURL = "https://m.media-amazon.com/images/I/71dpTXFz+dL._AC_UF1000,1000_QL80_.jpg",
+                            DateOfIssue = new DateTime(2023, 5, 2, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(768),
+                            EndDate = new DateTime(2023, 5, 9, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(780),
+                            ImageURL = "https://cdn.x-kom.pl/i/setup/images/prod/big/product-new-big,,2022/5/pr_2022_5_17_12_20_15_932_03.jpg",
                             ItemID = 1,
                             Pieces = 5,
-                            Price = 100m,
-                            PurchaseCounter = 0,
+                            Price = 1000m,
                             SubCategoryID = 1,
-                            Title = "Iphone",
+                            Title = "Dell XPS 13",
                             UserID = 2,
                             WarrantyID = 1
                         },
                         new
                         {
                             AuctionID = 2,
-                            BuyItNow = true,
-                            DateOfIssue = new DateTime(2023, 4, 24, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3088),
-                            EndDate = new DateTime(2023, 5, 8, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3090),
-                            ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg",
+                            DateOfIssue = new DateTime(2023, 5, 2, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(787),
+                            EndDate = new DateTime(2023, 5, 9, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(789),
+                            ImageURL = "https://www.proshop.pl/Images/915x900/3031704_4e1eacc41047.jpg",
                             ItemID = 2,
                             Pieces = 3,
-                            Price = 200m,
-                            PurchaseCounter = 0,
+                            Price = 700m,
                             SubCategoryID = 2,
-                            Title = "Shovel",
+                            Title = "Samsung Galaxy S22",
                             UserID = 2,
                             WarrantyID = 2
                         },
                         new
                         {
                             AuctionID = 3,
-                            BuyItNow = false,
-                            DateOfIssue = new DateTime(2023, 4, 24, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3093),
-                            EndDate = new DateTime(2023, 5, 15, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3096),
-                            ImageURL = "https://a.allegroimg.com/original/1e76f9/ba5267f249a8bb358f5d3cf50ec6",
+                            DateOfIssue = new DateTime(2023, 5, 2, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(791),
+                            EndDate = new DateTime(2023, 5, 9, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(793),
+                            ImageURL = "https://umebluje.pl/41747-large_default/sofa-modern-25-grafitowa.jpg",
                             ItemID = 3,
                             Pieces = 1,
-                            Price = 300m,
-                            PurchaseCounter = 0,
+                            Price = 1200m,
                             SubCategoryID = 3,
-                            Title = "Boots",
+                            Title = "Modern Sofa",
                             UserID = 2,
                             WarrantyID = 3
+                        },
+                        new
+                        {
+                            AuctionID = 4,
+                            DateOfIssue = new DateTime(2023, 5, 2, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(796),
+                            EndDate = new DateTime(2023, 5, 9, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(797),
+                            ImageURL = "https://m.media-amazon.com/images/I/61anBuiHUhL.jpg",
+                            ItemID = 4,
+                            Pieces = 2,
+                            Price = 150m,
+                            SubCategoryID = 4,
+                            Title = "Kitchen Mixer",
+                            UserID = 2,
+                            WarrantyID = 3
+                        },
+                        new
+                        {
+                            AuctionID = 5,
+                            DateOfIssue = new DateTime(2023, 5, 2, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(800),
+                            EndDate = new DateTime(2023, 5, 9, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(801),
+                            ImageURL = "https://n.nordstrommedia.com/id/sr3/ec6af5bc-c712-478b-b2d8-3723257766be.jpeg?h=365&w=240&dpr=2",
+                            ItemID = 5,
+                            Pieces = 4,
+                            Price = 80m,
+                            SubCategoryID = 5,
+                            Title = "Elegant Dress",
+                            UserID = 2,
+                            WarrantyID = 3
+                        },
+                        new
+                        {
+                            AuctionID = 6,
+                            DateOfIssue = new DateTime(2023, 5, 2, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(804),
+                            EndDate = new DateTime(2023, 5, 9, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(805),
+                            ImageURL = "https://m.media-amazon.com/images/I/61+hXDh7oIL._AC_UY1000_.jpg",
+                            ItemID = 6,
+                            Pieces = 3,
+                            Price = 250m,
+                            SubCategoryID = 6,
+                            Title = "Stylish Watch",
+                            UserID = 2,
+                            WarrantyID = 2
+                        },
+                        new
+                        {
+                            AuctionID = 7,
+                            DateOfIssue = new DateTime(2023, 5, 2, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(808),
+                            EndDate = new DateTime(2023, 5, 9, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(809),
+                            ImageURL = "https://www.lego.com/cdn/cs/set/assets/blt847a7b38581ded36/75315.png",
+                            ItemID = 7,
+                            Pieces = 10,
+                            Price = 100m,
+                            SubCategoryID = 7,
+                            Title = "LEGO Star Wars Set",
+                            UserID = 2,
+                            WarrantyID = 1
+                        },
+                        new
+                        {
+                            AuctionID = 8,
+                            DateOfIssue = new DateTime(2023, 5, 2, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(812),
+                            EndDate = new DateTime(2023, 5, 9, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(813),
+                            ImageURL = "https://ibkbike.vtexassets.com/arquivos/ids/593348-1200-auto?v=638060623332200000&width=1200&height=auto&aspect=true",
+                            ItemID = 8,
+                            Pieces = 2,
+                            Price = 850m,
+                            SubCategoryID = 8,
+                            Title = "Road Bike",
+                            UserID = 2,
+                            WarrantyID = 2
                         });
                 });
 
@@ -197,9 +201,6 @@ namespace MVCAuctionPortal.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CompanyID"));
-
-                    b.Property<int>("CompanyAddressID")
-                        .HasColumnType("int");
 
                     b.Property<string>("CountryEstablishment")
                         .IsRequired()
@@ -230,15 +231,12 @@ namespace MVCAuctionPortal.Migrations
 
                     b.HasKey("CompanyID");
 
-                    b.HasIndex("CompanyAddressID");
-
                     b.ToTable("Company");
 
                     b.HasData(
                         new
                         {
                             CompanyID = 1,
-                            CompanyAddressID = 1,
                             CountryEstablishment = "Poland",
                             DateOfEstablishment = new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "This is the first example company.",
@@ -249,7 +247,6 @@ namespace MVCAuctionPortal.Migrations
                         new
                         {
                             CompanyID = 2,
-                            CompanyAddressID = 2,
                             CountryEstablishment = "USA",
                             DateOfEstablishment = new DateTime(1990, 5, 10, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Description = "This is the second example company.",
@@ -301,9 +298,9 @@ namespace MVCAuctionPortal.Migrations
                             CouponID = 1,
                             Description = "10% discount on your first purchase",
                             DiscountPercentage = 10,
-                            ExpireDate = new DateTime(2023, 5, 24, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3503),
+                            ExpireDate = new DateTime(2023, 6, 2, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(1036),
                             Name = "WELCOME10",
-                            NumberOfUses = 0,
+                            NumberOfUses = 5,
                             UserId = 1
                         },
                         new
@@ -311,9 +308,9 @@ namespace MVCAuctionPortal.Migrations
                             CouponID = 2,
                             Description = "15% discount on your next purchase",
                             DiscountPercentage = 15,
-                            ExpireDate = new DateTime(2023, 6, 24, 23, 13, 36, 452, DateTimeKind.Local).AddTicks(3509),
+                            ExpireDate = new DateTime(2023, 7, 2, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(1043),
                             Name = "SPRING15",
-                            NumberOfUses = 0,
+                            NumberOfUses = 5,
                             UserId = 1
                         });
                 });
@@ -363,18 +360,8 @@ namespace MVCAuctionPortal.Migrations
                         new
                         {
                             ItemID = 1,
-                            Condition = "New",
-                            Description = "Brand new smartphone with great features",
-                            Manufacturer = "Samsung",
-                            Model = "Galaxy S21",
-                            Name = "Smartphone",
-                            Other = "Comes with original packaging and accessories"
-                        },
-                        new
-                        {
-                            ItemID = 2,
                             Condition = "Used",
-                            Description = "Powerful laptop with high-end specs",
+                            Description = "Powerful Dell XPS 13 laptop with high-end specs",
                             Manufacturer = "Dell",
                             Model = "XPS 13",
                             Name = "Laptop",
@@ -382,13 +369,73 @@ namespace MVCAuctionPortal.Migrations
                         },
                         new
                         {
+                            ItemID = 2,
+                            Condition = "New",
+                            Description = "Brand new Samsung Galaxy S22 smartphone with great features",
+                            Manufacturer = "Samsung",
+                            Model = "Galaxy S22",
+                            Name = "Smartphone",
+                            Other = "Comes with original packaging and accessories"
+                        },
+                        new
+                        {
                             ItemID = 3,
-                            Condition = "Like new",
-                            Description = "Wireless noise-cancelling headphones",
-                            Manufacturer = "Sony",
-                            Model = "WH-1000XM4",
-                            Name = "Headphones",
-                            Other = "Comes with charging cable and carrying case"
+                            Condition = "Used",
+                            Description = "Comfortable and stylish modern sofa",
+                            Manufacturer = "IKEA",
+                            Model = "KIVIK",
+                            Name = "Sofa",
+                            Other = "Some minor wear and tear"
+                        },
+                        new
+                        {
+                            ItemID = 4,
+                            Condition = "New",
+                            Description = "High-quality kitchen mixer for all your baking needs",
+                            Manufacturer = "KitchenAid",
+                            Model = "Stand Mixer",
+                            Name = "Kitchen Mixer",
+                            Other = "Comes with original packaging and accessories"
+                        },
+                        new
+                        {
+                            ItemID = 5,
+                            Condition = "New",
+                            Description = "Elegant and fashionable dress for special occasions",
+                            Manufacturer = "Designer",
+                            Model = "Evening Dress",
+                            Name = "Elegant Dress",
+                            Other = "Available in multiple sizes and colors"
+                        },
+                        new
+                        {
+                            ItemID = 6,
+                            Condition = "New",
+                            Description = "Elegant and fashionable Rolex Datejust 41 watch",
+                            Manufacturer = "Rolex",
+                            Model = "Datejust 41",
+                            Name = "Stylish Watch",
+                            Other = "Includes box and papers"
+                        },
+                        new
+                        {
+                            ItemID = 7,
+                            Condition = "New",
+                            Description = "Collectible LEGO Millennium Falcon set from the Star Wars series",
+                            Manufacturer = "LEGO",
+                            Model = "Millennium Falcon",
+                            Name = "LEGO Star Wars Set",
+                            Other = "Factory sealed"
+                        },
+                        new
+                        {
+                            ItemID = 8,
+                            Condition = "Used",
+                            Description = "Lightweight and fast Trek Domane SL 6 road bike",
+                            Manufacturer = "Trek",
+                            Model = "Domane SL 6",
+                            Name = "Road Bike",
+                            Other = "Recently serviced and in great condition"
                         });
                 });
 
@@ -578,29 +625,57 @@ namespace MVCAuctionPortal.Migrations
                         {
                             SubCategoryID = 1,
                             CategoryID = 1,
-                            ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg",
+                            ImageURL = "https://miro.medium.com/v2/resize:fit:928/1*SUK_D1dp3Acw1EjE1Cn6OA.png",
                             Name = "Laptops"
                         },
                         new
                         {
                             SubCategoryID = 2,
                             CategoryID = 1,
-                            ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg",
+                            ImageURL = "https://cdn.pixabay.com/photo/2016/11/29/12/30/android-1869510_1280.jpg",
                             Name = "Smartphones"
                         },
                         new
                         {
                             SubCategoryID = 3,
                             CategoryID = 2,
-                            ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg",
+                            ImageURL = "https://cdn.pixabay.com/photo/2016/11/18/17/20/living-room-1835923_1280.jpg",
                             Name = "Furniture"
                         },
                         new
                         {
                             SubCategoryID = 4,
                             CategoryID = 2,
-                            ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg",
+                            ImageURL = "https://www.compliancegate.com/wp-content/uploads/2019/12/kitchen-appliances-safety-standards-eu.jpg",
                             Name = "Kitchen appliances"
+                        },
+                        new
+                        {
+                            SubCategoryID = 5,
+                            CategoryID = 3,
+                            ImageURL = "https://cdn.pixabay.com/photo/2017/08/01/08/29/people-2563491_1280.jpg",
+                            Name = "Clothing"
+                        },
+                        new
+                        {
+                            SubCategoryID = 6,
+                            CategoryID = 3,
+                            ImageURL = "https://media.istockphoto.com/id/1181376840/photo/mock-up-blank-empty-digital-tablet-screen-on-beige-fashion-women-stylish-accessories-with-tag.jpg?s=612x612&w=0&k=20&c=AVOd71gDv5dRL9aic_9JmLyB0nvHkpSZ3uNkc9dl74o=",
+                            Name = "Accessories"
+                        },
+                        new
+                        {
+                            SubCategoryID = 7,
+                            CategoryID = 4,
+                            ImageURL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuBnq8qmkvccgSwZhLaxEIn5KzJqWSfdm5ow&usqp=CAU",
+                            Name = "Board games"
+                        },
+                        new
+                        {
+                            SubCategoryID = 8,
+                            CategoryID = 4,
+                            ImageURL = "https://cdn.vox-cdn.com/thumbor/VK3R_SzCKTnG4egaSIMpxewl7M4=/0x0:2040x1360/1400x1400/filters:focal(1020x680:1021x681)/cdn.vox-cdn.com/uploads/chorus_asset/file/22236383/acastro_210113_1777_gamingstock_0002.jpg",
+                            Name = "Video games"
                         });
                 });
 
@@ -613,9 +688,6 @@ namespace MVCAuctionPortal.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<int>("AddressID")
                         .HasColumnType("int");
 
                     b.Property<int?>("CompanyID")
@@ -639,9 +711,6 @@ namespace MVCAuctionPortal.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("Nip")
-                        .HasColumnType("int");
 
                     b.Property<string>("NormalizedEmail")
                         .HasColumnType("nvarchar(max)");
@@ -676,8 +745,6 @@ namespace MVCAuctionPortal.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AddressID");
-
                     b.HasIndex("CompanyID");
 
                     b.ToTable("Users");
@@ -687,15 +754,13 @@ namespace MVCAuctionPortal.Migrations
                         {
                             Id = 1,
                             AccessFailedCount = 0,
-                            AddressID = 1,
-                            ConcurrencyStamp = "f4138ce2-057f-4528-9fc6-67b5139212f6",
+                            ConcurrencyStamp = "70007488-670e-4628-8831-066a45e238f5",
                             Email = "johndoe@example.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             Name = "John",
-                            Nip = 0,
                             PhoneNumberConfirmed = false,
-                            RegistationDate = new DateTime(2023, 4, 17, 23, 13, 36, 451, DateTimeKind.Local).AddTicks(9296),
+                            RegistationDate = new DateTime(2023, 4, 25, 13, 19, 34, 437, DateTimeKind.Local).AddTicks(8619),
                             Surname = "Doe",
                             TwoFactorEnabled = false
                         },
@@ -703,16 +768,14 @@ namespace MVCAuctionPortal.Migrations
                         {
                             Id = 2,
                             AccessFailedCount = 0,
-                            AddressID = 2,
                             CompanyID = 1,
-                            ConcurrencyStamp = "2614112f-4005-4925-bfe3-0199b85a8ec7",
+                            ConcurrencyStamp = "1bb936c8-d2f0-4ac9-a232-77c1fd387e28",
                             Email = "janedoe@example.com",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             Name = "Jane",
-                            Nip = 0,
                             PhoneNumberConfirmed = false,
-                            RegistationDate = new DateTime(2023, 4, 21, 23, 13, 36, 451, DateTimeKind.Local).AddTicks(9341),
+                            RegistationDate = new DateTime(2023, 4, 29, 13, 19, 34, 437, DateTimeKind.Local).AddTicks(8657),
                             Surname = "Doe",
                             TwoFactorEnabled = false
                         });
@@ -792,14 +855,14 @@ namespace MVCAuctionPortal.Migrations
                         new
                         {
                             BasketID = 1,
-                            NumberOfItems = 2,
+                            NumberOfItems = 3,
                             SummaryPrice = 50f,
                             UserID = 1
                         },
                         new
                         {
                             BasketID = 2,
-                            NumberOfItems = 1,
+                            NumberOfItems = 2,
                             SummaryPrice = 15f,
                             UserID = 2
                         });
@@ -851,25 +914,25 @@ namespace MVCAuctionPortal.Migrations
                         new
                         {
                             CategoryID = 1,
-                            ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg",
+                            ImageURL = "https://cdn.pixabay.com/photo/2016/03/27/19/43/smartphone-1283938_1280.jpg",
                             Name = "Electronics"
                         },
                         new
                         {
                             CategoryID = 2,
-                            ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg",
+                            ImageURL = "https://cdn.pixabay.com/photo/2016/11/29/03/53/architecture-1867187_1280.jpg",
                             Name = "Home and Garden"
                         },
                         new
                         {
                             CategoryID = 3,
-                            ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg",
+                            ImageURL = "https://cdn.pixabay.com/photo/2017/08/01/11/48/blue-2564660_1280.jpg",
                             Name = "Fashion"
                         },
                         new
                         {
                             CategoryID = 4,
-                            ImageURL = "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg",
+                            ImageURL = "https://www.waysideinsurance.com/wp-content/uploads/2019/12/184/shopping-tips-to-avoid-dangerous-toys.jpg",
                             Name = "Toys and Games"
                         });
                 });
@@ -899,21 +962,21 @@ namespace MVCAuctionPortal.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "dd6b1aca-cce9-451b-b746-9bd95eda16fa",
+                            ConcurrencyStamp = "90c686bf-5c12-43d8-80d3-4b1da2ff7756",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "3cc48986-020f-405b-a4d4-fc747afd0778",
+                            ConcurrencyStamp = "036224a8-8acd-4250-937f-74569417d393",
                             Name = "User",
                             NormalizedName = "USER"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "1e056af0-bb65-4702-b384-10838120fc41",
+                            ConcurrencyStamp = "1b9e1a69-005b-4de1-9138-56059c84d138",
                             Name = "Seller",
                             NormalizedName = "SELLER"
                         });
@@ -1053,17 +1116,6 @@ namespace MVCAuctionPortal.Migrations
                     b.Navigation("Warranty");
                 });
 
-            modelBuilder.Entity("AuctionPortal.Models.Company", b =>
-                {
-                    b.HasOne("AuctionPortal.Models.Address", "CompanyAddress")
-                        .WithMany()
-                        .HasForeignKey("CompanyAddressID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CompanyAddress");
-                });
-
             modelBuilder.Entity("AuctionPortal.Models.Coupon", b =>
                 {
                     b.HasOne("AuctionPortal.Models.User", "User")
@@ -1126,17 +1178,9 @@ namespace MVCAuctionPortal.Migrations
 
             modelBuilder.Entity("AuctionPortal.Models.User", b =>
                 {
-                    b.HasOne("AuctionPortal.Models.Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("AuctionPortal.Models.Company", "Companies")
                         .WithMany()
                         .HasForeignKey("CompanyID");
-
-                    b.Navigation("Address");
 
                     b.Navigation("Companies");
                 });

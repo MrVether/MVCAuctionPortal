@@ -1,30 +1,51 @@
-﻿@model IEnumerable<AuctionPortal.Models.Auction>
+﻿@model IEnumerable<AuctionPortal.Models.AuctionAndWarrantyViewModel>
 
 @{
     ViewData["Title"] = "List of Auctions";
 }
+
 <style>
     .card {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        height: 100%;
+        height: 90%;
+        background-color: #f8f9fa;
+        border: 1px solid #dee2e6;
+        border-radius: .25rem;
+        transition: box-shadow .15s ease;
     }
 
+        .card:hover {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+        }
+
         .card img {
+            width: 100%;
+            height: 100%;
             max-width: 100%;
             max-height: 80%;
             object-fit: contain;
+            display: block;
+            margin: auto;
+            position: relative;
+            top: 50%;
+            transform: translateY(-50%);
         }
+
 
     .card-body {
         height: auto;
         overflow-y: auto;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
 
     .card-container {
         position: relative;
-        height: 450px;
+        height: 500px;
         margin-bottom: 50px;
     }
 
@@ -34,70 +55,103 @@
         left: 0;
         right: 0;
         margin-top: auto;
+        background-color: transparent;
+        border-top: 1px solid #dee2e6;
+    }
+
+    .row.equal-height > .col-md-4 {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .card-header {
+        background-color: #17a2b8;
+        padding: .75rem 1.25rem;
+        margin-bottom: 0;
+        font-weight: 500;
+    }
+
+
+    .add-to-basket-form {
+        display: flex;
+    }
+
+        .add-to-basket-form .form-control {
+            width: 35%;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        .add-to-basket-form .btn {
+            width: 65%;
+            border-top-right-radius: 0;
+            border-bottom-right-radius: 0;
+        }
+
+    .small-btn {
+        font-size: 0.9rem;
+        padding: 0.25rem 0.5rem;
     }
 </style>
-<div class="row">
-    @foreach (var item in Model)
-    {
-        <div class="col-md-4 col-xs-6 border-primary mb-3">
-            <div class="card-container">
-                <div class="card mb-3" style="max-width: 540px;">
-                    <div class="row g-0 ">
-                        <div class="col-md-12">
-                            <div class="card-header text-white bg-info">
-                                <p class="card-text">
-                                    <h5 class="card-title">
-                                        @item.Title
-                                    </h5>
-                                </p>
+
+<div class="container mt-3">
+    <div class="row">
+        @foreach (var item in Model)
+        {
+            var auction = item.Auction;
+            var warranty = item.Warranty;
+            <div class="col-md-4 col-xs-6 border-primary mb-3">
+                <div class="card-container">
+                    <div class="card mb-3">
+                        <div class="row g-0">
+                            <div class="col-md-12">
+                                <div class="card-header text-white">
+                                    <h5 class="card-title mb-0">@auction.Title</h5>
+                                </div>
                             </div>
-                        </div>
-                        <div class="col-md-6">
-                            <img src="@item.ImageURL" width="100%" alt="@item.Title">
-                        </div>
-                        <div class="col-md-6">
-                            <div class="card-body">
-                                <p class="card-text">@item.Item.Description</p>
-                                <p class="card-text"><b>Seller: </b><a href="/company/GetByUserID/@item.UserID">@item.UserID</a></p>
-                                <p class="card-text"><b>Category: </b>@item.SubCategory.Name</p>
-                                <p class="card-text"><b>Start Date: </b>@item.DateOfIssue.ToString("dd MMM yyyy")</p>
-                                <p class="card-text ">
-                                    <b>Status: </b>
-                                    @if (DateTime.Now >= item.DateOfIssue && DateTime.Now <= item.EndDate)
-                                    {
-                                        <span class="badge bg-success text-white">AVAILABLE</span>
-                                    }
-                                    else if (DateTime.Now > item.EndDate)
-                                    {
-                                        <span class="badge bg-danger text-white">ENDED</span>
-                                    }
-                                    else
-                                    {
-                                        <span class="badge bg-primary text-white">UPCOMING</span>
-                                    }
-                                </p>
+                            <div class="col-md-6">
+                                <img src="@auction.ImageURL" width="100%" alt="@auction.Title">
                             </div>
-                        </div>
-                        <div class="col-md-12">
-                            <div class="card-footer mt-auto">
-                                <div class="row">
-                                    <div class="col-6 mb-2">
-                                        <a class="btn btn-outline-primary w-100" asp-action="Details" asp-route-id="@item.ItemID">
-                                            <i class="bi bi-eye-fill"></i> Show Details
-                                        </a>
-                                    </div>
-                                    <div class="col-6 mb-2">
-                                        <a class="btn btn-outline-primary w-100" asp-action="Edit" asp-route-id="@item.ItemID">
-                                            <i class="bi bi-eye-fill"></i> Edit
-                                        </a>
-                                    </div>
-                                    <div class="col-12 mb-2">
-                                        <a class="btn btn-success text-white w-100 @((DateTime.Now > item.EndDate) ? "disabled" : "")"
-                                       asp-controller="Orders"
-                                       asp-action="AddItemToShoppingCart"
-                                       asp-route-id="@item.AuctionID">
-                                            <i class="bi bi-cart-plus"></i> Add to Cart (Price @item.Price.ToString("c"))
-                                        </a>
+                            <div class="col-md-6">
+                                <div class="card-body">
+                                    <p class="card-text d-none d-md-block"><b>Description: </b>@auction.Item.Description</p>
+                                    <p class="card-text d-none d-md-block"><b>Warranty: </b>@warranty.Description</p>
+                                    <p class="card-text d-none d-md-block"><b>Category: </b>@auction.SubCategory.Name</p>
+                                    <p class="card-text d-none d-md-block"><b>Price: </b>@auction.Price.ToString() $</p>
+                                    <p class="card-text d-none d-md-block">
+                                        <b>Status: </b>
+                                        @if (DateTime.Now >= auction.DateOfIssue && DateTime.Now <= auction.EndDate && auction.Pieces > 0)
+                                        {
+                                            <span class="badge bg-success d-none d-md-block">AVAILABLE</span>
+                                        }
+                                        else if (DateTime.Now > auction.EndDate || auction.Pieces == 0)
+                                        {
+                                            <span class="badge bg-danger d-none d-md-block">ENDED</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-primary d-none d-md-block ">UPCOMING</span>
+                                        }
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                                <div class="card-footer mt-auto">
+                                    <div class="row">
+                                        <div class="col-6 mb-2">
+                                            <a class="btn btn-outline-primary w-100 small-btn" asp-action="Details" asp-route-id="@auction.ItemID">
+                                                <i class="bi bi-eye-fill"></i> Show Details
+                                            </a>
+                                        </div>
+                                        <div class="col-6 mb-2">
+                                            <form method="post" asp-controller="Basket" asp-action="AddToBasket" class="add-to-basket-form">
+                                                <input type="hidden" name="auctionId" value="@auction.AuctionID" />
+                                                <button type="submit" class="btn btn-success small-btn @((DateTime.Now > auction.EndDate) ? "disabled" : "")">
+                                                    <i class="bi bi-cart-plus"></i> Add to Cart
+                                                </button>
+                                                <input type="number" class="form-control form-control-sm" name="quantity" min="1" max="@auction.Pieces" value="1" style="width: 50px;" />
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -105,7 +159,7 @@
                     </div>
                 </div>
             </div>
-        </div>
-    }
-</div>
+        }
+    </div>
 
+</div>

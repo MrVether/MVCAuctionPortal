@@ -1,11 +1,7 @@
 ﻿using AuctionPortal.Models;
 using AuctionPortal.Models.ViewModels;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using MVCAuctionPortal.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ServicesAndInterfacesLibary.Services
 {
@@ -70,7 +66,6 @@ namespace ServicesAndInterfacesLibary.Services
                 user.Name = model.Name;
                 user.Surname = model.Surname;
                 user.Email = model.Email;
-                user.Nip = model.Nip;
 
                 _context.SaveChanges();
             }
@@ -93,7 +88,6 @@ namespace ServicesAndInterfacesLibary.Services
                     Name = user.Name,
                     Surname = user.Surname,
                     Email = user.Email,
-                    Nip = user.Nip,
                     RegistrationDate = user.RegistationDate
                 };
             }

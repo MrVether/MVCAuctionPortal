@@ -13,7 +13,6 @@ namespace MVCAuctionPortal.Models
         {
         }
 
-        public DbSet<Address> Address { get; set; }
         public DbSet<Auction> Auction { get; set; }
         public DbSet<Basket> Basket { get; set; }
         public DbSet<Category> Category { get; set; }
@@ -59,7 +58,6 @@ namespace MVCAuctionPortal.Models
 
             modelBuilder.ApplyConfiguration(new IdentityRoleSeeder());
             modelBuilder.ApplyConfiguration(new UserSeeder());
-            modelBuilder.ApplyConfiguration(new AddressSeeder());
             modelBuilder.ApplyConfiguration(new CompanySeeder());
             modelBuilder.ApplyConfiguration(new CategorySeeder());
             modelBuilder.ApplyConfiguration(new SubCategorySeeder());

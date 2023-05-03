@@ -1,18 +1,25 @@
 ﻿using AuctionPortal.Data.Seeders;
+using AuctionPortal.Models;
 using AuctionPortal.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using MVCAuctionPortal.Models;
 using MVCAuctionPortal.Services;
 using ServicesAndInterfacesLibary.Services;
-using Microsoft.AspNetCore.Identity;
-using AuctionPortal.Models;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
-builder.Services.AddIdentity<User, IdentityRole<int>> ()
+builder.Services.AddControllersWithViews(options =>
+{
+    var policy = new AuthorizationPolicyBuilder()
+        .RequireAuthenticatedUser()
+        .Build();
+    options.Filters.Add(new AuthorizeFilter(policy));
+}); builder.Services.AddIdentity<User, IdentityRole<int>>()
     .AddEntityFrameworkStores<AuctionDbContext>()
     .AddDefaultTokenProviders();
 builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
@@ -27,19 +34,14 @@ builder.Services.AddAuthentication(IdentityConstants.ApplicationScheme)
     {
         options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
         options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
-    })
-    .AddTwitter(options =>
-    {
-        options.ConsumerKey = builder.Configuration["Authentication:Twitter:ConsumerKey"];
-        options.ConsumerSecret = builder.Configuration["Authentication:Twitter:ConsumerSecret"];
-        options.RetrieveUserDetails = true;
+
     });
+
 
 
 var connectionString = builder.Configuration.GetConnectionString("AuctionPortalDB");
 builder.Services.AddDbContext<AuctionDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddScoped<IAuctionService, AuctionService>();
-builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<ICouponService, CouponService>();
 builder.Services.AddScoped<ICompanyService, CompanyService>();
@@ -53,17 +55,18 @@ builder.Services.AddScoped<IBasketService, BasketService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IRoleService, RoleService>();
 
-
-builder.Services.AddTransient<AddressSeeder>();
-builder.Services.AddTransient<AuctionSeeder>();
-builder.Services.AddTransient<CategorySeeder>();
-builder.Services.AddTransient<CompanySeeder>();
-builder.Services.AddTransient<CouponSeeder>();
-builder.Services.AddTransient<ItemSeeder>();
-builder.Services.AddTransient<ReviewSeeder>();
-builder.Services.AddTransient<SubCategorySeeder>();
 builder.Services.AddTransient<UserSeeder>();
 builder.Services.AddTransient<WarrantySeeder>();
+builder.Services.AddTransient<CategorySeeder>();
+builder.Services.AddTransient<SubCategorySeeder>();
+builder.Services.AddTransient<ItemSeeder>();
+builder.Services.AddTransient<AuctionSeeder>();
+builder.Services.AddTransient<CompanySeeder>();
+builder.Services.AddTransient<CouponSeeder>();
+builder.Services.AddTransient<ReviewSeeder>();
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

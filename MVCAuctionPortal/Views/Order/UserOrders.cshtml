@@ -1,20 +1,20 @@
 ﻿@model List<AuctionPortal.Models.Order>
 
 @{
-    ViewBag.Title = "Twoje zamówienia";
+    ViewBag.Title = "Your Orders";
 }
 
-<h2>Twoje zamówienia</h2>
+<h2>Your Orders</h2>
 
 <table class="table">
     <thead>
     <tr>
-        <th>Id zamówienia</th>
-        <th>Data zamówienia</th>
+        <th>Order ID</th>
+        <th>Order Date</th>
         <th>Status</th>
-        <th>Metoda płatności</th>
-        <th>Wartość zamówienia</th>
-        <th>Aukcje</th>
+        <th>Payment Method</th>
+        <th>Order Value</th>
+        <th>Auctions</th>
         <th></th>
         <th></th>
         <th></th> <!-- Add an extra column for the Retry Payment button -->
@@ -33,20 +33,21 @@
                 <ul>
                     @foreach (var orderItem in order.OrderItems)
                     {
-                        <li>@orderItem.Auction.Title (Ilość: @orderItem.Quantity, Cena: @orderItem.Auction.Price)</li>
+                        <li>@orderItem.Auction.Title (Quantity: @orderItem.Quantity, Price: @orderItem.Auction.Price)</li>
                     }
                 </ul>
             </td>
             <td>
-                <a href="@Url.Action("Details", "Order", new { id = order.OrderID })" class="btn btn-primary">Szczegóły Zamówienia</a>
+                <a href="@Url.Action("Details", "Order", new { id = order.OrderID })" class="btn btn-primary">Order Details</a>
             </td>
             <td>
-                <a asp-controller="Auction" asp-action="AddReview" asp-route-auctionId="@order.OrderItems.FirstOrDefault().Auction.AuctionID" class="btn btn-secondary">Dodaj recenzję</a>
+                <a asp-controller="Auction" asp-action="AddReviews" asp-route-orderId="@order.OrderID" class="btn btn-secondary">Add Review</a>
             </td>
+
             <td>
                 @if (order.OrderStatus == "Pending")
                 {
-                    <a href="@Url.Action("Payment", "Order", new { id = order.OrderID })" class="btn btn-warning">Ponów płatność</a>
+                    <a href="@Url.Action("Payment", "Order", new { id = order.OrderID })" class="btn btn-warning">Retry Payment</a>
                 }
             </td>
         </tr>

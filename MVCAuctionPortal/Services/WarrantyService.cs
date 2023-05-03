@@ -1,5 +1,4 @@
 ﻿using AuctionPortal.Models;
-using Microsoft.EntityFrameworkCore;
 using MVCAuctionPortal.Models;
 
 namespace ServicesAndInterfacesLibary.Services

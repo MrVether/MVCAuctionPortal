@@ -1,4 +1,5 @@
 ﻿using AuctionPortal.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServicesAndInterfacesLibary.Services;
 
@@ -11,12 +12,15 @@ namespace MVCAuctionPortal.Controllers
         {
             _warrantyService = warrantyService;
         }
+        [Authorize(Roles = "Seller,Admin")]
 
         public IActionResult Create()
         {
             return View();
         }
         [HttpPost]
+        [Authorize(Roles = "Seller,Admin")]
+
         public IActionResult Create(Warranty warranty)
         {
             _warrantyService.Create(warranty);
@@ -24,24 +28,27 @@ namespace MVCAuctionPortal.Controllers
         }
 
 
+        [Authorize(Roles = "Seller,Admin")]
 
         public IActionResult Edit([FromRoute] int id)
         {
             var warranty = _warrantyService.GetWarrantyById(id);
             return View(warranty);
         }
+        [Authorize(Roles = "User,Seller,Admin")]
 
         public IActionResult ListOfWarranties()
         {
-         var warranty =  _warrantyService.GetAllWarranties();
+            var warranty = _warrantyService.GetAllWarranties();
             return View(warranty);
         }
-       
+        [Authorize(Roles = "Seller,Admin")]
+
         [HttpPost]
         public IActionResult Edit(Warranty warranty)
         {
-           _warrantyService.Update(warranty);
-           return RedirectToAction("ListOfWarranties");
+            _warrantyService.Update(warranty);
+            return RedirectToAction("ListOfWarranties");
         }
 
         [HttpPost]

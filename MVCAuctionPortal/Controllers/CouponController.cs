@@ -1,6 +1,8 @@
 ﻿using AuctionPortal.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ServicesAndInterfacesLibary.Services;
+using System.Security.Claims;
 
 namespace MVCAuctionPortal.Controllers
 {
@@ -12,11 +14,12 @@ namespace MVCAuctionPortal.Controllers
         {
             _couponService = couponService;
         }
-
+        [Authorize(Roles = "Admin")]
         public IActionResult Create()
         {
             return View();
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(IFormCollection formCollection)
@@ -44,20 +47,23 @@ namespace MVCAuctionPortal.Controllers
             }
             return RedirectToAction("ListOfCoupons");
         }
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Edit(Coupon coupon)
         {
             _couponService.Update(coupon);
             return RedirectToAction("ListOfCoupons");
         }
-
-        public IActionResult ListOfCoupons()
+        [AllowAnonymous]
+        public async Task<IActionResult> ListOfCoupons()
         {
-            var coupons = _couponService.GetAllCoupons();
-            return View(coupons);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var coupons = await _couponService.GetCouponsForUser(userId);
+            return View(coupons.ToList());
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Delete(int id)
         {

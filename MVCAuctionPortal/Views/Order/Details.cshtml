@@ -1,19 +1,19 @@
 ﻿@model AuctionPortal.Models.Order
 
 @{
-    ViewBag.Title = "Szczegóły zamówienia";
+    ViewBag.Title = "Order Details";
 }
 
-<h2>Szczegóły zamówienia #@Model.OrderID</h2>
+<h2>Order Details #@Model.OrderID</h2>
 
 <table class="table">
     <thead>
     <tr>
-        <th>Id zamówienia</th>
-        <th>Data zamówienia</th>
+        <th>Order ID</th>
+        <th>Order Date</th>
         <th>Status</th>
-        <th>Metoda płatności</th>
-        <th>Wartość zamówienia</th>
+        <th>Payment Method</th>
+        <th>Order Value</th>
     </tr>
     </thead>
     <tbody>
@@ -27,14 +27,14 @@
     </tbody>
 </table>
 
-<h3>Aukcje</h3>
+<h3>Auctions</h3>
 <table class="table">
     <thead>
     <tr>
-        <th>Tytuł aukcji</th>
-        <th>Cena</th>
-        <th>Ilość</th>
-        <th>Wartość</th>
+        <th>Auction Title</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Value</th>
     </tr>
     </thead>
     <tbody>
@@ -51,5 +51,5 @@
 </table>
 
 <p>
-    <a href="@Url.Action("UserOrders", "Order", new { userId = Model.UserID })" class="btn btn-primary">Powrót do listy zamówień</a>
+    <a href="@Url.Action("UserOrders", "Order", new { userId = Model.UserID })" class="btn btn-primary">Back to orders list</a>
 </p>

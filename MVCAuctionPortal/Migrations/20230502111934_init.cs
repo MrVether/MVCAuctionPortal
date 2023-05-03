@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -14,22 +13,6 @@ namespace MVCAuctionPortal.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Address",
-                columns: table => new
-                {
-                    AddressID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    HouseNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LocalNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ZipCode = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Address", x => x.AddressID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Category",
                 columns: table => new
                 {
@@ -41,6 +24,24 @@ namespace MVCAuctionPortal.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Category", x => x.CategoryID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Company",
+                columns: table => new
+                {
+                    CompanyID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    Nip = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    Regon = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
+                    CountryEstablishment = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    DateOfEstablishment = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Company", x => x.CompanyID);
                 });
 
             migrationBuilder.CreateTable(
@@ -69,8 +70,10 @@ namespace MVCAuctionPortal.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserID = table.Column<int>(type: "int", nullable: false),
                     OrderDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Total = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     FirstName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    DiscountPercentage = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     City = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Street = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     HouseNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -187,31 +190,6 @@ namespace MVCAuctionPortal.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Company",
-                columns: table => new
-                {
-                    CompanyID = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    Nip = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
-                    Regon = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false),
-                    CountryEstablishment = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    DateOfEstablishment = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CompanyAddressID = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Company", x => x.CompanyID);
-                    table.ForeignKey(
-                        name: "FK_Company_Address_CompanyAddressID",
-                        column: x => x.CompanyAddressID,
-                        principalTable: "Address",
-                        principalColumn: "AddressID",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "SubCategory",
                 columns: table => new
                 {
@@ -240,9 +218,7 @@ namespace MVCAuctionPortal.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Surname = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Nip = table.Column<int>(type: "int", nullable: true),
                     RegistationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AddressID = table.Column<int>(type: "int", nullable: false),
                     CompanyID = table.Column<int>(type: "int", nullable: true),
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NormalizedUserName = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -263,12 +239,6 @@ namespace MVCAuctionPortal.Migrations
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Address_AddressID",
-                        column: x => x.AddressID,
-                        principalTable: "Address",
-                        principalColumn: "AddressID",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
                         name: "FK_Users_Company_CompanyID",
                         column: x => x.CompanyID,
                         principalTable: "Company",
@@ -282,12 +252,10 @@ namespace MVCAuctionPortal.Migrations
                     AuctionID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    BuyItNow = table.Column<bool>(type: "bit", nullable: false),
                     DateOfIssue = table.Column<DateTime>(type: "datetime2", nullable: false),
                     EndDate = table.Column<DateTime>(type: "datetime2", nullable: true),
                     Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Pieces = table.Column<int>(type: "int", nullable: false),
-                    PurchaseCounter = table.Column<int>(type: "int", nullable: false),
                     SubCategoryID = table.Column<int>(type: "int", nullable: false),
                     ItemID = table.Column<int>(type: "int", nullable: false),
                     WarrantyID = table.Column<int>(type: "int", nullable: false),
@@ -455,24 +423,23 @@ namespace MVCAuctionPortal.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Address",
-                columns: new[] { "AddressID", "HouseNumber", "LocalNumber", "Street", "ZipCode" },
-                values: new object[,]
-                {
-                    { 1, "10", "1", "Main Street", "12345" },
-                    { 2, "5", "3", "Park Avenue", "54321" },
-                    { 3, "27", "2", "Broadway", "67890" }
-                });
-
-            migrationBuilder.InsertData(
                 table: "Category",
                 columns: new[] { "CategoryID", "ImageURL", "Name" },
                 values: new object[,]
                 {
-                    { 1, "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", "Electronics" },
-                    { 2, "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", "Home and Garden" },
-                    { 3, "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", "Fashion" },
-                    { 4, "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", "Toys and Games" }
+                    { 1, "https://cdn.pixabay.com/photo/2016/03/27/19/43/smartphone-1283938_1280.jpg", "Electronics" },
+                    { 2, "https://cdn.pixabay.com/photo/2016/11/29/03/53/architecture-1867187_1280.jpg", "Home and Garden" },
+                    { 3, "https://cdn.pixabay.com/photo/2017/08/01/11/48/blue-2564660_1280.jpg", "Fashion" },
+                    { 4, "https://www.waysideinsurance.com/wp-content/uploads/2019/12/184/shopping-tips-to-avoid-dangerous-toys.jpg", "Toys and Games" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Company",
+                columns: new[] { "CompanyID", "CountryEstablishment", "DateOfEstablishment", "Description", "Name", "Nip", "Regon" },
+                values: new object[,]
+                {
+                    { 1, "Poland", new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "This is the first example company.", "Example Company 1", "123-456-78-90", "123456789" },
+                    { 2, "USA", new DateTime(1990, 5, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "This is the second example company.", "Example Company 2", "098-765-43-21", "122143289" }
                 });
 
             migrationBuilder.InsertData(
@@ -480,9 +447,14 @@ namespace MVCAuctionPortal.Migrations
                 columns: new[] { "ItemID", "Condition", "Description", "Manufacturer", "Model", "Name", "Other" },
                 values: new object[,]
                 {
-                    { 1, "New", "Brand new smartphone with great features", "Samsung", "Galaxy S21", "Smartphone", "Comes with original packaging and accessories" },
-                    { 2, "Used", "Powerful laptop with high-end specs", "Dell", "XPS 13", "Laptop", "Includes charger and carrying case" },
-                    { 3, "Like new", "Wireless noise-cancelling headphones", "Sony", "WH-1000XM4", "Headphones", "Comes with charging cable and carrying case" }
+                    { 1, "Used", "Powerful Dell XPS 13 laptop with high-end specs", "Dell", "XPS 13", "Laptop", "Includes charger and carrying case" },
+                    { 2, "New", "Brand new Samsung Galaxy S22 smartphone with great features", "Samsung", "Galaxy S22", "Smartphone", "Comes with original packaging and accessories" },
+                    { 3, "Used", "Comfortable and stylish modern sofa", "IKEA", "KIVIK", "Sofa", "Some minor wear and tear" },
+                    { 4, "New", "High-quality kitchen mixer for all your baking needs", "KitchenAid", "Stand Mixer", "Kitchen Mixer", "Comes with original packaging and accessories" },
+                    { 5, "New", "Elegant and fashionable dress for special occasions", "Designer", "Evening Dress", "Elegant Dress", "Available in multiple sizes and colors" },
+                    { 6, "New", "Elegant and fashionable Rolex Datejust 41 watch", "Rolex", "Datejust 41", "Stylish Watch", "Includes box and papers" },
+                    { 7, "New", "Collectible LEGO Millennium Falcon set from the Star Wars series", "LEGO", "Millennium Falcon", "LEGO Star Wars Set", "Factory sealed" },
+                    { 8, "Used", "Lightweight and fast Trek Domane SL 6 road bike", "Trek", "Domane SL 6", "Road Bike", "Recently serviced and in great condition" }
                 });
 
             migrationBuilder.InsertData(
@@ -490,10 +462,15 @@ namespace MVCAuctionPortal.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { 1, "92ea290d-063a-4b17-b411-874bdde1d35e", "Admin", "ADMIN" },
-                    { 2, "fa483a23-822c-474f-8de2-fdd6ad3e7de0", "User", "USER" },
-                    { 3, "33bfea3d-113c-4251-9c3c-6ad54a09072b", "Seller", "SELLER" }
+                    { 1, "90c686bf-5c12-43d8-80d3-4b1da2ff7756", "Admin", "ADMIN" },
+                    { 2, "036224a8-8acd-4250-937f-74569417d393", "User", "USER" },
+                    { 3, "1b9e1a69-005b-4de1-9138-56059c84d138", "Seller", "SELLER" }
                 });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "AccessFailedCount", "CompanyID", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RegistationDate", "SecurityStamp", "Surname", "TwoFactorEnabled", "UserName" },
+                values: new object[] { 1, 0, null, "70007488-670e-4628-8831-066a45e238f5", "johndoe@example.com", false, false, null, "John", null, null, null, null, false, new DateTime(2023, 4, 25, 13, 19, 34, 437, DateTimeKind.Local).AddTicks(8619), null, "Doe", false, null });
 
             migrationBuilder.InsertData(
                 table: "Warranty",
@@ -506,12 +483,17 @@ namespace MVCAuctionPortal.Migrations
                 });
 
             migrationBuilder.InsertData(
-                table: "Company",
-                columns: new[] { "CompanyID", "CompanyAddressID", "CountryEstablishment", "DateOfEstablishment", "Description", "Name", "Nip", "Regon" },
+                table: "Basket",
+                columns: new[] { "BasketID", "NumberOfItems", "SummaryPrice", "UserID" },
+                values: new object[] { 1, 3, 50f, 1 });
+
+            migrationBuilder.InsertData(
+                table: "Coupon",
+                columns: new[] { "CouponID", "Description", "DiscountPercentage", "ExpireDate", "Name", "NumberOfUses", "UserId" },
                 values: new object[,]
                 {
-                    { 1, 1, "Poland", new DateTime(2000, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "This is the first example company.", "Example Company 1", "123-456-78-90", "123456789" },
-                    { 2, 2, "USA", new DateTime(1990, 5, 10, 0, 0, 0, 0, DateTimeKind.Unspecified), "This is the second example company.", "Example Company 2", "098-765-43-21", "122143289" }
+                    { 1, "10% discount on your first purchase", 10, new DateTime(2023, 6, 2, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(1036), "WELCOME10", 5, 1 },
+                    { 2, "15% discount on your next purchase", 15, new DateTime(2023, 7, 2, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(1043), "SPRING15", 5, 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -519,50 +501,40 @@ namespace MVCAuctionPortal.Migrations
                 columns: new[] { "SubCategoryID", "CategoryID", "ImageURL", "Name" },
                 values: new object[,]
                 {
-                    { 1, 1, "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", "Laptops" },
-                    { 2, 1, "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", "Smartphones" },
-                    { 3, 2, "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", "Furniture" },
-                    { 4, 2, "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", "Kitchen appliances" }
+                    { 1, 1, "https://miro.medium.com/v2/resize:fit:928/1*SUK_D1dp3Acw1EjE1Cn6OA.png", "Laptops" },
+                    { 2, 1, "https://cdn.pixabay.com/photo/2016/11/29/12/30/android-1869510_1280.jpg", "Smartphones" },
+                    { 3, 2, "https://cdn.pixabay.com/photo/2016/11/18/17/20/living-room-1835923_1280.jpg", "Furniture" },
+                    { 4, 2, "https://www.compliancegate.com/wp-content/uploads/2019/12/kitchen-appliances-safety-standards-eu.jpg", "Kitchen appliances" },
+                    { 5, 3, "https://cdn.pixabay.com/photo/2017/08/01/08/29/people-2563491_1280.jpg", "Clothing" },
+                    { 6, 3, "https://media.istockphoto.com/id/1181376840/photo/mock-up-blank-empty-digital-tablet-screen-on-beige-fashion-women-stylish-accessories-with-tag.jpg?s=612x612&w=0&k=20&c=AVOd71gDv5dRL9aic_9JmLyB0nvHkpSZ3uNkc9dl74o=", "Accessories" },
+                    { 7, 4, "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRuBnq8qmkvccgSwZhLaxEIn5KzJqWSfdm5ow&usqp=CAU", "Board games" },
+                    { 8, 4, "https://cdn.vox-cdn.com/thumbor/VK3R_SzCKTnG4egaSIMpxewl7M4=/0x0:2040x1360/1400x1400/filters:focal(1020x680:1021x681)/cdn.vox-cdn.com/uploads/chorus_asset/file/22236383/acastro_210113_1777_gamingstock_0002.jpg", "Video games" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "AccessFailedCount", "AddressID", "CompanyID", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "Nip", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RegistationDate", "SecurityStamp", "Surname", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 1, 0, 1, null, "16cc088d-8ad4-49e8-a33a-6806e7822733", "johndoe@example.com", false, false, null, "John", 0, null, null, null, null, false, new DateTime(2023, 4, 14, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(38), null, "Doe", false, null });
-
-            migrationBuilder.InsertData(
-                table: "Basket",
-                columns: new[] { "BasketID", "NumberOfItems", "SummaryPrice", "UserID" },
-                values: new object[] { 1, 2, 50f, 1 });
-
-            migrationBuilder.InsertData(
-                table: "Coupon",
-                columns: new[] { "CouponID", "Description", "DiscountPercentage", "ExpireDate", "Name", "NumberOfUses", "UserId" },
-                values: new object[,]
-                {
-                    { 1, "10% discount on your first purchase", 10, new DateTime(2023, 5, 21, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(3244), "WELCOME10", 0, 1 },
-                    { 2, "15% discount on your next purchase", 15, new DateTime(2023, 6, 21, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(3251), "SPRING15", 0, 1 }
-                });
-
-            migrationBuilder.InsertData(
-                table: "Users",
-                columns: new[] { "Id", "AccessFailedCount", "AddressID", "CompanyID", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "Nip", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RegistationDate", "SecurityStamp", "Surname", "TwoFactorEnabled", "UserName" },
-                values: new object[] { 2, 0, 2, 1, "b8ec5191-f1a6-4f57-b271-fc8adc7e8dec", "janedoe@example.com", false, false, null, "Jane", 0, null, null, null, null, false, new DateTime(2023, 4, 18, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(76), null, "Doe", false, null });
+                columns: new[] { "Id", "AccessFailedCount", "CompanyID", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "Name", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "RegistationDate", "SecurityStamp", "Surname", "TwoFactorEnabled", "UserName" },
+                values: new object[] { 2, 0, 1, "1bb936c8-d2f0-4ac9-a232-77c1fd387e28", "janedoe@example.com", false, false, null, "Jane", null, null, null, null, false, new DateTime(2023, 4, 29, 13, 19, 34, 437, DateTimeKind.Local).AddTicks(8657), null, "Doe", false, null });
 
             migrationBuilder.InsertData(
                 table: "Auction",
-                columns: new[] { "AuctionID", "BuyItNow", "CategoryID", "DateOfIssue", "EndDate", "ImageURL", "ItemID", "Pieces", "Price", "PurchaseCounter", "SubCategoryID", "Title", "UserID", "WarrantyID" },
+                columns: new[] { "AuctionID", "CategoryID", "DateOfIssue", "EndDate", "ImageURL", "ItemID", "Pieces", "Price", "SubCategoryID", "Title", "UserID", "WarrantyID" },
                 values: new object[,]
                 {
-                    { 1, false, null, new DateTime(2023, 4, 21, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(2893), new DateTime(2023, 4, 28, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(2905), "https://m.media-amazon.com/images/I/71dpTXFz+dL._AC_UF1000,1000_QL80_.jpg", 1, 5, 100m, 0, 1, "Iphone", 2, 1 },
-                    { 2, true, null, new DateTime(2023, 4, 21, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(2916), new DateTime(2023, 5, 5, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(2918), "https://grube.pl/wp-content/uploads/2017/07/product-135.jpg", 2, 3, 200m, 0, 2, "Shovel", 2, 2 },
-                    { 3, false, null, new DateTime(2023, 4, 21, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(2921), new DateTime(2023, 5, 12, 20, 5, 31, 8, DateTimeKind.Local).AddTicks(2922), "https://a.allegroimg.com/original/1e76f9/ba5267f249a8bb358f5d3cf50ec6", 3, 1, 300m, 0, 3, "Boots", 2, 3 }
+                    { 1, null, new DateTime(2023, 5, 2, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(768), new DateTime(2023, 5, 9, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(780), "https://cdn.x-kom.pl/i/setup/images/prod/big/product-new-big,,2022/5/pr_2022_5_17_12_20_15_932_03.jpg", 1, 5, 1000m, 1, "Dell XPS 13", 2, 1 },
+                    { 2, null, new DateTime(2023, 5, 2, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(787), new DateTime(2023, 5, 9, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(789), "https://www.proshop.pl/Images/915x900/3031704_4e1eacc41047.jpg", 2, 3, 700m, 2, "Samsung Galaxy S22", 2, 2 },
+                    { 3, null, new DateTime(2023, 5, 2, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(791), new DateTime(2023, 5, 9, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(793), "https://umebluje.pl/41747-large_default/sofa-modern-25-grafitowa.jpg", 3, 1, 1200m, 3, "Modern Sofa", 2, 3 },
+                    { 4, null, new DateTime(2023, 5, 2, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(796), new DateTime(2023, 5, 9, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(797), "https://m.media-amazon.com/images/I/61anBuiHUhL.jpg", 4, 2, 150m, 4, "Kitchen Mixer", 2, 3 },
+                    { 5, null, new DateTime(2023, 5, 2, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(800), new DateTime(2023, 5, 9, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(801), "https://n.nordstrommedia.com/id/sr3/ec6af5bc-c712-478b-b2d8-3723257766be.jpeg?h=365&w=240&dpr=2", 5, 4, 80m, 5, "Elegant Dress", 2, 3 },
+                    { 6, null, new DateTime(2023, 5, 2, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(804), new DateTime(2023, 5, 9, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(805), "https://m.media-amazon.com/images/I/61+hXDh7oIL._AC_UY1000_.jpg", 6, 3, 250m, 6, "Stylish Watch", 2, 2 },
+                    { 7, null, new DateTime(2023, 5, 2, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(808), new DateTime(2023, 5, 9, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(809), "https://www.lego.com/cdn/cs/set/assets/blt847a7b38581ded36/75315.png", 7, 10, 100m, 7, "LEGO Star Wars Set", 2, 1 },
+                    { 8, null, new DateTime(2023, 5, 2, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(812), new DateTime(2023, 5, 9, 13, 19, 34, 438, DateTimeKind.Local).AddTicks(813), "https://ibkbike.vtexassets.com/arquivos/ids/593348-1200-auto?v=638060623332200000&width=1200&height=auto&aspect=true", 8, 2, 850m, 8, "Road Bike", 2, 2 }
                 });
 
             migrationBuilder.InsertData(
                 table: "Basket",
                 columns: new[] { "BasketID", "NumberOfItems", "SummaryPrice", "UserID" },
-                values: new object[] { 2, 1, 15f, 2 });
+                values: new object[] { 2, 2, 15f, 2 });
 
             migrationBuilder.InsertData(
                 table: "Review",
@@ -610,11 +582,6 @@ namespace MVCAuctionPortal.Migrations
                 column: "BasketId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Company_CompanyAddressID",
-                table: "Company",
-                column: "CompanyAddressID");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Coupon_UserId",
                 table: "Coupon",
                 column: "UserId");
@@ -643,11 +610,6 @@ namespace MVCAuctionPortal.Migrations
                 name: "IX_SubCategory_CategoryID",
                 table: "SubCategory",
                 column: "CategoryID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_AddressID",
-                table: "Users",
-                column: "AddressID");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_CompanyID",
@@ -714,9 +676,6 @@ namespace MVCAuctionPortal.Migrations
 
             migrationBuilder.DropTable(
                 name: "Company");
-
-            migrationBuilder.DropTable(
-                name: "Address");
         }
     }
 }

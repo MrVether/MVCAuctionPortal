@@ -1,13 +1,7 @@
-﻿using AuctionPortal.Data;
-using AuctionPortal.Models;
+﻿using AuctionPortal.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
 using MVCAuctionPortal.Models;
-using System.Security.Claims;
+using System.Data;
 
 namespace AuctionPortal.Services
 {
@@ -16,7 +10,7 @@ namespace AuctionPortal.Services
         private readonly AuctionDbContext _context;
         private readonly IAuctionService _auctionService;
 
-        public OrderService(AuctionDbContext context,IAuctionService auctionService)
+        public OrderService(AuctionDbContext context, IAuctionService auctionService)
         {
             _context = context;
             _auctionService = auctionService;
@@ -49,9 +43,10 @@ namespace AuctionPortal.Services
                 .FirstOrDefaultAsync(o => o.OrderID == id);
             return order;
         }
-        public async Task CreateOrderAsync(Order order, List<int> auctionIds, List<int> quantities, ClaimsPrincipal user, decimal discountPercentage)
+        public async Task CreateOrderAsync(Order order, List<int> auctionIds, List<int> quantities, int userId, decimal discountPercentage)
         {
             order.OrderDate = DateTime.Now;
+            order.UserID = userId;
 
             _context.Orders.Add(order);
             await _context.SaveChangesAsync();
@@ -85,6 +80,7 @@ namespace AuctionPortal.Services
 
             order.Total = orderTotal * (1 - discountPercentage / 100);
             order.DiscountPercentage = discountPercentage;
+
 
             _context.Orders.Update(order);
             await _context.SaveChangesAsync();

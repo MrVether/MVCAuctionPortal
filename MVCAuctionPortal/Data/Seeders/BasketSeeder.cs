@@ -1,7 +1,5 @@
-﻿using AuctionPortal.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using MVCAuctionPortal.Models;
-using System.Collections.Generic;
 
 namespace AuctionPortal.Data.Seeders
 {
@@ -35,7 +33,6 @@ namespace AuctionPortal.Data.Seeders
             };
 
             context.Basket.AddRange(baskets);
-         //   context.BasketAndAuction.AddRange(basketAuctions);
             context.SaveChanges();
         }
 
@@ -45,11 +42,11 @@ namespace AuctionPortal.Data.Seeders
                 new Basket
                 {
                     BasketID = 1,
-                    NumberOfItems = 2,
+                    NumberOfItems = 3,
                     SummaryPrice = 50.0f,
                     UserID = 1
                 },
-                new Basket { BasketID = 2, NumberOfItems = 1, SummaryPrice = 15.0f, UserID = 2 }
+                new Basket { BasketID = 2, NumberOfItems = 2, SummaryPrice = 15.0f, UserID = 2 }
             );
         }
     }

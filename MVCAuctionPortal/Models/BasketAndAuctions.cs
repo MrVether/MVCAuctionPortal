@@ -2,7 +2,7 @@
 
 namespace MVCAuctionPortal.Models
 {
-    public class BasketAndAuction 
+    public class BasketAndAuction
     {
 
         public int AuctionId { get; set; }

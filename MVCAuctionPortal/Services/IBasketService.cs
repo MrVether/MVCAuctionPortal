@@ -1,5 +1,4 @@
-﻿using AuctionPortal.Models;
-using MVCAuctionPortal.Models;
+﻿using MVCAuctionPortal.Models;
 
 public interface IBasketService
 {

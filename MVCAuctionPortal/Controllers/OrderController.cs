@@ -1,9 +1,10 @@
 ﻿using AuctionPortal.Models;
 using AuctionPortal.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using MVCAuctionPortal.Models;
+using System.Data;
 
 namespace MVCAuctionPortal.Controllers
 {
@@ -28,6 +29,7 @@ namespace MVCAuctionPortal.Controllers
 
             return View(order);
         }
+        [Authorize(Roles = "User,Seller,Admin")]
 
         public IActionResult UserOrders()
         {
@@ -40,6 +42,7 @@ namespace MVCAuctionPortal.Controllers
             List<Order> orders = _orderService.GetOrdersByUserId(int.Parse(userId));
             return View(orders);
         }
+        [Authorize(Roles = "User,Seller,Admin")]
 
         [HttpGet]
         public async Task<IActionResult> OrderForm(List<int> auctionIds, List<int> quantities, decimal discountPercentage)
@@ -53,7 +56,7 @@ namespace MVCAuctionPortal.Controllers
 
             return View(orderViewModel);
         }
-
+[AllowAnonymous]
         public async Task<IActionResult> Payment(int id)
         {
             var order = await _orderService.GetOrderById(id);
@@ -67,14 +70,23 @@ namespace MVCAuctionPortal.Controllers
 
             return View(order);
         }
+
+        [AllowAnonymous]
+
         [HttpPost]
-public async Task<IActionResult> CreateOrder(IFormCollection form, decimal discountPercentage)
+        public async Task<IActionResult> CreateOrder(IFormCollection form, decimal discountPercentage)
         {
+            var userId = _userManager.GetUserId(User);
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var order = new Order
             {
                 FirstName = form["FirstName"],
                 Surname = form["Surname"],
-                City= form["City"],
+                City = form["City"],
                 Street = form["Street"],
                 HouseNumber = form["HouseNumber"],
                 LocalNumber = form["LocalNumber"],
@@ -85,9 +97,11 @@ public async Task<IActionResult> CreateOrder(IFormCollection form, decimal disco
             var auctionIds = form["AuctionIds[]"].Select(int.Parse).ToList();
             var quantities = form["Quantities[]"].Select(int.Parse).ToList();
 
-            await _orderService.CreateOrderAsync(order, auctionIds, quantities, User, discountPercentage);
+            await _orderService.CreateOrderAsync(order, auctionIds, quantities, int.Parse(userId), discountPercentage);
             return RedirectToAction("Payment", new { id = order.OrderID });
         }
+        [AllowAnonymous]
+
         public async Task<IActionResult> PaymentSuccess(int id, string paymentMethod)
         {
             var order = await _orderService.GetOrderById(id);
@@ -101,9 +115,11 @@ public async Task<IActionResult> CreateOrder(IFormCollection form, decimal disco
 
             return View(order);
         }
+        [AllowAnonymous]
+
         public async Task<IActionResult> PaymentFailed(int id)
         {
-           
+
             return View();
         }
 

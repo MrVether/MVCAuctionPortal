@@ -1,19 +1,19 @@
 ﻿@model MVCAuctionPortal.Models.BasketViewModel
 @{
-    ViewBag.Title = "Koszyk";
+    ViewBag.Title = "Basket";
 }
 
-<h2>Koszyk</h2>
+<h2>Basket</h2>
 <form id="basket-form" method="post" action="@Url.Action("UpdateBasket", "Basket")">
     <input type="hidden" id="discount-percentage" name="DiscountPercentage" value="" />
     <table class="table">
         <thead>
         <tr>
-            <th>Nazwa</th>
-            <th>Cena</th>
-            <th>Ilość</th>
-            <th>Usuń</th>
-            <th>Wybrane</th>
+            <th>Name</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Remove</th>
+            <th>Selected</th>
         </tr>
         </thead>
         <tbody>
@@ -27,12 +27,11 @@
                     <input type="hidden" name="AuctionId[]" value="@item.Auction.AuctionId"/>
                     <input type="number" min="0" value="@item.Auction.Quantity" data-auction-id="@item.Auction.AuctionId" data-price="@item.Auction.Price" class="quantity-input" name="Quantity[]"/>
 
-
                 </td>
                 <td>
                     <form method="post" action="@Url.Action("DeleteFromBasket", "Basket")">
                         <input type="hidden" name="auctionId" value="@item.Auction.AuctionId"/>
-                        <button class="btn btn-danger remove-button">Usuń</button>
+                        <button class="btn btn-danger remove-button">Remove</button>
                     </form>
                 </td>
                 <td>
@@ -44,22 +43,26 @@
     </table>
 
     <p>
-        <strong>Wybierz kupon:</strong>
+        <strong>Select a coupon:</strong>
         <select id="coupon-select">
-            <option value="">Brak kuponu</option>
+            <option value="">No coupon</option>
             @foreach (var coupon in Model.AvailableCoupons)
             {
-                <option value="@coupon.DiscountPercentage">@coupon.Name - @coupon.DiscountPercentage% zniżki</option>
+                if (coupon.NumberOfUses > 0)
+                {
+                    <option value="@coupon.DiscountPercentage">@coupon.Name - @coupon.DiscountPercentage% discount</option>
+                }
             }
         </select>
     </p>
 
-    <button type="button" class="btn btn-success" id="submit-order-button">Złóż zamówienie</button>
+    <button type="button" class="btn btn-success" id="submit-order-button">Submit order</button>
 </form>
 
 <p>
-    <strong>Suma:</strong> <span id="summary-price">@Model.SummaryPrice</span>$
+    <strong>Total:</strong> <span id="summary-price">@Model.SummaryPrice</span>$
 </p>
+
 
 @section Scripts {
     <script>
@@ -85,7 +88,6 @@
         $(function () {
             $(".quantity-input").on("change", updateSummaryPrice);
             $(".selected-checkbox").on("change", updateSummaryPrice);
-
             $(".remove-button").on("click", function (event) {
                 event.preventDefault();
 
@@ -125,11 +127,12 @@
                 form.attr("action", '@Url.Action("OrderForm", "Basket")');
                 form.submit();
             } else {
-                alert("Proszę wybrać przynajmniej jedną aukcję.");
+                alert("Please select at least one auction.");
             }
 
         });
-    
+
     </script>
 }
 
+           

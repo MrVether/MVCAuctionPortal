@@ -1,0 +1,28 @@
+﻿@model MVCAuctionPortal.ViewModels.OrderReviewsViewModel
+@{
+    ViewBag.Title = "Add Reviews";
+}
+
+<h2>Add Reviews</h2>
+
+<form asp-controller="Auction" asp-action="AddReviews" method="post">
+    <input type="hidden" asp-for="OrderId" />
+    @for (int i = 0; i < Model.Reviews.Count; i++)
+    {
+        <h4>Review for @Model.Reviews[i].AuctionName</h4>
+        <input type="hidden" asp-for="Reviews[i].AuctionID" />
+        <div class="form-group">
+            <label asp-for="Reviews[i].Title"></label>
+            <input asp-for="Reviews[i].Title" class="form-control" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Reviews[i].Description"></label>
+            <textarea asp-for="Reviews[i].Description" class="form-control"></textarea>
+        </div>
+        <div class="form-group">
+            <label asp-for="Reviews[i].IsPositive">Positive</label>
+            <input asp-for="Reviews[i].IsPositive" type="checkbox" />
+        </div>
+    }
+    <button type="submit" class="btn btn-primary">Submit Reviews</button>
+</form>

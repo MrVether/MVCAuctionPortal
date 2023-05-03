@@ -12,7 +12,11 @@ namespace MVCAuctionPortal.Models
         [Required]
         public string Email { get; set; }
 
-        public int? Nip { get; set; }
+        [Display(Name = "I want to be a Seller")]
+        public bool IsSeller { get; set; }
+        public int UserId { get; set; }
+
+
     }
 
 }

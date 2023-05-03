@@ -1,7 +1,5 @@
 ﻿using AuctionPortal.Models;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
 using MVCAuctionPortal.Models;
 
 namespace ServicesAndInterfacesLibary.Services
@@ -15,10 +13,12 @@ namespace ServicesAndInterfacesLibary.Services
             _context = context;
         }
 
-        public IEnumerable<Coupon> GetCouponsForUser(User user)
+
+        public async Task<IEnumerable<Coupon>> GetCouponsForUser(string userId)
         {
-            return _context.Coupon
-                .Where(a => a.UserId == user.Id);
+            return await _context.Coupon
+                .Where(c => c.UserId == Int32.Parse(userId))
+                .ToListAsync();
         }
         public async Task<bool> CreateUserCouponAsync(Coupon coupon, string userEmail)
         {
